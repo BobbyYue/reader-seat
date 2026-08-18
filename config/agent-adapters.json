@@ -7,26 +7,19 @@
     "source_policy": "the adapter passes the frozen source without summarizing or translating it"
   },
   "adapters": {
-    "codex": {
+    "command-stdin": {
       "mode": "command",
-      "requires": ["model"],
-      "command": [
-        "codex",
-        "exec",
-        "--skip-git-repo-check",
-        "--ephemeral",
-        "--ignore-user-config",
-        "--sandbox",
-        "read-only",
-        "--color",
-        "never",
-        "--model",
-        "{model}",
-        "--output-last-message",
-        "{output_file}",
-        "-"
-      ],
+      "requires": [],
+      "command_env": "READER_SEAT_AGENT_COMMAND_JSON",
       "prompt_transport": "stdin",
+      "result_transport": "stdout",
+      "timeout_seconds": 420
+    },
+    "command-files": {
+      "mode": "command",
+      "requires": [],
+      "command_env": "READER_SEAT_AGENT_FILE_COMMAND_JSON",
+      "prompt_transport": "file",
       "result_transport": "file",
       "timeout_seconds": 420
     },

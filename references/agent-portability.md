@@ -96,6 +96,42 @@ For a headless agent, configure a command adapter in
 adapter: prepare prompt bundles, run them in the host without edits, save each
 final answer at the requested path, then resume grading.
 
+### Command Adapters
+
+The built-in command adapters are vendor-neutral and execute an argv array
+directly without a shell.
+
+Use `command-stdin` when the agent command reads the frozen prompt from standard
+input and returns only its final answer on standard output. Provide the command
+as a JSON string array through `READER_SEAT_AGENT_COMMAND_JSON`:
+
+```bash
+export READER_SEAT_AGENT_COMMAND_JSON='["your-agent", "run", "--model", "{model}", "-"]'
+python3 scripts/run_evals.py run \
+  --adapter command-stdin \
+  --agent-id your-agent \
+  --model your-model \
+  --case xagent-analysis-causality \
+  --output-dir /tmp/reader-seat-eval
+```
+
+Use `command-files` when the agent command reads and writes files. Provide its
+argv array through `READER_SEAT_AGENT_FILE_COMMAND_JSON`; the placeholders
+`{prompt_file}`, `{output_file}`, `{model}`, `{skill_root}`, and
+`{judge_schema}` are available:
+
+```bash
+export READER_SEAT_AGENT_FILE_COMMAND_JSON='["your-agent", "run", "--input", "{prompt_file}", "--output", "{output_file}"]'
+python3 scripts/run_evals.py run \
+  --adapter command-files \
+  --agent-id your-agent \
+  --case xagent-analysis-causality \
+  --output-dir /tmp/reader-seat-eval
+```
+
+Replace the example argv array with the real command documented by the target
+agent. Do not insert a shell wrapper or bypass its permission model.
+
 ## Acceptance
 
 A cross-agent claim is supported only when:

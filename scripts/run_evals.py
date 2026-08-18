@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -176,7 +177,22 @@ def expand_command(
     }
     command = adapter.get("command")
     if not isinstance(command, list) or not command:
-        raise SystemExit("error: command adapter has no command array")
+        env_name = adapter.get("command_env")
+        if not isinstance(env_name, str) or not env_name:
+            raise SystemExit("error: command adapter has no command array or command_env")
+        raw_command = os.environ.get(env_name)
+        if not raw_command:
+            raise SystemExit(
+                f"error: command adapter requires {env_name} as a JSON argv array"
+            )
+        try:
+            command = json.loads(raw_command)
+        except json.JSONDecodeError as exc:
+            raise SystemExit(f"error: {env_name} is not valid JSON: {exc}") from exc
+        if not isinstance(command, list) or not command or not all(
+            isinstance(part, str) and part for part in command
+        ):
+            raise SystemExit(f"error: {env_name} must contain a non-empty JSON string array")
     try:
         return [str(part).format_map(values) for part in command]
     except KeyError as exc:

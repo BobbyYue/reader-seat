@@ -1,105 +1,126 @@
 # Reader's Seat
 
-> A reader-first AI writing skill that turns work material into documents people can understand, judge, and act on.
+> A reader-first AI writing skill that turns scattered work material into complete documents people can understand, judge, and act on.
 
-[中文说明](README.zh-CN.md) · [More examples](examples/quick-start.md)
+[中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.15.2-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.16.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
-## The Problem It Solves
+**Source material → complete document → a reader can form the right judgment**
 
-AI-generated documents can sound polished while leaving the reader to work out the conclusion, supporting evidence, uncertainty, and next step.
+Reader's Seat works with any agent that can load a `SKILL.md` file or follow explicitly provided skill instructions. It is not tied to one model, vendor, or invocation syntax.
 
-Reader's Seat restructures the material around what the reader needs to understand or decide. It preserves facts, numbers, scope, and uncertainty instead of making the content sound stronger than the evidence allows.
+## What It Changes For The Reader
 
-It works at document level, not just sentence level:
+AI-generated documents can sound polished while still making the reader reconstruct what matters.
+
+| Find | Verify | Act |
+| --- | --- | --- |
+| The main conclusion appears early. | Claims remain connected to evidence, scope, and uncertainty. | Decisions, open questions, and next steps stay within the evidence boundary. |
+
+## See It In Practice
 
 | Scenario | Source material | Finished document |
 | --- | --- | --- |
-| Project progress | Weekly reports, milestone plan, meeting notes, issue list, and available delivery data | A project status brief with the current conclusion, completed and in-progress milestones, schedule status, blockers and risks, decisions needed, and evidence-backed next steps. Missing owners or dates remain explicit instead of being invented. |
-| Data analysis conclusion | Metric definitions, query results, charts, methodology notes, and known data limitations | An analysis report covering the question and scope, main finding with magnitude and comparison basis, supporting and conflicting evidence, metric and data context, alternative explanations, uncertainty, and the next validation needed. |
-| Technical route | Business requirements, technical constraints, candidate architectures, benchmarks, cost estimates, and migration concerns | A technical decision document covering the decision to make, constraints, option comparison, trade-offs, recommendation and its conditions, implementation implications, rollback path, and unresolved risks. |
+| **Project progress** | Weekly reports, milestone plan, meeting notes, issue list, delivery data | **Project status brief**<br>Conclusion · milestones · schedule · blockers · decisions · supported next steps |
+| **Data analysis conclusion** | Metric definitions, query results, charts, methodology notes, data limitations | **Analysis report**<br>Question · finding and magnitude · evidence · data context · alternative explanations · uncertainty · next validation |
+| **Technical route** | Requirements, constraints, candidate architectures, benchmarks, costs, migration concerns | **Technical decision document**<br>Decision · constraints · option comparison · trade-offs · recommendation conditions · implementation impact · rollback · unresolved risks |
 
-## When To Use It
+It also supports news and industry briefs, product documents, retrospectives, performance summaries, SOPs, runbooks, and help articles.
 
-| Your material | What the reader needs |
-| --- | --- |
-| News or industry research | Confirmed facts, source status, timing, and unknowns |
-| Technical proposals | Constraints, options, trade-offs, risks, and rollback conditions |
-| Product documents | Intended users, problem, supported capabilities, and limits |
-| Business updates or performance reviews | Work, deliverables, outcomes, risks, and next steps |
-| Data analysis or research | Metric definitions, magnitude, evidence, uncertainty, and causal boundaries |
-| SOPs or runbooks | Preconditions, steps, success signals, exceptions, and recovery paths |
+> [!NOTE]
+> Reader's Seat is for substantive documents. Short workplace-message polishing, unsupported content expansion, and visual decoration without a document task are outside its main scope.
 
-Reader's Seat is not intended for short chat-message polishing, unsupported content expansion, or visual decoration without a document task.
+## Install
 
-## Install In Codex
+### Option 1: Ask Your Agent To Install It
 
-```bash
-git clone https://github.com/BobbyYue/reader-seat.git ~/.codex/skills/reader-seat
-```
-
-Start a new Codex task, then call the skill explicitly:
+Give an agent with file and shell access this instruction:
 
 ```text
-Use $reader-seat to rewrite this analysis for a product leader.
-Preserve the metrics, magnitude, time period, and uncertainty.
-Separate observed facts, plausible explanations, causal claims, and unknowns.
-Return Markdown.
+Install Reader's Seat from https://github.com/BobbyYue/reader-seat.
+Place it in the skill directory supported by this agent, keep the folder name reader-seat,
+then confirm that SKILL.md can be loaded. Do not overwrite an existing installation without asking.
+If Python is available, run python3 scripts/validate_skill.py after installation.
 ```
 
-Requests that clearly ask for a reader-first or reader-friendly work document may also trigger the skill automatically in supported hosts.
+If the agent cannot install local skills, use the manual method below.
 
-## What To Provide
+### Option 2: Clone It Manually
+
+Set the skill directory used by your agent, then clone the repository:
+
+```bash
+AGENT_SKILLS_DIR="/path/to/your-agent/skills"
+git clone https://github.com/BobbyYue/reader-seat.git "$AGENT_SKILLS_DIR/reader-seat"
+```
+
+After cloning, register that directory according to the agent's documentation or ask the agent to load `reader-seat/SKILL.md` explicitly. Automatic skill discovery differs across agents.
+
+## Use It
 
 You usually need only four inputs:
 
 ```text
-Material: the source text, data, or links
+Use Reader's Seat to create or rewrite this document.
+Material: the source text, data, files, or links
 Reader: who will use the document and what they already know
 Reader task: what they need to understand, judge, or do
 Format: HTML, Feishu/Lark, Word, Markdown, plain text, or another target
 ```
 
-See [ready-to-use prompts](examples/quick-start.md) for news, technical proposals, product documents, business updates, data analysis, and SOPs.
+See [ready-to-use prompts](examples/quick-start.en.md) for common document scenarios.
 
 ## Output Defaults
 
-- Facts, quantities, definitions, ownership, commitments, and uncertainty are preserved.
-- Observation, interpretation, causality, advice, and unknowns remain distinguishable.
-- Titles state supported information instead of manufacturing suspense.
-- Visuals are used only when they reduce the effort required to locate, compare, understand, or verify information.
-- A new finished document defaults to self-contained HTML unless another format is requested.
-- Output follows the source material's dominant language unless the user requests a different language.
-- Reader's Seat never publishes, overwrites, or sends content without explicit authorization.
+| Format | Language | Evidence | Visuals |
+| --- | --- | --- | --- |
+| Self-contained HTML unless another format is requested | The source material's dominant language unless the user requests another | Facts, quantities, definitions, ownership, commitments, and uncertainty are preserved | Used only when they reduce the effort to locate, compare, understand, or verify information |
 
-## What's Included
+Reader's Seat does not publish, overwrite, or send content without explicit authorization.
+
+## Across Different Agents
+
+The writing behavior lives in `SKILL.md` and its referenced modules. A host may adapt discovery, prompt transport, and output transport, but should not rewrite the content rules.
+
+For repeatability checks, the repository supports:
+
+| Agent interface | Evaluation path |
+| --- | --- |
+| Command accepts a prompt on standard input and returns the answer on standard output | `command-stdin` adapter |
+| Command reads a prompt file and writes a result file | `command-files` adapter |
+| GUI or unsupported command interface | `manual` prompt bundle |
+
+See [Agent Portability and Stability](references/agent-portability.md). The project does not claim cross-agent stability until at least two named agents pass the same frozen cases.
+
+<details>
+<summary><strong>Repository structure, validation, and licenses</strong></summary>
 
 | Folder | Function |
 | --- | --- |
-| `.github/` | Runs the repository checks on every push and pull request. |
+| `.github/` | Runs repository checks on every push and pull request. |
 | `agents/` | Helps supported agent hosts recognize and present Reader's Seat. |
 | `assets/` | Provides the self-contained HTML template, local fonts, and chart and diagram runtimes. |
-| `config/` | Defines supported document scenarios, module-loading profiles, agent adapters, and the enforceable skill contract. |
-| `evals/` | Provides frozen trigger, behavior, and cross-agent test cases with judging criteria. |
-| `examples/` | Contains prompts that users can adapt directly to common document tasks. |
-| `references/` | Provides the detailed writing rules selected for each scenario, format, title, evidence, and visual need. |
-| `scripts/` | Validates the skill, selects the required modules, creates HTML report scaffolds, and runs evaluations. |
+| `config/` | Defines document scenarios, module-loading profiles, agent adapters, and the enforceable skill contract. |
+| `evals/` | Provides frozen trigger, behavior, and cross-agent cases with judging criteria. |
+| `examples/` | Contains prompts users can adapt to common document tasks. |
+| `references/` | Provides detailed rules selected for each scenario, format, title, evidence, and visual need. |
+| `scripts/` | Validates the skill, selects modules, creates HTML report scaffolds, and runs evaluations. |
 
-## Other Agent Hosts
-
-Place the repository where the host can read it and explicitly load `SKILL.md`. Automatic discovery differs across hosts. See [Agent Portability and Stability](references/agent-portability.md) for manual and command-line evaluation options.
-
-The repository does not claim cross-agent stability until at least two named hosts pass the same frozen cases.
-
-## Validate And Update
+Validate an installation:
 
 ```bash
-cd ~/.codex/skills/reader-seat
-git pull
-python3 scripts/validate_skill.py
+python3 /path/to/reader-seat/scripts/validate_skill.py
+```
+
+Update an installation:
+
+```bash
+git -C /path/to/reader-seat pull
 ```
 
 Third-party font and visualization licenses are listed in [Third-Party Notices](assets/html/THIRD_PARTY_NOTICES.md).
+
+</details>

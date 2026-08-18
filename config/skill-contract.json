@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "skill_version": "0.15.2",
+  "skill_version": "0.16.0",
   "name": "reader-seat",
   "primary_routes": [
     {

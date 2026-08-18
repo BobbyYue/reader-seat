@@ -593,21 +593,24 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     adapters = load_json(AGENT_ADAPTERS_PATH, errors)
     if isinstance(adapters, dict):
         adapter_map = adapters.get("adapters", {})
-        if not isinstance(adapter_map, dict) or set(adapter_map) < {"codex", "manual"}:
-            fail("agent adapters must define codex and manual modes", errors)
+        required_adapters = {"command-stdin", "command-files", "manual"}
+        if not isinstance(adapter_map, dict) or set(adapter_map) < required_adapters:
+            fail("agent adapters must define command-stdin, command-files, and manual modes", errors)
         else:
-            codex = adapter_map["codex"]
-            command = codex.get("command", [])
-            if codex.get("mode") != "command" or not isinstance(command, list):
-                fail("codex adapter must use an argv command array", errors)
-            else:
-                joined = " ".join(str(part) for part in command)
-                for required in ("{model}", "{output_file}", "--ephemeral", "read-only"):
-                    if required not in joined:
-                        fail(f"codex adapter missing isolation or output term: {required}", errors)
-                for forbidden in ("bash -c", "bash -lc", "sh -c", "dangerously-bypass"):
-                    if forbidden in joined:
-                        fail(f"codex adapter contains unsafe shell or sandbox term: {forbidden}", errors)
+            command_contracts = {
+                "command-stdin": ("READER_SEAT_AGENT_COMMAND_JSON", "stdin", "stdout"),
+                "command-files": ("READER_SEAT_AGENT_FILE_COMMAND_JSON", "file", "file"),
+            }
+            for adapter_id, (env_name, prompt_transport, result_transport) in command_contracts.items():
+                adapter = adapter_map[adapter_id]
+                if adapter.get("mode") != "command":
+                    fail(f"{adapter_id} adapter must use command mode", errors)
+                if adapter.get("command_env") != env_name:
+                    fail(f"{adapter_id} adapter must use {env_name}", errors)
+                if adapter.get("prompt_transport") != prompt_transport:
+                    fail(f"{adapter_id} adapter must use {prompt_transport} prompt transport", errors)
+                if adapter.get("result_transport") != result_transport:
+                    fail(f"{adapter_id} adapter must use {result_transport} result transport", errors)
             if adapter_map["manual"].get("mode") != "manual":
                 fail("manual adapter must use manual mode", errors)
 

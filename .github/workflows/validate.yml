@@ -45,3 +45,6 @@ jobs:
           --case xagent-analysis-causality
           --repetitions 1
           --output-dir /tmp/reader-seat-eval
+
+      - name: Smoke-test vendor-neutral command adapters
+        run: python scripts/smoke_test_adapters.py
