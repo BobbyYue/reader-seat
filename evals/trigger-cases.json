@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "should_trigger": [
+    {
+      "id": "trigger-news-brief",
+      "prompt": "把这周的行业新闻整理成一份面向业务负责人的简报，说明来源、影响和仍不确定的地方。"
+    },
+    {
+      "id": "trigger-technical-proposal",
+      "prompt": "重写这份技术方案，让评审能看清问题、约束、选项取舍和回滚计划。"
+    },
+    {
+      "id": "trigger-product-intro",
+      "prompt": "把这个产品介绍改得更容易理解，别只罗列功能，也不要夸大价值。"
+    },
+    {
+      "id": "trigger-prd",
+      "prompt": "帮我检查这份PRD是否写清目标用户、问题、范围和成功指标。"
+    },
+    {
+      "id": "trigger-business-review",
+      "prompt": "把半年项目材料整理成一份业务汇报，突出目标、实际结果、影响、风险和需要的支持。"
+    },
+    {
+      "id": "trigger-analysis",
+      "prompt": "重构这份数据分析报告，使结论、证据、口径、不确定性和建议边界更清楚。"
+    },
+    {
+      "id": "trigger-procedure",
+      "prompt": "把这份操作流程改成新同事也能照着完成并在失败后恢复的SOP。"
+    },
+    {
+      "id": "trigger-ai-tone",
+      "prompt": "这篇产品复盘AI味很重、信息也没价值，请在不改变事实的前提下重写。"
+    },
+    {
+      "id": "trigger-feishu-doc",
+      "prompt": "优化这份飞书技术文档的可读性，保留原有事实和范围。"
+    },
+    {
+      "id": "trigger-self-contained-html",
+      "prompt": "从读者视角把这份行业调查写成一份可本地打开的HTML报告，带引用、移动端适配和清晰的结论结构。"
+    },
+    {
+      "id": "trigger-reader-perspective-explicit",
+      "prompt": "请从读者视角检查并重写这份业务复盘，让结论和下一步更容易找到。"
+    },
+    {
+      "id": "trigger-reader-friendly-explicit",
+      "prompt": "把这份产品方案改得对读者更友好，但不要丢失范围、限制和关键证据。"
+    },
+    {
+      "id": "trigger-reader-perspective-semantic",
+      "prompt": "这份方案作者自己看得懂，但第一次接触项目的跨团队同学需要反复追问。请改到他们不用猜也能理解重点和需要做什么。"
+    },
+    {
+      "id": "trigger-visual-communication-reader-task",
+      "prompt": "从读者角度优化这份业务报告，并判断哪些结论适合用图表、表格或颜色表达，避免为了好看堆视觉元素。"
+    }
+  ],
+  "should_not_trigger": [
+    {
+      "id": "exclude-short-message",
+      "prompt": "这句话能发吗：你这个数据怎么还没给？"
+    },
+    {
+      "id": "exclude-3080",
+      "prompt": "请调用3080-brief，把这份长文档制作成一页视觉摘要。"
+    },
+    {
+      "id": "exclude-visual-only",
+      "prompt": "只调整这张图的配色和字体，不改任何文字。"
+    },
+    {
+      "id": "exclude-translation-only",
+      "prompt": "把这段英文逐句翻译成中文，不要改写。"
+    }
+  ]
+}

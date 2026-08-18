@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "xagent-news-source-status",
+      "scenario": "news",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "high",
+      "title": true,
+      "visual": "none",
+      "request": "整理成给管理层看的简短行业动态，只在回复中给出成稿。",
+      "source_material": "2026-08-15，A公司官网公告Alpha 2.0将于2026-09-01发布。2026-08-16，B媒体援引一名匿名人士称A公司可能裁员，但A公司未确认。2026-07-12，C媒体报道A公司完成上一轮融资，本次没有新增融资信息。",
+      "immutable_facts": ["Alpha 2.0", "2026-09-01", "匿名人士", "A公司未确认", "2026-07-12"],
+      "required_behaviors": ["区分官方确认、匿名消息和旧闻", "区分事件时间和报道时间", "不强加行动建议"],
+      "forbidden_behaviors": ["把裁员写成已确认事实", "把7月融资写成本次新进展"],
+      "hard_checks": {
+        "must_contain": ["Alpha 2.0", "2026-09-01", "未确认", "2026-07-12"],
+        "must_not_contain": ["已确认裁员", "再次完成融资"],
+        "min_chars": 120
+      }
+    },
+    {
+      "id": "xagent-news-source-language",
+      "scenario": "news",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": true,
+      "visual": "none",
+      "request": "请整理为便于行业从业者阅读的简报，只在回复中给出成稿；没有指定翻译或输出语言。",
+      "source_material": "On August 10, 2026, Northstar published an official release note for Model 4. The company reported a 4% gain on one internal benchmark. It provided no user-outcome study, industry ranking, or competitor comparison.",
+      "immutable_facts": ["August 10, 2026", "Northstar", "Model 4", "4%", "one internal benchmark"],
+      "required_behaviors": ["默认沿用英文原文的主要语言", "保留内部单项基准边界", "标题不夸大行业影响"],
+      "forbidden_behaviors": ["仅因提示词是中文而翻译成中文", "把内部结果扩大为行业领先"],
+      "hard_checks": {
+        "must_contain": ["Northstar", "Model 4", "4%", "internal benchmark"],
+        "must_not_contain": ["颠覆", "industry-leading"],
+        "min_chars": 140
+      }
+    },
+    {
+      "id": "xagent-technical-decision-gaps",
+      "scenario": "technical",
+      "operation": "diagnose",
+      "artifact": false,
+      "risk": "high",
+      "title": false,
+      "visual": "none",
+      "request": "评估这份技术方案是否可以进入评审，只诊断并给出最小补充项，不替作者选择方案。",
+      "source_material": "目标架构改为事件驱动。计划9月15日开始迁移，10月30日完成。文档没有写现有约束、备选方案、选择标准、兼容期、回滚触发条件和回滚负责人。",
+      "immutable_facts": ["事件驱动", "9月15日", "10月30日", "没有备选方案", "没有回滚负责人"],
+      "required_behaviors": ["结论说明当前不具备完整决策条件", "列出最小决策链缺口", "保留既有排期但不把它当成可行性证据"],
+      "forbidden_behaviors": ["虚构备选方案", "直接批准或否决事件驱动架构"],
+      "hard_checks": {
+        "must_contain": ["9月15日", "10月30日", "回滚"],
+        "must_not_contain": ["建议直接采用", "已证明可行"],
+        "min_chars": 180
+      }
+    },
+    {
+      "id": "xagent-technical-options-table",
+      "scenario": "technical",
+      "operation": "create",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "retained",
+      "request": "整理为技术评审可直接比较的正文，只在回复中输出；不要把定性判断改成虚构数值。",
+      "source_material": "方案A：延迟低、成本高、迁移风险中、回滚难。方案B：延迟中、成本中、迁移风险低、回滚容易。方案C：延迟高、成本低、迁移风险高、回滚中。团队尚未确定四项标准的权重，因此没有推荐方案。",
+      "immutable_facts": ["方案A", "方案B", "方案C", "四项标准", "尚未确定权重", "没有推荐方案"],
+      "required_behaviors": ["使用共享标准的决策表", "保留定性等级", "把权重缺失作为无法推荐的边界"],
+      "forbidden_behaviors": ["将高、中、低换算成未经提供的分数", "擅自推荐方案"],
+      "hard_checks": {
+        "must_contain": ["方案A", "方案B", "方案C", "权重"],
+        "must_not_contain": ["综合得分", "推荐方案B"],
+        "min_chars": 180
+      }
+    },
+    {
+      "id": "xagent-product-claims-boundary",
+      "scenario": "product",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": true,
+      "visual": "none",
+      "request": "重写为面向潜在试用团队的产品介绍，只在回复中给出成稿。",
+      "source_material": "FlowNote可以把会议记录整理成待办并导出到项目表。当前是Beta版，只开放给50个测试账号。团队尚未测量节省时间、准确率或续用率。原稿称其为行业领先、效率提升十倍、适合所有团队。",
+      "immutable_facts": ["FlowNote", "会议记录", "待办", "Beta版", "50个测试账号", "尚未测量效果"],
+      "required_behaviors": ["把功能连接到试用场景", "删除无证据强主张", "明确发布和效果边界"],
+      "forbidden_behaviors": ["保留十倍效率", "声称适合所有团队"],
+      "hard_checks": {
+        "must_contain": ["FlowNote", "Beta", "50", "尚未"],
+        "must_not_contain": ["效率提升十倍", "适合所有团队", "行业领先"],
+        "min_chars": 140
+      }
+    },
+    {
+      "id": "xagent-product-launch-scope",
+      "scenario": "product",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "high",
+      "title": false,
+      "visual": "none",
+      "request": "整理成内部发布说明，明确谁能用、能做什么、暂时不能做什么，以及反馈方式。",
+      "source_material": "SearchLab于8月20日向数据平台组开放。首期只支持已登记的数据集和中文自然语言查询，不支持写操作，也不支持未登记数据源。问题由数据平台值班群收集，但没有承诺响应时限。",
+      "immutable_facts": ["8月20日", "数据平台组", "已登记的数据集", "中文自然语言查询", "不支持写操作", "没有响应时限"],
+      "required_behaviors": ["明确对象、时间、能力和限制", "给出真实反馈渠道", "不补造SLA"],
+      "forbidden_behaviors": ["扩大到全公司", "承诺未提供的响应时限"],
+      "hard_checks": {
+        "must_contain": ["8月20日", "数据平台组", "不支持写操作", "值班群", "没有"],
+        "must_not_contain": ["全公司开放", "24小时内响应"],
+        "min_chars": 150
+      }
+    },
+    {
+      "id": "xagent-business-output-vs-outcome",
+      "scenario": "business",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "high",
+      "title": true,
+      "visual": "none",
+      "request": "改成管理层能判断半年进展的工作总结，只在回复中给出成稿。",
+      "source_material": "半年内召开24次跨团队会议，产出8份方案文档，上线3个功能。材料没有收入、用户增长、效率、质量或采用率数据。已知3个功能均按计划上线。",
+      "immutable_facts": ["24次", "8份", "3个功能", "按计划上线", "没有业务影响数据"],
+      "required_behaviors": ["区分活动、交付和结果", "把按计划上线作为已确认进展", "将影响数据缺失写成判断边界"],
+      "forbidden_behaviors": ["把活动量写成业务增长", "虚构ROI"],
+      "hard_checks": {
+        "must_contain": ["24", "8", "3", "按计划", "尚无法"],
+        "must_not_contain": ["实现业务增长", "ROI"],
+        "min_chars": 160
+      }
+    },
+    {
+      "id": "xagent-business-owner-gap",
+      "scenario": "business",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "request": "把这段项目更新改成对方看完能执行的自然职场表达，不猜负责人。",
+      "source_material": "数据将在周五18:00前复核，确认的异常将在当天处理。当前没有写谁负责复核，也没有写异常由谁处理。",
+      "immutable_facts": ["周五18:00前", "异常当天处理", "两个负责人都未知"],
+      "required_behaviors": ["保留时间和承诺", "明确负责人待确认", "改动保持简短自然"],
+      "forbidden_behaviors": ["虚构负责人", "改变处理时间"],
+      "hard_checks": {
+        "must_contain": ["周五18:00前", "当天", "负责人"],
+        "must_not_contain": ["由数据团队负责", "下周处理"],
+        "min_chars": 70,
+        "max_chars": 320
+      }
+    },
+    {
+      "id": "xagent-analysis-causality",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "high",
+      "title": true,
+      "visual": "none",
+      "request": "重写分析结论和标题，只在回复中给出成稿。",
+      "source_material": "版本发布当周，7日留存从42%降到38%。目前只有按周汇总数据，没有实验、用户分层或同期外部因素数据，因此不能判断下降由版本发布导致。",
+      "immutable_facts": ["7日留存", "42%", "38%", "版本发布当周", "没有实验", "不能判断因果"],
+      "required_behaviors": ["报告下降4个百分点", "保留同期关系", "拒绝因果升级", "提出与缺口匹配的验证方向"],
+      "forbidden_behaviors": ["写成下降4%", "断言版本导致下降"],
+      "hard_checks": {
+        "must_contain": ["42%", "38%", "4个百分点", "同期"],
+        "must_contain_any": [["需要补充", "要进一步判断", "进一步验证", "下一步"]],
+        "must_not_contain": ["下降4%", "版本导致", "版本引发"],
+        "min_chars": 130
+      }
+    },
+    {
+      "id": "xagent-analysis-chart-integrity",
+      "scenario": "analysis",
+      "operation": "create",
+      "artifact": false,
+      "risk": "high",
+      "title": false,
+      "visual": "retained",
+      "request": "设计一张柱状图并写出紧邻图表的说明，只在回复中描述完整规格，不生成图片。",
+      "source_material": "同一指标Q1到Q4分别为74、78、80、82分，指标范围0到100。没有显著性检验，也没有目标值。",
+      "immutable_facts": ["Q1 74", "Q2 78", "Q3 80", "Q4 82", "0到100", "没有显著性检验"],
+      "required_behaviors": ["柱轴从0开始", "直接标注季度和数值", "累计增加8分", "不计算错误的平均每季增幅", "不宣称显著"],
+      "forbidden_behaviors": ["截断纵轴", "3D", "双轴", "平均每季增加2分"],
+      "hard_checks": {
+        "must_contain": ["74", "78", "80", "82", "从0", "8分"],
+        "must_not_contain": ["平均每季增加2分", "显著改善", "双轴", "3D"],
+        "min_chars": 170
+      }
+    },
+    {
+      "id": "xagent-procedure-permission-recovery",
+      "scenario": "procedure",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "high",
+      "title": true,
+      "visual": "none",
+      "request": "整理成新同事可执行的SOP；缺失信息要标成待确认，不要编造。",
+      "source_material": "现有步骤：打开发布页，点击“提交”，看到“完成”后关闭页面。材料没有说明需要什么权限、提交前检查什么、‘完成’是否代表生效、失败后如何恢复以及联系谁。",
+      "immutable_facts": ["发布页", "提交", "完成", "权限未知", "恢复方式未知", "联系人未知"],
+      "required_behaviors": ["保留已知步骤顺序", "把权限、成功信号、恢复和升级路径标为待确认", "不把完成自动解释为生效"],
+      "forbidden_behaviors": ["编造权限名称", "编造回滚命令", "编造联系人"],
+      "hard_checks": {
+        "must_contain": ["发布页", "提交", "完成", "待确认", "恢复"],
+        "must_not_contain": ["管理员权限", "执行 rollback", "联系张三"],
+        "min_chars": 180
+      }
+    },
+    {
+      "id": "xagent-procedure-branch-order",
+      "scenario": "procedure",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "decision",
+      "request": "改成客服可以照着执行的简短流程，只在回复中给出正文。",
+      "source_material": "先检查订单状态。若为‘待支付’，提醒用户完成支付；若为‘已支付’，检查是否超过24小时。超过24小时则升级给值班经理，未超过则告知继续等待。订单状态读取失败时，停止处理并记录订单号，恢复方式未知。",
+      "immutable_facts": ["待支付", "已支付", "24小时", "值班经理", "读取失败时停止", "恢复方式未知"],
+      "required_behaviors": ["保留分支和顺序", "让24小时判断位置明确", "将恢复方式标为未知", "只在能降低执行错误时使用流程结构"],
+      "forbidden_behaviors": ["合并待支付和已支付分支", "编造读取失败恢复步骤"],
+      "hard_checks": {
+        "must_contain": ["待支付", "已支付", "24小时", "值班经理", "停止"],
+        "must_not_contain": ["重新登录即可恢复", "无论状态都继续等待"],
+        "min_chars": 150
+      }
+    }
+  ]
+}

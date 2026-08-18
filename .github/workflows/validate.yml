@@ -1,0 +1,47 @@
+name: Validate Reader's Seat
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile scripts
+        run: python -m py_compile scripts/*.py
+
+      - name: Validate skill contract
+        run: python scripts/validate_skill.py
+
+      - name: Smoke-test module resolution
+        run: >-
+          python scripts/resolve_modules.py
+          --scenario analysis
+          --operation rewrite
+          --artifact
+          --output-format html
+          --title
+          --visual retained
+          --risk high
+          --emit json
+
+      - name: Prepare a manual cross-agent evaluation bundle
+        run: >-
+          python scripts/run_evals.py prepare
+          --adapter manual
+          --agent-id ci-manual-smoke
+          --case xagent-analysis-causality
+          --repetitions 1
+          --output-dir /tmp/reader-seat-eval

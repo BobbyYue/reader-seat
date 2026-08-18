@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["verdict", "hard_gates", "hard_failures", "reader_outcome", "summary"],
+  "properties": {
+    "verdict": {"enum": ["pass", "fail"]},
+    "hard_gates": {
+      "type": "object",
+      "required": [
+        "fact_fidelity",
+        "evidence_boundary",
+        "scope_and_commitment",
+        "scenario_completeness",
+        "language_and_format",
+        "title_and_visual_integrity",
+        "action_boundary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fact_fidelity": {"enum": ["pass", "fail", "not_applicable"]},
+        "evidence_boundary": {"enum": ["pass", "fail", "not_applicable"]},
+        "scope_and_commitment": {"enum": ["pass", "fail", "not_applicable"]},
+        "scenario_completeness": {"enum": ["pass", "fail", "not_applicable"]},
+        "language_and_format": {"enum": ["pass", "fail", "not_applicable"]},
+        "title_and_visual_integrity": {"enum": ["pass", "fail", "not_applicable"]},
+        "action_boundary": {"enum": ["pass", "fail", "not_applicable"]}
+      }
+    },
+    "hard_failures": {"type": "array", "items": {"type": "string"}},
+    "reader_outcome": {
+      "type": "object",
+      "required": [
+        "conclusion_retrieval",
+        "paraphrase_accuracy",
+        "evidence_traceability",
+        "natural_expression",
+        "actionability"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "conclusion_retrieval": {"type": "integer", "minimum": 1, "maximum": 5},
+        "paraphrase_accuracy": {"type": "integer", "minimum": 1, "maximum": 5},
+        "evidence_traceability": {"type": "integer", "minimum": 1, "maximum": 5},
+        "natural_expression": {"type": "integer", "minimum": 1, "maximum": 5},
+        "actionability": {"type": "integer", "minimum": 1, "maximum": 5}
+      }
+    },
+    "summary": {"type": "string"}
+  },
+  "additionalProperties": false
+}

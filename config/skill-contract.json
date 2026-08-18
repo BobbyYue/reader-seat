@@ -1,0 +1,304 @@
+{
+  "schema_version": 2,
+  "skill_version": "0.15.2",
+  "name": "reader-seat",
+  "primary_routes": [
+    {
+      "id": "news",
+      "reference": "references/scenario-news.md"
+    },
+    {
+      "id": "technical",
+      "reference": "references/scenario-technical.md"
+    },
+    {
+      "id": "product",
+      "reference": "references/scenario-product.md"
+    },
+    {
+      "id": "business",
+      "reference": "references/scenario-business.md"
+    },
+    {
+      "id": "analysis",
+      "reference": "references/scenario-analysis.md"
+    },
+    {
+      "id": "procedure",
+      "reference": "references/scenario-procedure.md"
+    }
+  ],
+  "shared_modules": [
+    "references/scenario-routing.md",
+    "references/output-standards.md",
+    "references/signal-processing.md"
+  ],
+  "conditional_modules": [
+    {
+      "id": "format-decision",
+      "condition": "every finished artifact selects a format and portable presentation baseline",
+      "reference": "references/format-decision.md"
+    },
+    {
+      "id": "diagnosis-and-revision",
+      "condition": "the task rewrites or diagnoses an existing document",
+      "reference": "references/diagnosis-and-revision.md"
+    },
+    {
+      "id": "evaluation",
+      "condition": "the user requests comparison or scoring, risk is high, or skill rules are being changed",
+      "reference": "references/evaluation.md"
+    },
+    {
+      "id": "visual-decision",
+      "condition": "every finished artifact decides whether a material visual reduces reader cost",
+      "reference": "references/visual-decision.md"
+    },
+    {
+      "id": "visual-communication",
+      "condition": "the visual decision retains or reviews a chart, diagram, table, screenshot, callout, semantic color, card group, or encoded layout",
+      "reference": "references/visual-communication.md"
+    },
+    {
+      "id": "visual-evidence",
+      "condition": "any visual is selected, generated, replaced, captioned, or published",
+      "reference": "references/visual-evidence.md"
+    },
+    {
+      "id": "title-design",
+      "condition": "the output needs a title, headline, subtitle, or title diagnosis",
+      "reference": "references/title-design.md"
+    },
+    {
+      "id": "html-output",
+      "condition": "the task produces or edits a finished artifact; use the HTML default or the portable presentation baseline for an explicit non-HTML format",
+      "reference": "references/html-output.md"
+    },
+    {
+      "id": "agent-portability",
+      "condition": "the skill is installed, adapted, or regression-tested in another agent host",
+      "reference": "references/agent-portability.md"
+    }
+  ],
+  "runtime_loading": {
+    "profile": "config/module-profiles.json",
+    "resolver": "scripts/resolve_modules.py",
+    "policy": "minimum-complete-module-set",
+    "capability_reduction_allowed": false,
+    "active_scenario_contract_extracted_from_canonical_module": true,
+    "format_decision_module": "references/format-decision.md",
+    "html_implementation_loaded_only_when_selected": true,
+    "visual_decision_module": "references/visual-decision.md",
+    "visual_implementation_module": "references/visual-communication.md"
+  },
+  "cross_agent_evaluation": {
+    "adapters": "config/agent-adapters.json",
+    "runner": "scripts/run_evals.py",
+    "cases": "evals/cross-agent-cases.json",
+    "rubric": "evals/judge-rubric.md",
+    "judge_schema": "evals/judge-output.schema.json",
+    "minimum_repetitions_for_stability_claim": 3,
+    "minimum_distinct_agents_for_cross_agent_claim": 2,
+    "minimum_automated_judge_repetitions_for_stability_claim": 2,
+    "requires_semantic_judge": true,
+    "report_worst_run": true
+  },
+  "retained_capabilities": [
+    "six-scenario-routing",
+    "create-rewrite-diagnose-compare",
+    "source-dominant-language-selection",
+    "explicit-format-override-and-html-default",
+    "meaning-preserving-revision",
+    "evidence-and-certainty-calibration",
+    "information-bearing-title-design",
+    "visual-need-decision",
+    "chart-diagram-table-color-and-layout-integrity",
+    "visual-provenance-and-synthetic-disclosure",
+    "self-contained-html-rendering",
+    "native-non-html-format-preservation",
+    "signal-based-diagnosis",
+    "hard-gate-and-reader-outcome-evaluation"
+  ],
+  "html_output": {
+    "reference": "references/html-output.md",
+    "scaffold_scripts": [
+      "scripts/new-html-report.sh",
+      "scripts/new-html-report.ps1"
+    ],
+    "validator": "scripts/validate_html_output.py",
+    "template": "assets/html/report-template.html",
+    "bundled_fonts": [
+      "assets/html/fonts/WorkSans-Regular.ttf",
+      "assets/html/fonts/WorkSans-Bold.ttf",
+      "assets/html/fonts/RedHatMono-Regular.ttf",
+      "assets/html/fonts/RedHatMono-Bold.ttf"
+    ],
+    "third_party_notices": [
+      "assets/html/THIRD_PARTY_NOTICES.md",
+      "assets/html/fonts/WorkSans-OFL.txt",
+      "assets/html/fonts/RedHatMono-OFL.txt"
+    ],
+    "optional_runtimes": [
+      "assets/html/js/echarts.min.js",
+      "assets/html/js/mermaid.min.js"
+    ],
+    "external_skill_dependency": false
+  },
+  "mandatory_execution_gates": [
+    "G1-task",
+    "G2-source",
+    "G3-route",
+    "G4-build",
+    "G5-signals",
+    "G6-verify"
+  ],
+  "signal_decisions": [
+    "confirmed",
+    "dismissed",
+    "unresolved"
+  ],
+  "signal_actions": [
+    "none",
+    "local-edit",
+    "section-rebuild",
+    "full-restructure",
+    "surface-to-user"
+  ],
+  "visual_claim_states": [
+    "verified",
+    "contextualized",
+    "synthetic",
+    "rejected"
+  ],
+  "visual_fallback_order": [
+    "verified-source-visual",
+    "non-person-conceptual-visual",
+    "no-visual"
+  ],
+  "visual_communication_rules": [
+    "reader-job-required",
+    "prose-alternative-comparison",
+    "deletion-test",
+    "least-complex-faithful-form",
+    "source-backed-encoding",
+    "honest-geometry-and-scale",
+    "functional-color-semantics",
+    "no-color-only-meaning",
+    "adjacent-context-and-source",
+    "responsive-render-verification"
+  ],
+  "natural_structure_rules": [
+    "progressive-disclosure-is-a-relationship",
+    "content-specific-headings",
+    "visuals-only-when-useful",
+    "no-method-labels-by-default",
+    "avoid-mechanical-symmetry",
+    "visible-structure-classification",
+    "heading-proposition-map",
+    "heading-only-readback"
+  ],
+  "visible_structure_states": [
+    "content-bearing",
+    "navigation-only",
+    "decorative"
+  ],
+  "language_selection_rules": [
+    "explicit-user-language-override",
+    "source-dominant-language-default",
+    "prompt-language-does-not-trigger-translation",
+    "mixed-source-language-resolution",
+    "preserve-precision-critical-original-forms"
+  ],
+  "output_format_rules": [
+    "explicit-user-format-override",
+    "existing-target-format-preservation",
+    "chat-only-output-signal",
+    "self-contained-html-default",
+    "portable-html-presentation-baseline",
+    "native-format-capability-preservation"
+  ],
+  "title_design_rules": [
+    "concrete-anchor",
+    "one-core-relationship",
+    "evidence-calibrated-verb",
+    "natural-not-formulaic",
+    "no-deceptive-clickbait",
+    "three-angle-candidate-generation",
+    "information-value-selection",
+    "verified-result-over-generic-hook",
+    "subtitle-adds-distinct-information",
+    "opening-fulfills-title-promise"
+  ],
+  "output_standards": [
+    "practical-information-first",
+    "reader-perspective",
+    "progressive-disclosure",
+    "natural-audience-fit-language",
+    "evidence-and-calibrated-certainty",
+    "scope-and-assumption-fidelity",
+    "useful-structure-and-concision",
+    "action-proportional-to-evidence"
+  ],
+  "hard_gates": [
+    "critical-proposition-fidelity",
+    "critical-evidence-coverage",
+    "critical-number-and-definition-accuracy",
+    "certainty-calibration",
+    "output-language-fidelity",
+    "output-format-selection-and-fidelity",
+    "title-content-fidelity",
+    "information-empty-visible-structure",
+    "visual-identity-and-provenance",
+    "synthetic-visual-disclosure",
+    "visual-purpose-and-form-fit",
+    "visual-encoding-integrity",
+    "visual-color-accessibility",
+    "html-local-asset-integrity",
+    "html-responsive-rendering",
+    "html-citation-integrity",
+    "scope-and-responsibility-fidelity",
+    "action-boundary",
+    "scenario-task-completeness"
+  ],
+  "scenario_required_headings": [
+    "## Reader Task",
+    "## Required Content",
+    "## Recommended Relationship",
+    "## Evidence Requirements",
+    "## Common Failures",
+    "## Acceptance Questions",
+    "## Industry Basis"
+  ],
+  "eval_files": [
+    "evals/trigger-cases.json",
+    "evals/behavior-cases.json",
+    "evals/cross-agent-cases.json",
+    "evals/judge-rubric.md",
+    "evals/judge-output.schema.json"
+  ],
+  "required_behavior_case_ids": [
+    "signal-long-sentence-dismissed",
+    "signal-owner-ambiguity-confirmed",
+    "signal-hard-failure-override",
+    "visual-unverified-person-photo-rejected",
+    "visual-verified-original-photo-allowed",
+    "visual-generated-concept-labeled",
+    "visual-source-summary-does-not-import-unrelated-photo",
+    "visual-deletion-test-removes-decoration",
+    "visual-chart-preserves-scale-and-context",
+    "visual-color-has-redundant-semantics",
+    "visual-form-follows-scenario-task",
+    "natural-structure-without-method-headings",
+    "title-source-summary-core-relationship",
+    "title-analysis-calibrates-causality",
+    "title-deceptive-clickbait-hard-rejected",
+    "title-strong-supported-claim-allowed",
+    "title-specific-result-beats-generic-hook",
+    "visible-structure-carries-content",
+    "language-source-dominant-default",
+    "language-explicit-user-override",
+    "html-self-contained-without-external-skill",
+    "format-defaults-to-self-contained-html",
+    "format-explicit-feishu-uses-portable-baseline"
+  ]
+}

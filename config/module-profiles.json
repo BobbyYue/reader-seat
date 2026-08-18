@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "canonical_entry": "SKILL.md",
+  "modules": {
+    "scenario-routing": {
+      "path": "references/scenario-routing.md",
+      "purpose": "select one primary reader task and a bounded secondary task when needed"
+    },
+    "output-standards": {
+      "path": "references/output-standards.md",
+      "purpose": "apply the eight cross-scenario output standards and hard gates"
+    },
+    "signal-processing": {
+      "path": "references/signal-processing.md",
+      "purpose": "turn readability signals into context-tested revision decisions"
+    },
+    "diagnosis-and-revision": {
+      "path": "references/diagnosis-and-revision.md",
+      "purpose": "diagnose or revise an existing document without meaning drift"
+    },
+    "evaluation": {
+      "path": "references/evaluation.md",
+      "purpose": "score, compare, or regression-test high-risk outputs"
+    },
+    "format-decision": {
+      "path": "references/format-decision.md",
+      "purpose": "select the output format and apply the portable native-format presentation baseline"
+    },
+    "html-output": {
+      "path": "references/html-output.md",
+      "purpose": "select output format and render self-contained HTML or a portable native-format baseline"
+    },
+    "visual-decision": {
+      "path": "references/visual-decision.md",
+      "purpose": "decide whether a material visual reduces reader cost before loading implementation detail"
+    },
+    "visual-communication": {
+      "path": "references/visual-communication.md",
+      "purpose": "implement retained charts, diagrams, tables, color, and encoded layout faithfully"
+    },
+    "visual-evidence": {
+      "path": "references/visual-evidence.md",
+      "purpose": "verify visual provenance, identity, context, and synthetic disclosure"
+    },
+    "title-design": {
+      "path": "references/title-design.md",
+      "purpose": "design or diagnose an evidence-faithful, information-bearing title"
+    },
+    "agent-portability": {
+      "path": "references/agent-portability.md",
+      "purpose": "package, invoke, and regression-test the canonical skill across agent hosts"
+    },
+    "scenario-news": {
+      "path": "references/scenario-news.md",
+      "purpose": "news and industry brief route"
+    },
+    "scenario-technical": {
+      "path": "references/scenario-technical.md",
+      "purpose": "technical proposal and architecture decision route"
+    },
+    "scenario-product": {
+      "path": "references/scenario-product.md",
+      "purpose": "product introduction, launch note, and PRD route"
+    },
+    "scenario-business": {
+      "path": "references/scenario-business.md",
+      "purpose": "business update, review, retrospective, and performance route"
+    },
+    "scenario-analysis": {
+      "path": "references/scenario-analysis.md",
+      "purpose": "data analysis and research route"
+    },
+    "scenario-procedure": {
+      "path": "references/scenario-procedure.md",
+      "purpose": "procedure, runbook, help article, and SOP route"
+    }
+  },
+  "always_modules": [
+    "scenario-routing",
+    "output-standards",
+    "signal-processing"
+  ],
+  "scenario_modules": {
+    "news": "scenario-news",
+    "technical": "scenario-technical",
+    "product": "scenario-product",
+    "business": "scenario-business",
+    "analysis": "scenario-analysis",
+    "procedure": "scenario-procedure"
+  },
+  "operation_modules": {
+    "create": [],
+    "rewrite": ["diagnosis-and-revision"],
+    "diagnose": ["diagnosis-and-revision"],
+    "compare": ["diagnosis-and-revision", "evaluation"]
+  },
+  "artifact_modules": [
+    "format-decision",
+    "visual-decision"
+  ],
+  "risk_modules": {
+    "standard": [],
+    "high": ["evaluation"]
+  },
+  "feature_modules": {
+    "html-output": ["html-output"],
+    "title": ["title-design"],
+    "visual-decision": ["visual-decision"],
+    "visual-retained": ["visual-decision", "visual-communication"],
+    "visual-asset": ["visual-decision", "visual-communication", "visual-evidence"],
+    "explicit-evaluation": ["evaluation"],
+    "portability": ["agent-portability"]
+  },
+  "load_order": [
+    "scenario-routing",
+    "output-standards",
+    "signal-processing",
+    "scenario-news",
+    "scenario-technical",
+    "scenario-product",
+    "scenario-business",
+    "scenario-analysis",
+    "scenario-procedure",
+    "diagnosis-and-revision",
+    "format-decision",
+    "html-output",
+    "visual-decision",
+    "visual-communication",
+    "visual-evidence",
+    "title-design",
+    "evaluation",
+    "agent-portability"
+  ]
+}

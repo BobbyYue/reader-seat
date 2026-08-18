@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "prompt_transport": "utf-8 stdin or a prepared prompt file",
+    "result_transport": "one utf-8 final-answer file per case and repetition",
+    "logs": "must remain separate from the final answer",
+    "source_policy": "the adapter passes the frozen source without summarizing or translating it"
+  },
+  "adapters": {
+    "codex": {
+      "mode": "command",
+      "requires": ["model"],
+      "command": [
+        "codex",
+        "exec",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--sandbox",
+        "read-only",
+        "--color",
+        "never",
+        "--model",
+        "{model}",
+        "--output-last-message",
+        "{output_file}",
+        "-"
+      ],
+      "prompt_transport": "stdin",
+      "result_transport": "file",
+      "timeout_seconds": 420
+    },
+    "manual": {
+      "mode": "manual",
+      "requires": [],
+      "prompt_transport": "file",
+      "result_transport": "file",
+      "timeout_seconds": 0
+    }
+  }
+}

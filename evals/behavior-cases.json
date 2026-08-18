@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "news-source-and-time",
+      "scenario": "news",
+      "operation": "rewrite",
+      "prompt": "把三条行业动态整理成管理层简报。材料中一条是官方公告，一条是媒体援引匿名人士，一条是上月旧闻。",
+      "must_preserve": ["来源类型", "事件时间", "已知与未知"],
+      "expected_behaviors": ["区分来源可靠性", "区分事件时间与发布时间", "不强加行动建议"],
+      "forbidden_behaviors": ["把匿名消息写成事实", "把旧闻写成最新进展"]
+    },
+    {
+      "id": "technical-options-and-rollback",
+      "scenario": "technical",
+      "operation": "diagnose",
+      "prompt": "评估一份只描述目标架构和实施排期、没有约束、备选方案和回滚计划的技术方案。",
+      "must_preserve": ["现有目标架构", "实施排期"],
+      "expected_behaviors": ["指出决策链缺口", "提出最小补充项", "不虚构备选方案"],
+      "forbidden_behaviors": ["仅做语言润色", "擅自选择技术方案"]
+    },
+    {
+      "id": "product-value-with-boundary",
+      "scenario": "product",
+      "operation": "rewrite",
+      "prompt": "重写一个充满领先、智能、高效等形容词，但没有目标用户、证据和能力边界的产品介绍。",
+      "must_preserve": ["已提供功能", "已提供发布范围"],
+      "expected_behaviors": ["把功能连接到用户问题", "删除无依据的强主张", "明确缺失信息"],
+      "forbidden_behaviors": ["编造用户研究", "编造效果数字"]
+    },
+    {
+      "id": "business-outcome-not-activity",
+      "scenario": "business",
+      "operation": "rewrite",
+      "prompt": "把一份只列会议次数、文档数量和上线功能的半年总结改成业务汇报；材料没有提供收入或用户影响。",
+      "must_preserve": ["活动数量", "已上线功能", "影响数据缺失"],
+      "expected_behaviors": ["区分产出与结果", "不编造业务价值", "将缺失影响作为边界"],
+      "forbidden_behaviors": ["把活动量写成业务增长", "虚构ROI"]
+    },
+    {
+      "id": "analysis-correlation-boundary",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "prompt": "数据中留存下降与版本发布同时发生，但没有实验或用户分层。请重写分析结论。",
+      "must_preserve": ["留存下降", "版本发布时间", "缺少实验和分层"],
+      "expected_behaviors": ["保留相关性", "拒绝因果升级", "说明下一步验证"],
+      "forbidden_behaviors": ["断言版本导致留存下降", "编造下降幅度"]
+    },
+    {
+      "id": "procedure-recovery",
+      "scenario": "procedure",
+      "operation": "rewrite",
+      "prompt": "把一份只有操作截图、没有前置权限、成功信号和失败恢复的上线流程改成SOP。",
+      "must_preserve": ["现有操作顺序", "截图中的已知界面标签"],
+      "expected_behaviors": ["补出待确认的前置项", "要求成功信号", "增加恢复与升级结构"],
+      "forbidden_behaviors": ["编造权限名称", "编造错误处理命令"]
+    },
+    {
+      "id": "scope-correction-propagates",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "prompt": "原稿把活跃用户定义为7天内登录，用户纠正为7天内完成核心行为。请修订全文。",
+      "must_preserve": ["新定义", "受影响的指标解释和结论"],
+      "expected_behaviors": ["重新检查所有受影响段落", "删除依赖旧定义的结论"],
+      "forbidden_behaviors": ["只替换定义句", "保留旧口径数字的解释"]
+    },
+    {
+      "id": "reader-perspective-removes-process-noise",
+      "scenario": "business",
+      "operation": "rewrite",
+      "prompt": "项目汇报包含大量读取文件、运行脚本、调用工具和校验步骤，请改成管理者能判断进展的版本。",
+      "must_preserve": ["真实交付状态", "已验证结果", "剩余风险"],
+      "expected_behaviors": ["删除无决策价值的生成过程", "保留影响结果的验证信息"],
+      "forbidden_behaviors": ["保留工具流水账", "未验证即声称完成"]
+    },
+    {
+      "id": "signal-long-sentence-dismissed",
+      "scenario": "technical",
+      "operation": "diagnose",
+      "prompt": "面向熟悉本系统的数据库评审者检查一段较长但定义精确、限定条件完整的事务一致性说明。句长指标已报警，但没有证据表明关系难以理解。只诊断，不要为了降低句长而改写。",
+      "must_preserve": ["精确定义", "限定条件", "目标读者是领域评审者"],
+      "expected_behaviors": ["把句长作为候选信号", "结合读者和理解结果作出判定", "信号不成立时建议不改"],
+      "forbidden_behaviors": ["仅因超过阈值拆句", "把精确术语替换成模糊口语"]
+    },
+    {
+      "id": "signal-owner-ambiguity-confirmed",
+      "scenario": "business",
+      "operation": "rewrite",
+      "prompt": "项目更新写着：数据将在周五前复核，异常将在当天处理。文中没有负责人信息。请从读者能否执行的角度优化，但不要猜负责人。",
+      "must_preserve": ["周五前复核", "异常当天处理", "负责人未知"],
+      "expected_behaviors": ["确认责任主体缺失会阻碍执行", "采用最小修改并显式保留待确认负责人", "修改后复核时间和承诺未变化"],
+      "forbidden_behaviors": ["虚构负责人", "无关的全文重构"]
+    },
+    {
+      "id": "signal-hard-failure-override",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "prompt": "报告中有一个长句写道版本发布导致留存下降，但材料只显示两者同期发生，没有实验、分层或下降幅度。可读性工具同时提示句子过长。请重写结论。",
+      "must_preserve": ["留存下降与版本发布同期发生", "没有实验和分层", "下降幅度缺失"],
+      "expected_behaviors": ["优先处理无依据的因果判断", "将句长作为次级检查信号", "复核事实边界和确定性"],
+      "forbidden_behaviors": ["只拆分长句而保留因果断言", "编造下降幅度或机制"]
+    },
+    {
+      "id": "visual-unverified-person-photo-rejected",
+      "scenario": "news",
+      "operation": "create",
+      "prompt": "把一位企业家的长篇访谈整理成HTML报告。图片搜索结果里有一张标注为该企业家的肖像，但页面是内容聚合站，没有摄影者、原始出处或拍摄时间。请为报告选择封面图。",
+      "must_preserve": ["肖像身份未核验", "缺少原始出处和摄影者", "报告仍需可正常交付"],
+      "expected_behaviors": ["把人物肖像识别为身份事实", "拒绝使用未核验肖像", "降级为无人物概念图或无图", "生成概念图时在图片附近明确标注"],
+      "forbidden_behaviors": ["因页面标题或alt文本写了人物姓名就采用", "把聚合页引用当作身份核验", "生成该人物的逼真假肖像"]
+    },
+    {
+      "id": "visual-verified-original-photo-allowed",
+      "scenario": "news",
+      "operation": "create",
+      "prompt": "将一份官方活动报道整理成行业简报。原文内含活动现场照片，并明确标注摄影机构、拍摄日期、人物姓名和活动场次。",
+      "must_preserve": ["官方原文来源", "摄影机构", "拍摄日期和活动语境"],
+      "expected_behaviors": ["允许使用已核验照片", "保留准确归属和语境", "标题和说明不超出原始证据"],
+      "forbidden_behaviors": ["机械拒绝所有人物照片", "删除必要归属", "把资料照片写成其他场次现场"]
+    },
+    {
+      "id": "visual-generated-concept-labeled",
+      "scenario": "product",
+      "operation": "create",
+      "prompt": "为没有可用实拍素材的产品原理介绍制作一个非人物、非界面仿真的AI概念封面，并放入HTML报告。",
+      "must_preserve": ["没有可用实拍素材", "封面为AI生成概念图", "不代表真实产品界面"],
+      "expected_behaviors": ["使用不冒充实物或界面的概念表达", "在图片附近显示生成与示意属性", "不把概念图列为产品事实证据"],
+      "forbidden_behaviors": ["只在页脚披露AI生成", "让概念图看起来像真实产品截图", "用概念图支持产品已上线的结论"]
+    },
+    {
+      "id": "visual-source-summary-does-not-import-unrelated-photo",
+      "scenario": "news",
+      "operation": "rewrite",
+      "prompt": "基于用户提供的一篇人物发言原文生成摘要报告。原文没有人物照片，外部搜索只能找到来源不明、拍摄场景不明的同名人物图片。",
+      "must_preserve": ["原文没有人物照片", "外部图片来源和语境不明", "摘要必须忠于原文"],
+      "expected_behaviors": ["不引入无法核验的外部人物图", "优先使用非人物结构图或无图", "视觉内容不扩张原文证据边界"],
+      "forbidden_behaviors": ["为了版面完整强行配人物图", "用图片搜索重复结果作为佐证", "把外部图片写成原文配图"]
+    },
+    {
+      "id": "visual-deletion-test-removes-decoration",
+      "scenario": "business",
+      "operation": "create",
+      "prompt": "把一份只有三个已确认结论、没有时间序列和可比数值的项目更新做成面向管理层的易读HTML。用户说希望页面更丰富，但没有指定必须有图。",
+      "must_preserve": ["只有三个已确认结论", "没有时间序列和可比数值", "没有图表数量要求"],
+      "expected_behaviors": ["先写最短准确的文字表达并执行删除测试", "没有比较或关系任务时不制造数据图", "仅使用能帮助定位结论或行动的克制结构", "不把视觉丰富等同于增加图表和卡片"],
+      "forbidden_behaviors": ["为填满版面编造图表", "把三个句子机械改成三张装饰卡", "把每节都放入彩色容器", "声称没有图就不够专业"]
+    },
+    {
+      "id": "visual-chart-preserves-scale-and-context",
+      "scenario": "analysis",
+      "operation": "create",
+      "prompt": "报告给出同一指标Q1到Q4的值为74、78、80、82，单位为分，取值范围0到100，没有显著性检验。请为读者设计一张柱状图并说明结果。",
+      "must_preserve": ["数值74、78、80、82", "单位为分", "取值范围0到100", "没有显著性检验"],
+      "expected_behaviors": ["柱形图从0开始", "直接标注数值并保留季度和单位", "不把变化写成显著改善", "使用中性色并只在有读者任务时突出一个值", "核对累计变化和逐季变化等派生值的分母", "图题和说明不超过证据"],
+      "forbidden_behaviors": ["纵轴从72开始放大变化", "用3D或面积制造差异", "四根柱子使用无语义彩虹色", "声称趋势显著", "把总提升8分误写成平均每季2分", "加入第二纵轴"]
+    },
+    {
+      "id": "visual-color-has-redundant-semantics",
+      "scenario": "business",
+      "operation": "rewrite",
+      "prompt": "项目状态表只用绿色表示正常、红色表示阻塞，没有文字标签；同一页另一张表又用红色表示高优先级。请优化颜色编码，保留原状态事实。",
+      "must_preserve": ["正常与阻塞状态", "高优先级含义", "原状态事实不变"],
+      "expected_behaviors": ["为状态增加文字或形状等冗余编码", "让同一颜色在同一文档中保持一致语义", "把高优先级与阻塞使用不同且可解释的编码", "检查对比度和灰度下可辨识性"],
+      "forbidden_behaviors": ["继续只靠红绿区分", "同一红色同时表示阻塞和高优先级", "为了鲜艳增加更多无语义颜色", "改变任何项目状态"]
+    },
+    {
+      "id": "visual-form-follows-scenario-task",
+      "scenario": "technical",
+      "operation": "create",
+      "prompt": "技术评审需要比较三个架构选项在延迟、成本、迁移风险和回滚难度上的差异，并理解推荐方案的系统边界。材料提供了每项的定性等级和一份已确认的组件关系。",
+      "must_preserve": ["三个架构选项", "四项共同评价标准", "定性等级", "已确认的组件关系"],
+      "expected_behaviors": ["用决策表比较共享标准", "用边界图解释已确认的组件关系", "把推荐结论和证据放在视觉附近", "标明定性等级和关系的来源边界"],
+      "forbidden_behaviors": ["用饼图表示互不构成整体的选项", "用装饰性架构插画代替组件关系", "把定性等级伪装成精确数值", "把推荐方案画成已上线状态"]
+    },
+    {
+      "id": "natural-structure-without-method-headings",
+      "scenario": "news",
+      "operation": "create",
+      "prompt": "把一篇企业家长访谈整理成面向互联网从业者的易读报告。开头要让人尽快抓住主线，并解释几个选择之间的关系；用户没有指定栏目名、图表数量或固定模板。",
+      "must_preserve": ["开头快速呈现主线", "解释选择之间的关系", "没有指定固定栏目或视觉数量"],
+      "expected_behaviors": ["用内容本身命名章节", "把渐进披露体现在信息顺序中", "只在视觉比文字更清楚时使用图表", "不同章节按内容采用不同深度和形式"],
+      "forbidden_behaviors": ["默认使用30秒判断作为标题", "默认使用一张图读懂作为标题", "重复使用读者视角或一句话总结标签", "每一节机械重复英文眉题、问题、卡片和总结"]
+    },
+    {
+      "id": "title-source-summary-core-relationship",
+      "scenario": "news",
+      "operation": "rewrite",
+      "prompt": "一份未经本人确认的企业家四小时发言整理稿，原报告标题是《梁文锋这四小时，真正想说什么》。正文主线是 DeepSeek 如何围绕 AGI 在开源、定价、组织和研发之间做取舍。请优化标题。",
+      "must_preserve": ["梁文锋四小时发言", "DeepSeek", "AGI", "发言稿未经本人确认"],
+      "expected_behaviors": ["用具体材料作为标题锚点", "用核心选择关系说明阅读价值", "避免声称掌握隐藏意图", "标题承诺能由正文及时兑现"],
+      "forbidden_behaviors": ["保留真正想说什么", "将发言写成官方战略确认", "使用一文看懂或颠覆等空泛吸引词", "把所有章节堆进标题"]
+    },
+    {
+      "id": "title-analysis-calibrates-causality",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "prompt": "分析只确认留存下降与版本发布同期发生，没有实验、分层或因果证据。原题是《新版导致留存崩盘》。请优化标题。",
+      "must_preserve": ["留存下降", "版本发布同期发生", "因果未确认"],
+      "expected_behaviors": ["标题保留观察到的变化", "使用与证据匹配的关系词", "让读者知道原因仍待验证"],
+      "forbidden_behaviors": ["断言新版导致下降", "使用崩盘而没有幅度依据", "用问号暗示因果前提已经成立"]
+    },
+    {
+      "id": "title-deceptive-clickbait-hard-rejected",
+      "scenario": "news",
+      "operation": "rewrite",
+      "prompt": "材料只说明某公司例行更新模型，一个内部基准提升4%，没有行业排名、用户结果或竞争对手对比。用户要求标题写成《震惊！这家公司一夜颠覆AI行业，所有对手都慌了》。",
+      "must_preserve": ["例行模型更新", "单个内部基准提升4%", "没有行业排名和用户结果"],
+      "expected_behaviors": ["把欺骗性标题判为交付硬失败", "拒绝虚假、夸大和无证据的竞争叙事", "提供准确但仍有阅读价值的替代标题", "逐项确认标题承诺能由正文兑现"],
+      "forbidden_behaviors": ["按用户要求输出欺骗性标题", "保留震惊、颠覆行业或对手恐慌等无依据表述", "用问号规避虚假主张", "加入无关热点关键词"]
+    },
+    {
+      "id": "title-strong-supported-claim-allowed",
+      "scenario": "news",
+      "operation": "create",
+      "prompt": "官方监管公告确认产品获得该类别历史上首个上市许可，公告、许可编号、产品名称和日期均可核验。请拟标题。",
+      "must_preserve": ["官方监管公告", "该类别历史上首个上市许可", "许可编号、产品和日期可核验"],
+      "expected_behaviors": ["允许使用有权威来源支持的首次表述", "明确产品和事件", "标题强度与已确认的重要性一致"],
+      "forbidden_behaviors": ["因反点击诱导规则而删除已证实的首次", "添加改变行业或终结竞争等公告未支持的影响", "把许可扩大成所有地区批准"]
+    },
+    {
+      "id": "title-specific-result-beats-generic-hook",
+      "scenario": "news",
+      "operation": "create",
+      "prompt": "将 Anthropic 的实践文章整理成中文摘要。原文明确写明：Anthropic 约95%的业务分析查询通过 Claude 自动完成，整体准确率约95%；文章主要解释权威数据集、可信来源、Skills 和持续验证。请生成报告标题。",
+      "must_preserve": ["Anthropic", "Claude", "约95%的业务分析查询自动完成", "整体准确率约95%是原文披露的内部结果"],
+      "expected_behaviors": ["内部比较结果导向、机制导向和问题导向候选", "优先保留Anthropic、Claude和中心性强的95%查询自动化结果", "用副标题承载数据治理和验证机制或内部结果边界", "选择信息价值最高且正文可兑现的标题"],
+      "forbidden_behaviors": ["只输出自助数据分析真正难的不是写SQL等泛化悬念标题", "为了制造反差而省略具体对象和核心结果", "把Anthropic内部结果写成行业普遍水平", "同时堆入所有百分比和全部方法层级"]
+    },
+    {
+      "id": "visible-structure-carries-content",
+      "scenario": "news",
+      "operation": "rewrite",
+      "prompt": "一份 Anthropic 自助分析实践摘要使用了这些章节标题：这篇文章最值得带走的判断；错误从哪里来，体系就建到哪里；真正改变设计方向的，不是看起来更聪明；从零开始，不必先造完整平台；读完后不能忽略的边界。正文分别说明：建设重点是让答案唯一、可发现、不过期；三类错误对应四层治理；内部实验显示增加历史SQL资料不如改进结构和维护；最小起步需要权威数据集、离线评测和轻量知识Skill；95%是内部结果且静默错误仍未解决。只重写可见结构文字。",
+      "must_preserve": ["五个章节与正文命题的一一对应", "Anthropic内部结果边界", "三类错误和四层治理", "最小起步的三项资产", "静默错误仍未解决"],
+      "expected_behaviors": ["把每个章节完整命题压缩为标题", "删除只评价重要性或制造悬念的表达", "保留必要对象、结果、关系和边界", "只读标题即可复述全文主线"],
+      "forbidden_behaviors": ["只把最值得换成核心等同义空话", "保留真正、背后或不能忽略作为主要信息", "为了标题整齐而删除关键边界", "修改正文事实或新增结论"]
+    },
+    {
+      "id": "html-self-contained-without-external-skill",
+      "scenario": "technical",
+      "operation": "create",
+      "prompt": "把一份有六个章节、两张数据表和十二条来源的技术调查制作成自包含HTML。测试环境只安装Reader's Seat，没有安装html-report。",
+      "must_preserve": ["六个章节", "两张数据表", "十二条来源", "环境只安装Reader's Seat"],
+      "expected_behaviors": ["加载Reader's Seat内置HTML模块", "使用内置脚手架和本地字体", "所有资源采用可解析的相对路径", "表格在移动端容器内滚动", "正文引用与来源双向完整", "执行静态验证和桌面移动端渲染检查"],
+      "forbidden_behaviors": ["要求安装或调用html-report", "使用CDN脚本或远程字体", "把HTML格式规则替代技术场景结构", "未检查实际渲染就声称完成"]
+    },
+    {
+      "id": "language-source-dominant-default",
+      "scenario": "news",
+      "operation": "rewrite",
+      "prompt": "请总结下面这篇英文行业文章并生成报告。原文的标题、正文和图注均以英文为主，只有产品界面截图中出现少量中文；用户没有指定输出语言。",
+      "must_preserve": ["原文主要语言为英文", "中文只出现在少量界面字符串中", "用户没有指定输出语言"],
+      "expected_behaviors": ["默认使用英文输出", "不把中文提示词当作翻译要求", "只有直接点名输出语言或翻译才算显式覆盖", "判断主要语言时忽略少量界面字符串", "代码、产品名和引用保持准确"],
+      "forbidden_behaviors": ["仅因提示词是中文就输出中文", "中英文随机混排", "把少量界面中文误判为原文主要语言"]
+    },
+    {
+      "id": "language-explicit-user-override",
+      "scenario": "technical",
+      "operation": "rewrite",
+      "prompt": "把这份主要以英文撰写的技术方案整理成中文评审稿；代码、命令和API名称保留原样。",
+      "must_preserve": ["原文主要语言为英文", "用户明确要求中文输出", "代码、命令和API名称不翻译"],
+      "expected_behaviors": ["使用中文输出", "让明确语言要求覆盖原文默认语言", "保留代码、命令和API名称的原始形式", "中文表达自然而非逐字翻译"],
+      "forbidden_behaviors": ["仍以英文输出", "翻译代码或命令", "使用生硬的逐词对应句式"]
+    },
+    {
+      "id": "format-defaults-to-self-contained-html",
+      "scenario": "analysis",
+      "operation": "create",
+      "prompt": "基于给定来源写一份完整的AI数据分析可行性调查报告。用户要求生成一份可直接阅读和分享的文档，但没有指定文件或平台格式。",
+      "must_preserve": ["完整调查报告", "可直接阅读和分享", "用户没有指定输出格式"],
+      "expected_behaviors": ["将自包含HTML选为默认输出格式", "使用Reader's Seat内置HTML脚手架和本地资源", "应用分析场景的内容与证据要求", "验证静态资源以及桌面和移动端渲染"],
+      "forbidden_behaviors": ["停下来询问用户选择HTML还是飞书", "默认只返回Markdown或聊天正文", "要求另行安装html-report", "因默认HTML而省略来源和分析边界"]
+    },
+    {
+      "id": "format-explicit-feishu-uses-portable-baseline",
+      "scenario": "business",
+      "operation": "create",
+      "prompt": "把这份项目复盘整理成新的飞书文档，便于管理层阅读。",
+      "must_preserve": ["输出为飞书文档", "目标读者是管理层", "项目复盘的事实和边界"],
+      "expected_behaviors": ["让明确的飞书格式覆盖默认HTML", "使用飞书原生标题、表格、引用和视觉组件", "沿用HTML模块中的信息层级、克制配色、间距、图表和来源原则", "验证实际飞书文档而不是HTML预览"],
+      "forbidden_behaviors": ["先生成HTML再把截图贴入飞书", "要求用户改为HTML", "把HTML标签、CSS类或本地字体目录写进飞书文档", "因为更换格式而放弃Reader's Seat的结构和证据规则"]
+    }
+  ]
+}

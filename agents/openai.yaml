@@ -1,0 +1,6 @@
+interface:
+  display_name: "Reader’s Seat"
+  short_description: "换到读者的位置，生成、重写与诊断专业易读的工作文档"
+  default_prompt: "使用 $reader-seat 从读者视角重构这份材料，让目标读者更容易理解和行动，同时保留事实、范围与证据边界。除非我指定其他形式，否则生成自包含 HTML 文档。"
+policy:
+  allow_implicit_invocation: true
