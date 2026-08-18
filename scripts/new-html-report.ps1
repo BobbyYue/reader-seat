@@ -6,6 +6,10 @@ param(
     [Parameter(Mandatory = $true, Position = 1)]
     [string]$BaseDir,
 
+    [Parameter(Mandatory = $true)]
+    [ValidatePattern('^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$')]
+    [string]$Language,
+
     [switch]$Charts,
     [switch]$Diagrams
 )
@@ -43,7 +47,8 @@ if ($Diagrams) {
 
 $TemplatePath = Join-Path $SkillDir "assets/html/report-template.html"
 $HtmlPath = Join-Path $OutDir "$Name.html"
-Copy-Item $TemplatePath $HtmlPath
+$Template = Get-Content -Raw -Path $TemplatePath
+$Template.Replace("{{LANG}}", $Language) | Set-Content -Path $HtmlPath -Encoding UTF8 -NoNewline
 
 Write-Host "Created: $HtmlPath"
 Write-Host "Created: $(Join-Path $OutDir 'assets/')"

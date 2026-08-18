@@ -118,6 +118,11 @@ def resolve(args: argparse.Namespace, profiles: dict) -> dict:
     return {
         "schema_version": 1,
         "skill": "reader-seat",
+        "runtime_enforcement": {
+            "required": True,
+            "contract_script": "scripts/runtime_contract.py",
+            "verification_receipt_required": True,
+        },
         "task_profile": {
             "scenario": args.scenario,
             "operation": args.operation,
@@ -156,8 +161,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-format",
         default="html",
-        choices=("html", "native"),
-        help="selected finished-artifact format; native covers explicit non-HTML targets",
+        choices=(
+            "html",
+            "native",
+            "feishu",
+            "lark",
+            "word",
+            "markdown",
+            "plain-text",
+            "slides",
+            "other",
+        ),
+        help="selected finished-artifact format; native remains a generic non-HTML alias",
     )
     parser.add_argument("--title", action="store_true")
     parser.add_argument(

@@ -62,24 +62,25 @@ reader-visible document.
 Use the bundled script from the Reader's Seat directory:
 
 ```bash
-bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir>
+bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --lang <locked-output-language>
 ```
 
 Add optional local libraries only when the report uses them:
 
 ```bash
-bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --charts
-bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --diagrams
-bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --charts --diagrams
+bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --lang <locked-output-language> --charts
+bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --lang <locked-output-language> --diagrams
+bash <reader-seat-dir>/scripts/new-html-report.sh <report-name> <output-dir> --lang <locked-output-language> --charts --diagrams
 ```
 
 On native Windows:
 
 ```powershell
-pwsh -File <reader-seat-dir>/scripts/new-html-report.ps1 <report-name> <output-dir> -Charts -Diagrams
+pwsh -File <reader-seat-dir>/scripts/new-html-report.ps1 <report-name> <output-dir> -Language <locked-output-language> -Charts -Diagrams
 ```
 
-The scaffold copies the bundled Work Sans and Red Hat Mono fonts automatically.
+The scaffold requires the runtime contract's locked output language and writes
+it into the HTML `lang` attribute. It copies the bundled Work Sans and Red Hat Mono fonts automatically.
 It copies ECharts for `--charts` and Mermaid for `--diagrams`. Author directly
 inside the created directory; there is no separate deployment step. Keep the
 copied `_shared/licenses/` directory with the artifact when redistributing it.

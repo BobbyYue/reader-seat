@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.16.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.17.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -67,6 +67,7 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 - **判断有据：**结论能够对应到证据、适用范围和其他合理解释。
 - **降低阅读成本：**标题、结构和视觉元素用于帮助定位和比较信息，而不是装饰。
 - **输出符合场景：**默认使用原材料的主要语言生成自包含 HTML；用户指定时可以改为飞书、Word、Markdown 等格式。
+- **交付边界明确：**生成前锁定语言、格式和发布权限；校验未通过或缺少回执时不交付。
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
 
@@ -83,6 +84,7 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 | `examples/` | 提供可以直接改写使用的常见文档提示词。 |
 | `references/` | 提供按场景、格式、标题、证据和视觉需要选择的详细规则。 |
 | `scripts/` | 校验 skill、选择模块、创建 HTML 报告骨架并运行评测。 |
+| `tests/` | 验证语言、格式、授权、来源完整性和交付回执约束。 |
 
 校验安装：
 

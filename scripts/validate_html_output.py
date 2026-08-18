@@ -17,6 +17,7 @@ PLACEHOLDERS = (
     "Replace this scaffold text",
     "Content goes here",
     "Report Title",
+    "{{LANG}}",
 )
 
 
@@ -28,11 +29,15 @@ class ArtifactParser(HTMLParser):
         self.assets: list[tuple[str, str]] = []
         self.tables_total = 0
         self.tables_wrapped = 0
+        self.html_lang: str | None = None
+        self.visible_text: list[str] = []
         self._stack: list[tuple[str, dict[str, str]]] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attributes = {key: value or "" for key, value in attrs}
         self._stack.append((tag, attributes))
+        if tag == "html":
+            self.html_lang = attributes.get("lang") or None
         if attributes.get("id"):
             self.ids.add(attributes["id"])
         if attributes.get("href"):
@@ -60,9 +65,34 @@ class ArtifactParser(HTMLParser):
                 del self._stack[index:]
                 return
 
+    def handle_data(self, data: str) -> None:
+        excluded = {"script", "style", "noscript", "svg", "code", "pre"}
+        if any(tag in excluded for tag, _ in self._stack):
+            return
+        self.visible_text.append(data)
+
 
 def is_remote(value: str) -> bool:
     return urlparse(value).scheme in {"http", "https"}
+
+
+def language_root(value: str) -> str:
+    return value.strip().lower().split("-", 1)[0]
+
+
+def dominant_language(text: str) -> tuple[str, int, int]:
+    text = re.sub(r"https?://\S+", " ", text)
+    cjk = len(re.findall(r"[\u3400-\u4dbf\u4e00-\u9fff]", text))
+    latin = len(re.findall(r"[A-Za-z]", text))
+    total = cjk + latin
+    if total < 80:
+        return "unknown", cjk, latin
+    cjk_share = cjk / total
+    if cjk_share >= 0.25:
+        return "zh", cjk, latin
+    if cjk_share <= 0.10:
+        return "en", cjk, latin
+    return "mixed", cjk, latin
 
 
 def main() -> int:
@@ -72,6 +102,10 @@ def main() -> int:
         "--scaffold",
         action="store_true",
         help="allow template placeholders while checking generated structure",
+    )
+    parser.add_argument(
+        "--expected-language",
+        help="expected dominant output language, for example en or zh-CN",
     )
     args = parser.parse_args()
 
@@ -96,6 +130,20 @@ def main() -> int:
 
     artifact = ArtifactParser()
     artifact.feed(text)
+
+    if args.expected_language:
+        expected = language_root(args.expected_language)
+        if not artifact.html_lang or language_root(artifact.html_lang) != expected:
+            errors.append(
+                f"html lang {artifact.html_lang!r} does not match expected language {expected}"
+            )
+        if not args.scaffold:
+            detected, cjk, latin = dominant_language(" ".join(artifact.visible_text))
+            if expected in {"en", "zh"} and detected != expected:
+                errors.append(
+                    f"visible text language is {detected}, expected {expected} "
+                    f"(CJK={cjk}, Latin={latin})"
+                )
 
     internal_targets = {href[1:] for href in artifact.hrefs if href.startswith("#")}
     for target in sorted(internal_targets - artifact.ids):

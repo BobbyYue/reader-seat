@@ -26,21 +26,30 @@ Natural wording, paragraph rhythm, and non-material layout details may vary.
 
 ## Adapter Contract
 
-An adapter has five responsibilities:
+An adapter has eight responsibilities:
 
 1. make `SKILL.md` discoverable or load it explicitly;
-2. resolve the required modules with `scripts/resolve_modules.py` or reproduce
+2. create the runtime source snapshot and run `scripts/runtime_contract.py init`
+   before generation;
+3. resolve the required modules with `scripts/resolve_modules.py` or reproduce
    its result exactly from `config/module-profiles.json`, including the active
    scenario contract extracted from the canonical scenario file;
-3. provide the complete user request and source material without summarizing
+4. provide the complete user request and source material without summarizing
    them first;
-4. preserve authorization boundaries and available-tool constraints;
-5. return the final artifact or response separately from logs and internal
-   reasoning.
+5. preserve authorization boundaries and available-tool constraints;
+6. run `runtime_contract.py check-action` with the exact locked action and target
+   immediately before any publish, overwrite, or cross-application replacement;
+7. run `runtime_contract.py verify` against the actual candidate or artifact and
+   reject delivery unless the resulting receipt has `status=pass`;
+8. return the verified artifact or response separately from logs, runtime files,
+   and internal reasoning.
 
 An adapter must not translate the request, compress the source, add a preferred
-template, silently enable publishing, or replace unavailable modules with its
-own writing policy.
+template, silently enable an external action, replace unavailable modules with
+its own writing policy, or treat a generated file as a successful delivery
+without a passing runtime receipt. If the host cannot enforce the runtime
+preconditions, label the adapter `advisory-only`; it cannot support a stability
+claim.
 
 For high-risk or regression work, use explicit invocation. Automatic discovery
 is a host feature and must be tested separately; it is not evidence that the
@@ -64,7 +73,7 @@ python3 scripts/resolve_modules.py \
 
 `--artifact` always loads the short format and visual decision gates.
 `--output-format html` additionally loads the complete HTML implementation;
-`--output-format native` leaves HTML-only mechanics unloaded. `--visual
+`--output-format word` leaves HTML-only mechanics unloaded. `--visual
 retained` loads the full visual implementation rules; `--visual asset` also
 loads provenance rules. This changes context cost, not capability: every full
 rule remains available before the corresponding output is built.
@@ -91,46 +100,13 @@ Use `scripts/run_evals.py` with the frozen cases in
   single host can establish only within-agent repeatability; a cross-agent
   claim requires at least two distinct, explicitly named agent IDs.
 
-For a headless agent, configure a command adapter in
-`config/agent-adapters.json`. For a GUI-only or unsupported host, use the manual
-adapter: prepare prompt bundles, run them in the host without edits, save each
-final answer at the requested path, then resume grading.
-
-### Command Adapters
-
-The built-in command adapters are vendor-neutral and execute an argv array
-directly without a shell.
-
-Use `command-stdin` when the agent command reads the frozen prompt from standard
-input and returns only its final answer on standard output. Provide the command
-as a JSON string array through `READER_SEAT_AGENT_COMMAND_JSON`:
-
-```bash
-export READER_SEAT_AGENT_COMMAND_JSON='["your-agent", "run", "--model", "{model}", "-"]'
-python3 scripts/run_evals.py run \
-  --adapter command-stdin \
-  --agent-id your-agent \
-  --model your-model \
-  --case xagent-analysis-causality \
-  --output-dir /tmp/reader-seat-eval
-```
-
-Use `command-files` when the agent command reads and writes files. Provide its
-argv array through `READER_SEAT_AGENT_FILE_COMMAND_JSON`; the placeholders
-`{prompt_file}`, `{output_file}`, `{model}`, `{skill_root}`, and
-`{judge_schema}` are available:
-
-```bash
-export READER_SEAT_AGENT_FILE_COMMAND_JSON='["your-agent", "run", "--input", "{prompt_file}", "--output", "{output_file}"]'
-python3 scripts/run_evals.py run \
-  --adapter command-files \
-  --agent-id your-agent \
-  --case xagent-analysis-causality \
-  --output-dir /tmp/reader-seat-eval
-```
-
-Replace the example argv array with the real command documented by the target
-agent. Do not insert a shell wrapper or bypass its permission model.
+For a headless agent, use the bundled Codex adapter or either vendor-neutral
+command adapter in `config/agent-adapters.json`. `command-stdin` accepts a JSON
+argv array through `READER_SEAT_AGENT_COMMAND_JSON`; `command-files` accepts one
+through `READER_SEAT_AGENT_FILE_COMMAND_JSON` and substitutes `{prompt_file}`
+and `{output_file}`. For a GUI-only or unsupported host, use the manual adapter:
+prepare prompt bundles, run them in the host without edits, save each final
+answer at the requested path, then resume grading.
 
 ## Acceptance
 
@@ -148,3 +124,9 @@ A cross-agent claim is supported only when:
 
 Passing static skill validation or one successful generation is not sufficient
 evidence of cross-agent stability.
+
+For production delivery, the host integration must make the runtime receipt a
+machine-checked return precondition rather than another prompt instruction. A
+host that can return an answer after a missing or failed receipt is not a
+conforming enforcement adapter, even when its prompt contains every Reader's
+Seat rule.

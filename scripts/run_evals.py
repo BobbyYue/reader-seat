@@ -73,13 +73,47 @@ def module_plan(case: dict) -> dict:
     return resolve_modules.resolve(namespace, resolve_modules.load_profiles())
 
 
+def dominant_language(text: str) -> str:
+    without_urls = re.sub(r"https?://\S+", " ", text)
+    cjk = len(re.findall(r"[\u3400-\u4dbf\u4e00-\u9fff]", without_urls))
+    latin = len(re.findall(r"[A-Za-z]", without_urls))
+    total = cjk + latin
+    if total < 40:
+        return "unknown"
+    share = cjk / total
+    if share >= 0.25:
+        return "zh"
+    if share <= 0.10:
+        return "en"
+    return "mixed"
+
+
+def locked_test_decisions(case: dict) -> dict:
+    source_language = dominant_language(case["source_material"])
+    if source_language in {"mixed", "unknown"}:
+        raise SystemExit(f"error: case {case['id']} needs an explicit frozen output language")
+    return {
+        "output_language": case.get("output_language", source_language),
+        "output_format": case.get("output_format", "html" if case.get("artifact") else "chat"),
+        "publication_target": "none",
+    }
+
+
 def build_producer_prompt(case: dict, plan: dict) -> str:
     paths = [plan["canonical_entry"], *[item["path"] for item in plan["modules"]]]
     absolute_paths = "\n".join(f"- {ROOT / path}" for path in paths)
     active = plan["active_scenario_contract"]
+    decisions = locked_test_decisions(case)
     return f"""Use the canonical Reader's Seat skill from the files listed below.
 Read every listed file before answering. Apply the rules silently; do not mention
 the skill, this test, module routing, internal records, tools, or evaluation.
+
+The evaluation harness owns runtime enforcement for this frozen, read-only test.
+Do not create runtime files or call external tools. Treat these decisions as the
+locked task contract; the harness will reject a candidate that drifts from them:
+- output_language: {decisions['output_language']}
+- output_format: {decisions['output_format']}
+- publication_target: none
 
 Required files:
 {absolute_paths}
@@ -341,6 +375,12 @@ def deterministic_grade(case: dict, text: str) -> dict:
     folded = normalize(text)
     failures: list[str] = []
     signals: list[str] = []
+    decisions = locked_test_decisions(case)
+    detected_language = dominant_language(text)
+    if detected_language != decisions["output_language"]:
+        failures.append(
+            f"output language is {detected_language}, expected {decisions['output_language']}"
+        )
     for literal in checks.get("must_contain", []):
         if normalize(literal) not in folded:
             failures.append(f"missing required literal: {literal}")

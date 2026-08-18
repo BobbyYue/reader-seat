@@ -2,6 +2,10 @@
   "schema_version": 1,
   "canonical_entry": "SKILL.md",
   "modules": {
+    "runtime-enforcement": {
+      "path": "references/runtime-enforcement.md",
+      "purpose": "lock critical task decisions and require a passing deliverable receipt"
+    },
     "scenario-routing": {
       "path": "references/scenario-routing.md",
       "purpose": "select one primary reader task and a bounded secondary task when needed"
@@ -76,6 +80,7 @@
     }
   },
   "always_modules": [
+    "runtime-enforcement",
     "scenario-routing",
     "output-standards",
     "signal-processing"
@@ -112,6 +117,7 @@
     "portability": ["agent-portability"]
   },
   "load_order": [
+    "runtime-enforcement",
     "scenario-routing",
     "output-standards",
     "signal-processing",

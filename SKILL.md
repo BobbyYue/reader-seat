@@ -9,7 +9,7 @@ Create or improve a work document by routing it to the right document scenario, 
 
 Progressive disclosure is an information relationship, not a set of visible section names. Do not turn quality goals such as quick judgment, visual understanding, reader perspective, or evidence boundaries into default headings. Let headings name the actual subject, finding, tension, or question in the document.
 
-Every loaded rule is operational, not optional background. Complete the mandatory execution record before delivery. A step may be marked `not-applicable` only with a task-specific reason; never skip it silently.
+Every loaded rule is operational, not optional background. Complete the mandatory execution record before delivery. A step may be marked `not-applicable` only with a task-specific reason; never skip it silently. A prose claim that a check was completed is not verification; the bundled runtime contract and receipt are required.
 
 ## Core Contract
 
@@ -30,6 +30,21 @@ Apply this priority when goals conflict:
 - Never deliver a deceptive or clickbait title. Reject or rewrite any title that uses falsehood, exaggeration, unrelated hooks, manufactured suspense, or a promise the body does not fulfill to obtain attention.
 - Do not expose the skill name, routing labels, internal tools, commands, prompts, schemas, checks, or scores in the finished document unless the user asks or they affect a real decision.
 - Do not publish, overwrite a source, or replace content in another application without explicit authorization.
+- Never report `verified`, `validated`, `PASS`, or an equivalent completion claim unless the actual deliverable has a passing runtime receipt.
+
+## Mandatory Runtime Enforcement
+
+For every Reader's Seat task, read [references/runtime-enforcement.md](references/runtime-enforcement.md) and use `scripts/runtime_contract.py`. This is the executable control plane for decisions that must not drift.
+
+1. Read enough of the primary source to determine its dominant language and establish the source boundary.
+2. Save the substantive source prose as a runtime source snapshot, then run `runtime_contract.py init`. It fingerprints the source and derives and locks the output language and format from the source, explicit user signals, existing target, channel, and publication authorization. A conflicting selection fails instead of being recorded.
+3. Draft only after the contract reports `status=locked`. Treat its `output_language`, `output_format`, and `publication_target` as immutable.
+4. Complete every required semantic check in the generated review file with concrete artifact evidence. `pending`, `fail`, missing evidence, or a missing gate blocks delivery. High-risk tasks also require a passing independent judge result.
+5. Run `runtime_contract.py verify` against the actual artifact. Deliver only when it writes a receipt with `status=pass`.
+
+Immediately before publishing, overwriting, or replacing content in Feishu/Lark or another external target, run `runtime_contract.py check-action` with the exact locked action and retain its passing action receipt for final verification. Do not call the external tool when this check fails. Creating a local HTML file is not external-action authorization.
+
+If the runtime script cannot execute, do not substitute an informal checklist and do not claim completion. State that the output could not be verified and stop before publishing or delivering a finished artifact. A host integration may enforce these commands externally; the skill's instructions do not override a higher-priority host rule.
 
 ## Language Selection Gate
 
@@ -49,7 +64,7 @@ Load only the resources needed for the current task.
 
 | Condition | Read |
 | --- | --- |
-| Every task | [references/scenario-routing.md](references/scenario-routing.md), [references/output-standards.md](references/output-standards.md), and [references/signal-processing.md](references/signal-processing.md) |
+| Every task | [references/runtime-enforcement.md](references/runtime-enforcement.md), [references/scenario-routing.md](references/scenario-routing.md), [references/output-standards.md](references/output-standards.md), and [references/signal-processing.md](references/signal-processing.md) |
 | Every task that produces or edits a finished artifact | [references/format-decision.md](references/format-decision.md) to select the format and apply its portable presentation baseline, and [references/visual-decision.md](references/visual-decision.md) to make the no-visual or retain-visual decision cheaply |
 | The selected output format is HTML by explicit request, inherited target, or default | [references/html-output.md](references/html-output.md) for the complete self-contained HTML implementation |
 | Primary scenario is news or industry brief | [references/scenario-news.md](references/scenario-news.md) |
@@ -67,13 +82,12 @@ Load only the resources needed for the current task.
 
 For a mixed document, select one primary scenario for the whole document. Load one secondary scenario only when a clearly bounded subsection has a different reader task.
 
-When script execution is available, resolve the ordered module list with
+After the runtime contract is locked, resolve the ordered module list with
 `python3 scripts/resolve_modules.py` using the recorded scenario, operation,
 artifact, selected output format, risk, title, and visual decisions. Treat
 [config/module-profiles.json](config/module-profiles.json) as the loading source
 of truth. The resolver changes context cost only; it may never waive a rule or
-prevent a required module from loading. When scripts are unavailable, reproduce
-the same decision with the table above. Use the resolver's
+prevent a required module from loading. Use the resolver's
 `active_scenario_contract` as a silent completion checklist; it is extracted
 verbatim from the selected scenario module and does not replace that module.
 
@@ -90,7 +104,7 @@ Maintain an internal record for every task. Do not expose it in the finished doc
 | `G5-signals` | signal register defined in [references/signal-processing.md](references/signal-processing.md) | Every detected signal is `confirmed`, `dismissed`, or `unresolved`; no signal directly causes rewriting |
 | `G6-verify` | hard-gate results, meaning-preservation result, scenario acceptance result, signal recheck, visual provenance and labeling when applicable, and unresolved limitations | No hard failure remains; material unresolved issues are either fixed or disclosed |
 
-Do not deliver because the draft merely sounds clearer. Delivery requires all six gates to reach their exit condition. When the source is insufficient, return a bounded result and surface the missing information instead of manufacturing completion.
+Do not deliver because the draft merely sounds clearer. Delivery requires all six gates to reach their exit condition and a passing runtime receipt. When the source is insufficient, return a bounded result and surface the missing information instead of manufacturing completion.
 
 ## Workflow
 
@@ -106,7 +120,7 @@ Determine:
 
 Ask only when one missing fact can materially change the structure, claim strength, tone, scope, or required action. Otherwise use a conservative assumption and state it outside the finished document when needed.
 
-Record the result under `G1-task`. Do not proceed with an undefined target reader unless the task is low-risk and a conservative reader assumption is recorded.
+Record the result under `G1-task`, then initialize the runtime contract. Do not proceed with an undefined target reader unless the task is low-risk and a conservative reader assumption is recorded. Do not draft until the contract locks the language, format, and publication decision.
 
 ### 2. Establish The Source Boundary
 
@@ -207,9 +221,9 @@ Verify that:
 - the title names the actual object and gives an accurate expectation of the document's central relationship, change, decision, or reader value; title and subtitle do not duplicate or overstate the body.
 - every material title claim maps to the body and source; no false, exaggerated, irrelevant, or unfulfilled click-inducing promise remains.
 
-Record the result under `G6-verify`. Recheck every passage changed because of a signal and rerun any affected hard gate, output standard, and scenario acceptance question. Do not use a better formula score as proof that the revision is better.
+Record the result under `G6-verify`. Recheck every passage changed because of a signal and rerun any affected hard gate, output standard, and scenario acceptance question. Complete the generated semantic review with concrete evidence, then run `runtime_contract.py verify` on the actual deliverable. Do not use a better formula score as proof that the revision is better.
 
-For file or online outputs, verify the actual rendered artifact in proportion to risk before claiming completion.
+For file or online outputs, verify the actual rendered artifact in proportion to risk before claiming completion. A structural validator, successful export, or successful publication does not replace the runtime receipt.
 
 ## Output Modes
 
@@ -266,7 +280,7 @@ When changing the skill:
 1. change only the affected scenario or shared standard;
 2. update the contract version according to behavior impact;
 3. add or update a regression case under `evals/`;
-4. run `python3 scripts/validate_skill.py` and the official `quick_validate.py`;
+4. run `python3 -m unittest discover -s tests -v`, `python3 scripts/validate_skill.py`, and the official `quick_validate.py`;
 5. run the affected frozen case through `scripts/run_evals.py` without leaking
    the expected answer to the producer;
 6. forward-test at least one affected case and one unaffected scenario in fresh

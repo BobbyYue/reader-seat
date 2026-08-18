@@ -122,8 +122,8 @@ def check_reference_links(errors: list[str]) -> None:
 
 
 def check_contract(contract: dict, errors: list[str]) -> None:
-    if contract.get("schema_version") != 2:
-        fail("skill contract schema_version must be 2", errors)
+    if contract.get("schema_version") != 3:
+        fail("skill contract schema_version must be 3", errors)
     if not re.fullmatch(r"\d+\.\d+\.\d+", contract.get("skill_version", "")):
         fail("skill_version must use semantic versioning", errors)
 
@@ -535,9 +535,11 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         "native-non-html-format-preservation",
         "signal-based-diagnosis",
         "hard-gate-and-reader-outcome-evaluation",
+        "fail-closed-runtime-contract",
+        "vendor-neutral-command-adapters",
     }
     if set(contract.get("retained_capabilities", [])) != required_capabilities:
-        fail("retained_capabilities does not preserve the complete v0.13 capability set", errors)
+        fail("retained_capabilities does not preserve the complete runtime capability set", errors)
 
     resolver = ROOT / "scripts" / "resolve_modules.py"
     resolver_cases = [
@@ -577,12 +579,21 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
             result = json.loads(completed.stdout)
             resolved_ids = {module["id"] for module in result["modules"]}
             active_contract = result["active_scenario_contract"]
+            runtime_contract = result["runtime_enforcement"]
         except (json.JSONDecodeError, KeyError, TypeError) as exc:
             fail(f"module resolver returned invalid JSON: {exc}", errors)
             continue
         for field in ("source", "required_content", "evidence_requirements", "acceptance_questions"):
             if not isinstance(active_contract.get(field), str) or not active_contract[field].strip():
                 fail(f"module resolver active scenario contract missing {field}", errors)
+        if runtime_contract != {
+            "required": True,
+            "contract_script": "scripts/runtime_contract.py",
+            "verification_receipt_required": True,
+        }:
+            fail("module resolver does not preserve runtime enforcement", errors)
+        if "runtime-enforcement" not in resolved_ids:
+            fail("module resolver omitted runtime-enforcement", errors)
         missing = required_ids - resolved_ids
         forbidden = forbidden_ids & resolved_ids
         if missing:
@@ -592,27 +603,40 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
 
     adapters = load_json(AGENT_ADAPTERS_PATH, errors)
     if isinstance(adapters, dict):
-        adapter_map = adapters.get("adapters", {})
-        required_adapters = {"command-stdin", "command-files", "manual"}
-        if not isinstance(adapter_map, dict) or set(adapter_map) < required_adapters:
-            fail("agent adapters must define command-stdin, command-files, and manual modes", errors)
+        protocol = adapters.get("protocol", {})
+        if not isinstance(protocol, dict):
+            fail("agent adapters must define a protocol object", errors)
         else:
-            command_contracts = {
-                "command-stdin": ("READER_SEAT_AGENT_COMMAND_JSON", "stdin", "stdout"),
-                "command-files": ("READER_SEAT_AGENT_FILE_COMMAND_JSON", "file", "file"),
-            }
-            for adapter_id, (env_name, prompt_transport, result_transport) in command_contracts.items():
-                adapter = adapter_map[adapter_id]
-                if adapter.get("mode") != "command":
-                    fail(f"{adapter_id} adapter must use command mode", errors)
-                if adapter.get("command_env") != env_name:
-                    fail(f"{adapter_id} adapter must use {env_name}", errors)
-                if adapter.get("prompt_transport") != prompt_transport:
-                    fail(f"{adapter_id} adapter must use {prompt_transport} prompt transport", errors)
-                if adapter.get("result_transport") != result_transport:
-                    fail(f"{adapter_id} adapter must use {result_transport} result transport", errors)
+            for required in (
+                "runtime_init",
+                "external_action_preflight",
+                "delivery_precondition",
+            ):
+                if not str(protocol.get(required, "")).strip():
+                    fail(f"agent adapter protocol missing enforcement term: {required}", errors)
+        adapter_map = adapters.get("adapters", {})
+        required_adapters = {"codex", "command-stdin", "command-files", "manual"}
+        if not isinstance(adapter_map, dict) or set(adapter_map) < required_adapters:
+            fail("agent adapters must preserve codex, generic command, and manual modes", errors)
+        else:
+            codex = adapter_map["codex"]
+            command = codex.get("command", [])
+            if codex.get("mode") != "command" or not isinstance(command, list):
+                fail("codex adapter must use an argv command array", errors)
+            else:
+                joined = " ".join(str(part) for part in command)
+                for required in ("{model}", "{output_file}", "--ephemeral", "read-only"):
+                    if required not in joined:
+                        fail(f"codex adapter missing isolation or output term: {required}", errors)
+                for forbidden in ("bash -c", "bash -lc", "sh -c", "dangerously-bypass"):
+                    if forbidden in joined:
+                        fail(f"codex adapter contains unsafe shell or sandbox term: {forbidden}", errors)
             if adapter_map["manual"].get("mode") != "manual":
                 fail("manual adapter must use manual mode", errors)
+            for adapter_id in ("command-stdin", "command-files"):
+                generic = adapter_map[adapter_id]
+                if generic.get("mode") != "command" or not generic.get("command_env"):
+                    fail(f"{adapter_id} must use an environment-supplied argv array", errors)
 
     portability_path = ROOT / "references" / "agent-portability.md"
     if portability_path.is_file():
@@ -626,6 +650,16 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         ):
             if heading not in portability_text:
                 fail(f"references/agent-portability.md missing heading: {heading}", errors)
+        for term in (
+            "runtime_contract.py init",
+            "runtime_contract.py check-action",
+            "runtime_contract.py verify",
+            "status=pass",
+            "advisory-only",
+            "machine-checked return precondition",
+        ):
+            if term not in portability_text:
+                fail(f"references/agent-portability.md missing enforcement term: {term}", errors)
     else:
         fail("missing references/agent-portability.md", errors)
 
@@ -667,6 +701,77 @@ def check_format_decision(errors: list[str]) -> None:
     ):
         if term not in text:
             fail(f"references/format-decision.md missing required rule: {term}", errors)
+
+
+def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
+    runtime = contract.get("runtime_enforcement")
+    if not isinstance(runtime, dict):
+        fail("contract missing runtime_enforcement", errors)
+        return
+
+    expected_true = (
+        "required_for_every_task",
+        "external_action_guard_required",
+        "action_preflight_receipt_required",
+        "semantic_review_required",
+        "independent_judge_required_for_high_risk",
+        "verification_receipt_required",
+        "fail_closed_on_missing_or_failed_receipt",
+        "host_wrapper_required_for_absolute_enforcement",
+    )
+    for key in expected_true:
+        if runtime.get(key) is not True:
+            fail(f"runtime_enforcement must set {key}=true", errors)
+
+    expected_lock = {
+        "output-language",
+        "output-format",
+        "publication-target",
+        "external-action",
+        "publication-authorization",
+    }
+    if set(runtime.get("decision_lock", [])) != expected_lock:
+        fail("runtime_enforcement decision_lock is incomplete", errors)
+    if "publication-authorization-and-target-fidelity" not in contract.get("hard_gates", []):
+        fail("hard_gates must include publication authorization and target fidelity", errors)
+
+    script_relative = runtime.get("contract_script")
+    script = ROOT / str(script_relative)
+    if script_relative != "scripts/runtime_contract.py" or not script.is_file():
+        fail("runtime_enforcement does not reference scripts/runtime_contract.py", errors)
+    else:
+        completed = subprocess.run(
+            [sys.executable, "-B", str(script), "--help"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if completed.returncode != 0:
+            fail(f"runtime_contract.py --help failed: {completed.stderr.strip()}", errors)
+
+    tests_relative = runtime.get("unit_tests")
+    if tests_relative != "tests/test_runtime_contract.py" or not (ROOT / str(tests_relative)).is_file():
+        fail("runtime_enforcement does not reference its unit tests", errors)
+
+    reference = ROOT / "references" / "runtime-enforcement.md"
+    if not reference.is_file():
+        fail("missing references/runtime-enforcement.md", errors)
+    else:
+        text = reference.read_text(encoding="utf-8")
+        for term in (
+            "Decision derivation",
+            "Immutable lock",
+            "Action authorization",
+            "Deliverable verification",
+            "runtime_contract.py init",
+            "runtime_contract.py check-action",
+            "runtime_contract.py verify",
+            "status=pass",
+            "cannot provide an absolute execution guarantee",
+        ):
+            if term not in text:
+                fail(f"runtime-enforcement.md missing required term: {term}", errors)
 
 
 def check_html_output(contract: dict, errors: list[str]) -> None:
@@ -740,6 +845,7 @@ def check_html_output(contract: dict, errors: list[str]) -> None:
             fail("HTML template has an invalid line-1 marker or doctype", errors)
         for term in (
             '<meta name="viewport"',
+            '<html lang="{{LANG}}">',
             "@media (max-width:",
             "@media print",
             ".table-wrap",
@@ -753,6 +859,8 @@ def check_html_output(contract: dict, errors: list[str]) -> None:
         if not path.is_file():
             continue
         script_text = path.read_text(encoding="utf-8")
+        if "new-html-report" in path.name and "LANG" not in script_text.upper():
+            fail(f"{relative} does not require the locked output language", errors)
         for forbidden in (
             "/skills/html-report/",
             "html-report/canvas-fonts",
@@ -900,6 +1008,7 @@ def main() -> int:
     check_contract(contract, errors)
     check_runtime_portability(contract, errors)
     check_format_decision(errors)
+    check_runtime_enforcement(contract, errors)
     check_html_output(contract, errors)
     check_evals(contract, errors)
 
@@ -910,7 +1019,7 @@ def main() -> int:
         return 1
 
     print(
-        "PASS: "
+        "PASS: static skill contract valid | "
         f"{contract['name']} {contract['skill_version']} | "
         f"{len(contract['primary_routes'])} routes | "
         f"{len(contract['output_standards'])} output standards | "

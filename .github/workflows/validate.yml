@@ -25,6 +25,9 @@ jobs:
       - name: Validate skill contract
         run: python scripts/validate_skill.py
 
+      - name: Test runtime contract enforcement
+        run: python -m unittest discover -s tests -v
+
       - name: Smoke-test module resolution
         run: >-
           python scripts/resolve_modules.py

@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-usage: new-html-report.sh <name> <output-base-dir> [--charts] [--diagrams]
+usage: new-html-report.sh <name> <output-base-dir> --lang <language> [--charts] [--diagrams]
 
 Creates <output-base-dir>/<name>/ with a self-contained Reader's Seat HTML
 scaffold. Bundled fonts are copied automatically. Optional local JavaScript
@@ -22,10 +22,19 @@ shift 2
 
 WITH_CHARTS=0
 WITH_DIAGRAMS=0
+LANGUAGE=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --charts) WITH_CHARTS=1 ;;
     --diagrams) WITH_DIAGRAMS=1 ;;
+    --lang)
+      shift
+      if [[ $# -eq 0 ]]; then
+        echo "error: --lang requires a language tag" >&2
+        exit 1
+      fi
+      LANGUAGE="$1"
+      ;;
     *)
       echo "error: unknown option: $1" >&2
       usage
@@ -34,6 +43,11 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
+
+if [[ -z "$LANGUAGE" || ! "$LANGUAGE" =~ ^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$ ]]; then
+  echo "error: --lang must be a BCP-47-like language tag" >&2
+  exit 1
+fi
 
 if [[ ! "$NAME" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
   echo "error: name must contain lowercase letters, digits, or hyphens" >&2
@@ -66,7 +80,7 @@ if [[ "$WITH_DIAGRAMS" -eq 1 ]]; then
   cp "$SKILL_DIR/assets/html/js/mermaid.min.js" "$OUT_DIR/_shared/js/"
 fi
 
-cp "$SKILL_DIR/assets/html/report-template.html" "$OUT_DIR/$NAME.html"
+sed "s/{{LANG}}/$LANGUAGE/g" "$SKILL_DIR/assets/html/report-template.html" > "$OUT_DIR/$NAME.html"
 
 echo "Created: $OUT_DIR/$NAME.html"
 echo "Created: $OUT_DIR/assets/"

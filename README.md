@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.16.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.17.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -67,6 +67,7 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 - **Judgment:** conclusions stay connected to evidence, scope, and credible alternatives.
 - **Reader effort:** titles, structure, and visuals help the reader locate and compare information instead of creating decoration.
 - **Output fit:** the default is self-contained HTML in the source material's dominant language, unless another format or language is requested.
+- **Delivery boundary:** language, format, and publication permission are locked before drafting; failed or missing verification blocks delivery.
 
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents rather than short-message polishing or unsupported content expansion.
 
@@ -83,6 +84,7 @@ Reader's Seat does not publish, overwrite, or send content without explicit auth
 | `examples/` | Contains prompts users can adapt to common document tasks. |
 | `references/` | Provides detailed rules selected for each scenario, format, title, evidence, and visual need. |
 | `scripts/` | Validates the skill, selects modules, creates HTML report scaffolds, and runs evaluations. |
+| `tests/` | Verifies language, format, authorization, source integrity, and delivery-receipt enforcement. |
 
 Validate an installation:
 

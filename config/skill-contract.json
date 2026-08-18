@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "skill_version": "0.16.0",
+  "schema_version": 3,
+  "skill_version": "0.17.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -29,6 +29,7 @@
     }
   ],
   "shared_modules": [
+    "references/runtime-enforcement.md",
     "references/scenario-routing.md",
     "references/output-standards.md",
     "references/signal-processing.md"
@@ -91,6 +92,25 @@
     "visual_decision_module": "references/visual-decision.md",
     "visual_implementation_module": "references/visual-communication.md"
   },
+  "runtime_enforcement": {
+    "contract_script": "scripts/runtime_contract.py",
+    "unit_tests": "tests/test_runtime_contract.py",
+    "required_for_every_task": true,
+    "decision_lock": [
+      "output-language",
+      "output-format",
+      "publication-target",
+      "external-action",
+      "publication-authorization"
+    ],
+    "external_action_guard_required": true,
+    "action_preflight_receipt_required": true,
+    "semantic_review_required": true,
+    "independent_judge_required_for_high_risk": true,
+    "verification_receipt_required": true,
+    "fail_closed_on_missing_or_failed_receipt": true,
+    "host_wrapper_required_for_absolute_enforcement": true
+  },
   "cross_agent_evaluation": {
     "adapters": "config/agent-adapters.json",
     "runner": "scripts/run_evals.py",
@@ -117,7 +137,9 @@
     "self-contained-html-rendering",
     "native-non-html-format-preservation",
     "signal-based-diagnosis",
-    "hard-gate-and-reader-outcome-evaluation"
+    "hard-gate-and-reader-outcome-evaluation",
+    "fail-closed-runtime-contract",
+    "vendor-neutral-command-adapters"
   ],
   "html_output": {
     "reference": "references/html-output.md",
@@ -246,6 +268,7 @@
     "certainty-calibration",
     "output-language-fidelity",
     "output-format-selection-and-fidelity",
+    "publication-authorization-and-target-fidelity",
     "title-content-fidelity",
     "information-empty-visible-structure",
     "visual-identity-and-provenance",
@@ -299,6 +322,9 @@
     "language-explicit-user-override",
     "html-self-contained-without-external-skill",
     "format-defaults-to-self-contained-html",
-    "format-explicit-feishu-uses-portable-baseline"
+    "format-explicit-feishu-uses-portable-baseline",
+    "runtime-language-drift-blocked",
+    "runtime-format-drift-blocked",
+    "runtime-unauthorized-publication-blocked"
   ]
 }
