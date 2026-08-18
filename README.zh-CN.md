@@ -10,7 +10,7 @@
 
 信息很多不等于结论清楚。面对密集网页或长文档，读者往往仍要自己找重点、对证据、判断该怎么做。Reader's Seat 把材料整理成完整文档，让结论、证据、边界和下一步容易找到，同时不补写材料里没有的事实。
 
-<img src="assets/readme-preview.jpg" alt="把 Artificial Analysis 真实网页长截图整理成简洁的 Reader's Seat 决策摘要" width="1280">
+<img src="assets/readme-preview-v2.jpg" alt="把 Artificial Analysis 真实网页长截图整理成简洁的 Reader's Seat 决策摘要" width="1280">
 
 <sub>左侧使用实时 [Artificial Analysis 模型对比页面](https://artificialanalysis.ai/models/)的真实连续长截图片段，右侧综合页面全部 11 个比较部分。预览为特定日期的快照，排名会继续变化。</sub>
 
