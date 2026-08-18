@@ -14,11 +14,11 @@ AI-generated documents can sound polished while leaving the reader to work out t
 
 Reader's Seat restructures the material around what the reader needs to understand or decide. It preserves facts, numbers, scope, and uncertainty instead of making the content sound stronger than the evidence allows.
 
-| Typical input | What Reader's Seat makes clear |
-| --- | --- |
-| “In the release week, 7-day retention fell from 42% to 38%, so the release probably caused it.” | Retention fell by 4 percentage points in the same week; the timing is known, but causality is not. Segmented or comparison data is still needed. |
-| A half-year summary listing meetings, dashboards, and experiments | What work was done, what was delivered, what result is actually supported, and what impact is still unknown. |
-| “Option A is better because it is more advanced.” | Which constraints each option satisfies, the trade-offs, decision conditions, risks, and missing rollback information. |
+| Scenario | Typical input | What Reader's Seat makes clear |
+| --- | --- | --- |
+| Project progress | “The project is going well. Requirements are aligned, the API design is complete, and integration testing is moving forward.” | Requirements alignment and API design are complete; integration testing is in progress. Launch readiness cannot yet be judged because test results, blockers, and the target date are missing. |
+| Data analysis conclusion | “In the release week, 7-day retention fell from 42% to 38%, so the release probably caused it.” | Retention fell by 4 percentage points in the same week; the timing is known, but causality is not. Segmented or comparison data is still needed. |
+| Technical route | “We should use a real-time streaming architecture because it is more advanced and can support future growth.” | The choice depends on latency requirements, expected load, the batch-processing alternative, cost, operational complexity, and rollback conditions. The current statement is not enough to select the route. |
 
 ## When To Use It
 
