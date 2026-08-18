@@ -81,20 +81,6 @@ git clone https://github.com/BobbyYue/reader-seat.git "$AGENT_SKILLS_DIR/reader-
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。
 
-## 在不同 Agent 上使用
-
-写作规则集中在 `SKILL.md` 及其引用模块中。不同 Agent 可以调整发现方式、输入方式和输出方式，但不应改写内容规则。
-
-仓库提供三种稳定性评测方式：
-
-| Agent 接口 | 评测方式 |
-| --- | --- |
-| 命令从标准输入读取提示词，并从标准输出返回结果 | `command-stdin` 适配器 |
-| 命令读取提示词文件，并写入结果文件 | `command-files` 适配器 |
-| GUI 或暂不支持命令调用 | `manual` 人工提示词包 |
-
-具体方法见[跨 Agent 使用与稳定性](references/agent-portability.md)。在至少两个明确命名的 Agent 通过相同冻结案例前，本项目不声称已经实现跨 Agent 稳定输出。
-
 <details>
 <summary><strong>仓库结构、校验和许可证</strong></summary>
 

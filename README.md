@@ -81,20 +81,6 @@ See [ready-to-use prompts](examples/quick-start.en.md) for common document scena
 
 Reader's Seat does not publish, overwrite, or send content without explicit authorization.
 
-## Across Different Agents
-
-The writing behavior lives in `SKILL.md` and its referenced modules. A host may adapt discovery, prompt transport, and output transport, but should not rewrite the content rules.
-
-For repeatability checks, the repository supports:
-
-| Agent interface | Evaluation path |
-| --- | --- |
-| Command accepts a prompt on standard input and returns the answer on standard output | `command-stdin` adapter |
-| Command reads a prompt file and writes a result file | `command-files` adapter |
-| GUI or unsupported command interface | `manual` prompt bundle |
-
-See [Agent Portability and Stability](references/agent-portability.md). The project does not claim cross-agent stability until at least two named agents pass the same frozen cases.
-
 <details>
 <summary><strong>Repository structure, validation, and licenses</strong></summary>
 
