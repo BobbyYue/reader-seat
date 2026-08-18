@@ -14,11 +14,13 @@ AI-generated documents can sound polished while leaving the reader to work out t
 
 Reader's Seat restructures the material around what the reader needs to understand or decide. It preserves facts, numbers, scope, and uncertainty instead of making the content sound stronger than the evidence allows.
 
-| Scenario | Typical input | What Reader's Seat makes clear |
+It works at document level, not just sentence level:
+
+| Scenario | Source material | Finished document |
 | --- | --- | --- |
-| Project progress | “The project is going well. Requirements are aligned, the API design is complete, and integration testing is moving forward.” | Requirements alignment and API design are complete; integration testing is in progress. Launch readiness cannot yet be judged because test results, blockers, and the target date are missing. |
-| Data analysis conclusion | “In the release week, 7-day retention fell from 42% to 38%, so the release probably caused it.” | Retention fell by 4 percentage points in the same week; the timing is known, but causality is not. Segmented or comparison data is still needed. |
-| Technical route | “We should use a real-time streaming architecture because it is more advanced and can support future growth.” | The choice depends on latency requirements, expected load, the batch-processing alternative, cost, operational complexity, and rollback conditions. The current statement is not enough to select the route. |
+| Project progress | Weekly reports, milestone plan, meeting notes, issue list, and available delivery data | A project status brief with the current conclusion, completed and in-progress milestones, schedule status, blockers and risks, decisions needed, and evidence-backed next steps. Missing owners or dates remain explicit instead of being invented. |
+| Data analysis conclusion | Metric definitions, query results, charts, methodology notes, and known data limitations | An analysis report covering the question and scope, main finding with magnitude and comparison basis, supporting and conflicting evidence, metric and data context, alternative explanations, uncertainty, and the next validation needed. |
+| Technical route | Business requirements, technical constraints, candidate architectures, benchmarks, cost estimates, and migration concerns | A technical decision document covering the decision to make, constraints, option comparison, trade-offs, recommendation and its conditions, implementation implications, rollback path, and unresolved risks. |
 
 ## When To Use It
 
