@@ -10,9 +10,9 @@
 
 Information-rich sources can still leave the reader to reconstruct the point: which result matters, what supports it, and what decision follows. Reader's Seat turns that material into a complete document with the conclusion, evidence, limits, and next step visible, without inventing missing facts.
 
-<img src="assets/readme-preview.jpg" alt="All dimensions of the Artificial Analysis model comparison transformed into a decision brief with six priority-based leaders and production selection checks" width="1280">
+<img src="assets/readme-preview.jpg" alt="A real long screenshot of the Artificial Analysis comparison page transformed into a concise Reader's Seat decision brief" width="1280">
 
-<sub>Illustrative transformation based on the live [Artificial Analysis model comparison](https://artificialanalysis.ai/models/). It reviews all 11 comparison sections; the preview is a dated snapshot and rankings will change.</sub>
+<sub>The left panel uses a real continuous screenshot excerpt from the live [Artificial Analysis model comparison](https://artificialanalysis.ai/models/); the right panel synthesizes all 11 comparison sections. The preview is a dated snapshot and rankings will change.</sub>
 
 ## Install
 

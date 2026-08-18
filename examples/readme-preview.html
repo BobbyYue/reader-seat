@@ -36,8 +36,8 @@
 
     main {
       display: grid;
-      grid-template-columns: 0.82fr 1.18fr;
-      gap: 22px;
+      grid-template-columns: minmax(0, 0.78fr) 72px minmax(0, 1.22fr);
+      gap: 0;
       width: 100%;
       height: 100%;
       padding: 34px;
@@ -52,7 +52,79 @@
 
     .source {
       overflow: hidden;
-      background: #fafbfc;
+      border-color: #cbd2dc;
+      background: #f4f6f8;
+      box-shadow: 0 8px 20px rgba(23, 32, 51, 0.06);
+    }
+
+    .stage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 48px;
+      padding: 10px 16px;
+      color: #ffffff;
+    }
+
+    .stage-header strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .stage-header span {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      opacity: 0.78;
+      text-transform: uppercase;
+    }
+
+    .stage-header b {
+      padding: 5px 7px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      font-size: 9px;
+      letter-spacing: 0;
+    }
+
+    .source-stage { background: #344054; }
+
+    .output-stage { background: #1749a7; }
+
+    .output-stage b { background: rgba(255, 255, 255, 0.12); }
+
+    .transform {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      color: #667085;
+    }
+
+    .transform::before {
+      position: absolute;
+      top: 150px;
+      bottom: 150px;
+      left: 50%;
+      width: 1px;
+      background: #c8d0dd;
+      content: "";
+    }
+
+    .transform-label {
+      z-index: 1;
+      width: 58px;
+      padding: 6px 4px;
+      border: 1px solid #d6dce5;
+      color: #475467;
+      background: #eef1f5;
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
     }
 
     .browser-bar {
@@ -83,107 +155,60 @@
       overflow: hidden;
     }
 
-    .source-body { padding: 20px 22px 24px; }
-
-    .site-name {
-      margin: 0 0 12px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .source h2 {
-      margin: 0 0 13px;
-      font-size: 23px;
-      line-height: 1.17;
-    }
-
-    .source-copy {
-      margin: 0 0 14px;
-      color: #667085;
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .metrics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-
-    .metric {
-      padding: 5px 8px;
-      border: 1px solid #d8dde7;
-      color: #475467;
-      background: #ffffff;
-      font-size: 10px;
-    }
-
-    .metric.active {
-      border-color: #2563eb;
-      color: #1749a7;
-      background: #eef4ff;
-      font-weight: 700;
-    }
-
-    .source-groups {
-      display: grid;
-      gap: 7px;
-      margin-bottom: 16px;
-    }
-
-    .source-group {
-      display: grid;
-      grid-template-columns: 82px 1fr;
-      gap: 9px;
-      padding: 8px 9px;
-      border: 1px solid #e1e5ec;
+    .source-scroll {
+      position: relative;
+      height: 560px;
+      overflow: hidden;
       background: #ffffff;
     }
 
-    .source-group strong {
-      color: #344054;
-      font-size: 10px;
-    }
-
-    .source-group span {
-      color: #667085;
-      font-size: 10px;
-      line-height: 1.25;
-    }
-
-    .source-foot {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 7px;
-    }
-
-    .source-stat {
-      padding: 9px;
-      border: 1px solid #e1e5ec;
-      background: #ffffff;
-      text-align: center;
-    }
-
-    .source-stat strong {
+    .source-scroll img {
       display: block;
-      margin-bottom: 2px;
-      font-size: 14px;
+      width: 100%;
+      height: auto;
+      filter: saturate(0.78) contrast(0.97);
     }
 
-    .source-stat span {
-      color: #667085;
+    .scroll-track {
+      position: absolute;
+      top: 12px;
+      right: 7px;
+      bottom: 46px;
+      width: 5px;
+      background: #d8dde5;
+    }
+
+    .scroll-thumb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 58px;
+      background: #667085;
+    }
+
+    .source-length {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      color: #ffffff;
+      background: #344054;
       font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
     }
 
     .arrow {
-      position: fixed;
-      left: 495px;
-      top: 327px;
       z-index: 2;
       display: grid;
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       place-items: center;
       border: 1px solid #c8d0dd;
       border-radius: 50%;
@@ -195,8 +220,13 @@
     }
 
     .output {
-      padding: 25px 30px 20px;
-      border-top: 6px solid #2563eb;
+      padding: 0;
+      border: 2px solid #2563eb;
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.13);
+    }
+
+    .output-body {
+      padding: 17px 24px 16px;
     }
 
     .status-row {
@@ -204,7 +234,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      margin-bottom: 13px;
+      margin-bottom: 10px;
     }
 
     .eyebrow {
@@ -307,84 +337,76 @@
 <body>
   <main aria-label="Reader's Seat turns a dense model comparison page into a decision brief">
     <section class="source">
+      <div class="stage-header source-stage">
+        <div><strong>SOURCE PAGE</strong><span>Raw comparison material</span></div>
+        <b>EXPLORE</b>
+      </div>
       <div class="browser-bar">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
         <div class="address">artificialanalysis.ai/models/</div>
       </div>
-      <div class="source-body">
-        <p class="site-name">Artificial Analysis</p>
-        <h2>Comparison of Models: Intelligence, Performance &amp; Price</h2>
-        <p class="source-copy">Explore models across quality, price, output speed, latency, context window and other metrics.</p>
-        <div class="metrics" aria-label="Available comparison views">
-          <span class="metric active">Intelligence</span>
-          <span class="metric">Benchmarks</span>
-          <span class="metric">Openness</span>
-          <span class="metric">Comparisons</span>
-          <span class="metric">Token Use</span>
-          <span class="metric">Price &amp; Cost</span>
-          <span class="metric">Context</span>
-          <span class="metric">Speed</span>
-          <span class="metric">Latency</span>
-          <span class="metric">End-to-End</span>
-          <span class="metric">Model Size</span>
-        </div>
-        <div class="source-groups" aria-label="Dimensions that a reader must synthesize">
-          <div class="source-group"><strong>Capability</strong><span>Composite intelligence · 23 evaluations · reliability</span></div>
-          <div class="source-group"><strong>Economics</strong><span>Token price · cost per task · output token use</span></div>
-          <div class="source-group"><strong>Experience</strong><span>Output speed · first-token latency · end-to-end time</span></div>
-          <div class="source-group"><strong>Deployment</strong><span>Context window · weights and license · active model size</span></div>
-          <div class="source-group"><strong>Trade-offs</strong><span>Intelligence vs. cost, time, speed and response time</span></div>
-        </div>
-        <div class="source-foot">
-          <div class="source-stat"><strong>609</strong><span>models covered</span></div>
-          <div class="source-stat"><strong>11</strong><span>comparison sections</span></div>
-          <div class="source-stat"><strong>23</strong><span>evaluation types</span></div>
+      <div class="source-scroll">
+        <img src="../assets/artificial-analysis-page-long.jpg" alt="Continuous long screenshot excerpt of the Artificial Analysis model comparison page">
+        <div class="scroll-track" aria-hidden="true"><span class="scroll-thumb"></span></div>
+        <div class="source-length">
+          <span>19,584 px full page</span>
+          <span>11 comparison sections</span>
         </div>
       </div>
     </section>
 
-    <div class="arrow" aria-hidden="true">→</div>
+    <div class="transform" aria-label="Reader's Seat turns 11 comparison views into one decision brief">
+      <span class="transform-label">11 views</span>
+      <div class="arrow" aria-hidden="true">→</div>
+      <span class="transform-label">1 brief</span>
+    </div>
 
     <section class="output">
-      <div class="status-row">
-        <p class="eyebrow">Reader's Seat decision brief</p>
-        <span class="snapshot">Snapshot · 18 Aug 2026</span>
+      <div class="stage-header output-stage">
+        <div><strong>READER'S SEAT OUTPUT</strong><span>Synthesized decision material</span></div>
+        <b>DECIDE</b>
       </div>
-      <h1>No model leads quality, price, speed, latency and deployment at once</h1>
-      <p class="summary">
-        Six different leaders emerge across six headline dimensions. Use the overall index to shortlist, then select by workload economics, response experience and deployment constraints.
-      </p>
-      <p class="decision-label">Current dimension leaders</p>
-      <div class="leaders">
-        <div class="leader">
-          <div class="leader-value"><strong>63</strong><span>Intelligence</span></div>
-          <p>Claude Opus 5 max and xhigh</p>
+      <div class="output-body">
+        <div class="status-row">
+          <p class="eyebrow">All 11 sections synthesized</p>
+          <span class="snapshot">Snapshot · 18 Aug 2026</span>
         </div>
-        <div class="leader">
-          <div class="leader-value"><strong>60</strong><span>Open-weight IQ</span></div>
-          <p>Kimi K3 max</p>
+        <h1>No model leads quality, price, speed, latency and deployment at once</h1>
+        <p class="summary">
+          Six different leaders emerge across six headline dimensions. Use the overall index to shortlist, then select by workload economics, response experience and deployment constraints.
+        </p>
+        <p class="decision-label">Current dimension leaders</p>
+        <div class="leaders">
+          <div class="leader">
+            <div class="leader-value"><strong>63</strong><span>Intelligence</span></div>
+            <p>Claude Opus 5 max and xhigh</p>
+          </div>
+          <div class="leader">
+            <div class="leader-value"><strong>60</strong><span>Open-weight IQ</span></div>
+            <p>Kimi K3 max</p>
+          </div>
+          <div class="leader">
+            <div class="leader-value"><strong>1,466</strong><span>Tokens / sec</span></div>
+            <p>Celeris-1</p>
+          </div>
+          <div class="leader">
+            <div class="leader-value"><strong>0.28s</strong><span>First token</span></div>
+            <p>Gemini 2.5 Flash-Lite</p>
+          </div>
+          <div class="leader">
+            <div class="leader-value"><strong>$0.02</strong><span>Per 1M tokens</span></div>
+            <p>Llama 3.1 8B · blended price</p>
+          </div>
+          <div class="leader">
+            <div class="leader-value"><strong>10M</strong><span>Context tokens</span></div>
+            <p>Llama 4 Scout</p>
+          </div>
         </div>
-        <div class="leader">
-          <div class="leader-value"><strong>1,466</strong><span>Tokens / sec</span></div>
-          <p>Celeris-1</p>
+        <div class="caution">
+          <strong>Before deciding:</strong> test the relevant benchmark and reliability; compare cost per task and token use; calculate end-to-end response time; then check model size, weight access and license terms.
         </div>
-        <div class="leader">
-          <div class="leader-value"><strong>0.28s</strong><span>First token</span></div>
-          <p>Gemini 2.5 Flash-Lite</p>
-        </div>
-        <div class="leader">
-          <div class="leader-value"><strong>$0.02</strong><span>Per 1M tokens</span></div>
-          <p>Llama 3.1 8B · blended price</p>
-        </div>
-        <div class="leader">
-          <div class="leader-value"><strong>10M</strong><span>Context tokens</span></div>
-          <p>Llama 4 Scout</p>
-        </div>
+        <footer>Source: Artificial Analysis · 11 comparison sections reviewed · Live rankings will change</footer>
       </div>
-      <div class="caution">
-        <strong>Before deciding:</strong> test the relevant benchmark and reliability; compare cost per task and token use; calculate end-to-end response time; then check model size, weight access and license terms.
-      </div>
-      <footer>Source: Artificial Analysis · 11 comparison sections reviewed · Live rankings will change</footer>
     </section>
   </main>
 </body>
