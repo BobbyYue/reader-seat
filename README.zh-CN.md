@@ -8,11 +8,11 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
-很多 AI 文档逐句读都通顺，合起来却需要读者自己找结论、对证据、猜下一步。Reader's Seat 把这些关键信息放到容易找到的位置，同时保留原始事实，不补写材料里没有的信息。
+信息很多不等于结论清楚。面对密集网页或长文档，读者往往仍要自己找重点、对证据、判断该怎么做。Reader's Seat 把材料整理成完整文档，让结论、证据、边界和下一步容易找到，同时不补写材料里没有的事实。
 
-<img src="assets/readme-preview.jpg" alt="把零散周报和会议记录整理成包含结论、证据、阻塞、缺失信息和下一步的项目进展报告" width="1280">
+<img src="assets/readme-preview.jpg" alt="把信息密集的 Artificial Analysis 模型对比页面整理成指出领先模型、选择条件和排行榜局限的决策摘要" width="1280">
 
-<sub>项目进展示例。右侧文档保留了原始事实，也明确指出材料无法证明什么。</sub>
+<sub>示意案例基于实时更新的 [Artificial Analysis 模型对比页面](https://artificialanalysis.ai/models/#intelligence)。预览为特定日期的快照，排名会继续变化。</sub>
 
 ## 安装
 

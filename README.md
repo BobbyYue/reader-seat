@@ -8,11 +8,11 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
-Most AI drafts are fluent sentence by sentence but hard to judge as a whole: the conclusion is buried, evidence is disconnected, and the next step is unclear. Reader's Seat makes those parts visible while preserving the source facts and leaving missing information missing.
+Information-rich sources can still leave the reader to reconstruct the point: which result matters, what supports it, and what decision follows. Reader's Seat turns that material into a complete document with the conclusion, evidence, limits, and next step visible, without inventing missing facts.
 
-<img src="assets/readme-preview.jpg" alt="Weekly reports and meeting notes transformed into a project status brief with a conclusion, evidence, blocker, missing information, and next step" width="1280">
+<img src="assets/readme-preview.jpg" alt="A dense Artificial Analysis model comparison page transformed into a decision brief that identifies the leaders, selection criteria, and limits of the ranking" width="1280">
 
-<sub>Illustrative project update. The finished document preserves the source facts and exposes what the material does not establish.</sub>
+<sub>Illustrative transformation based on the live [Artificial Analysis model comparison](https://artificialanalysis.ai/models/#intelligence). The preview is a dated snapshot; rankings will change.</sub>
 
 ## Install
 
