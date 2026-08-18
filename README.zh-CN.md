@@ -10,9 +10,9 @@
 
 信息很多不等于结论清楚。面对密集网页或长文档，读者往往仍要自己找重点、对证据、判断该怎么做。Reader's Seat 把材料整理成完整文档，让结论、证据、边界和下一步容易找到，同时不补写材料里没有的事实。
 
-<img src="assets/readme-preview.jpg" alt="把信息密集的 Artificial Analysis 模型对比页面整理成指出领先模型、选择条件和排行榜局限的决策摘要" width="1280">
+<img src="assets/readme-preview.jpg" alt="把 Artificial Analysis 的全部模型比较维度整理成包含六类优先级候选模型和生产选型检查项的决策摘要" width="1280">
 
-<sub>示意案例基于实时更新的 [Artificial Analysis 模型对比页面](https://artificialanalysis.ai/models/#intelligence)。预览为特定日期的快照，排名会继续变化。</sub>
+<sub>示意案例基于实时更新的 [Artificial Analysis 模型对比页面](https://artificialanalysis.ai/models/)，覆盖页面全部 11 个比较部分。预览为特定日期的快照，排名会继续变化。</sub>
 
 ## 安装
 
