@@ -62,29 +62,29 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      min-height: 48px;
-      padding: 10px 16px;
+      min-height: 60px;
+      padding: 11px 16px;
       color: #ffffff;
     }
 
     .stage-header strong {
       display: block;
-      font-size: 14px;
+      font-size: 17px;
       line-height: 1;
     }
 
     .stage-header span {
       display: block;
       margin-top: 4px;
-      font-size: 9px;
+      font-size: 10px;
       opacity: 0.78;
       text-transform: uppercase;
     }
 
     .stage-header b {
-      padding: 5px 7px;
+      padding: 7px 9px;
       border: 1px solid rgba(255, 255, 255, 0.42);
-      font-size: 9px;
+      font-size: 10px;
       letter-spacing: 0;
     }
 
@@ -100,7 +100,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 13px;
+      gap: 11px;
       color: #667085;
     }
 
@@ -125,6 +125,17 @@
       font-weight: 700;
       text-align: center;
       text-transform: uppercase;
+    }
+
+    .transform-brand {
+      z-index: 1;
+      width: 66px;
+      color: #1749a7;
+      background: #eef1f5;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
     }
 
     .browser-bar {
@@ -157,7 +168,7 @@
 
     .source-scroll {
       position: relative;
-      height: 560px;
+      height: 548px;
       overflow: hidden;
       background: #ffffff;
     }
@@ -338,8 +349,8 @@
   <main aria-label="Reader's Seat turns a dense model comparison page into a decision brief">
     <section class="source">
       <div class="stage-header source-stage">
-        <div><strong>SOURCE PAGE</strong><span>Raw comparison material</span></div>
-        <b>EXPLORE</b>
+        <div><strong>① ORIGINAL WEBPAGE</strong><span>Raw material · reader explores 11 sections</span></div>
+        <b>BEFORE</b>
       </div>
       <div class="browser-bar">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -356,6 +367,7 @@
     </section>
 
     <div class="transform" aria-label="Reader's Seat turns 11 comparison views into one decision brief">
+      <strong class="transform-brand">READER'S SEAT</strong>
       <span class="transform-label">11 views</span>
       <div class="arrow" aria-hidden="true">→</div>
       <span class="transform-label">1 brief</span>
@@ -363,8 +375,8 @@
 
     <section class="output">
       <div class="stage-header output-stage">
-        <div><strong>READER'S SEAT OUTPUT</strong><span>Synthesized decision material</span></div>
-        <b>DECIDE</b>
+        <div><strong>② READER'S SEAT OUTPUT</strong><span>One decision brief · ready to use</span></div>
+        <b>AFTER</b>
       </div>
       <div class="output-body">
         <div class="status-row">

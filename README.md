@@ -10,7 +10,9 @@
 
 Information-rich sources can still leave the reader to reconstruct the point: which result matters, what supports it, and what decision follows. Reader's Seat turns that material into a complete document with the conclusion, evidence, limits, and next step visible, without inventing missing facts.
 
-<img src="assets/readme-preview-v2.jpg" alt="A real long screenshot of the Artificial Analysis comparison page transformed into a concise Reader's Seat decision brief" width="1280">
+<p align="center"><strong>① Original webpage on the left → ② Reader's Seat output on the right</strong></p>
+
+<img src="assets/readme-preview-v3.jpg" alt="A real long screenshot of the Artificial Analysis comparison page transformed into a concise Reader's Seat decision brief" width="1280">
 
 <sub>The left panel uses a real continuous screenshot excerpt from the live [Artificial Analysis model comparison](https://artificialanalysis.ai/models/); the right panel synthesizes all 11 comparison sections. The preview is a dated snapshot and rankings will change.</sub>
 
