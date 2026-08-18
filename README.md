@@ -73,6 +73,19 @@ See [ready-to-use prompts](examples/quick-start.md) for news, technical proposal
 - Output follows the source material's dominant language unless the user requests a different language.
 - Reader's Seat never publishes, overwrites, or sends content without explicit authorization.
 
+## What's Included
+
+| Folder | Function |
+| --- | --- |
+| `.github/` | Runs the repository checks on every push and pull request. |
+| `agents/` | Helps supported agent hosts recognize and present Reader's Seat. |
+| `assets/` | Provides the self-contained HTML template, local fonts, and chart and diagram runtimes. |
+| `config/` | Defines supported document scenarios, module-loading profiles, agent adapters, and the enforceable skill contract. |
+| `evals/` | Provides frozen trigger, behavior, and cross-agent test cases with judging criteria. |
+| `examples/` | Contains prompts that users can adapt directly to common document tasks. |
+| `references/` | Provides the detailed writing rules selected for each scenario, format, title, evidence, and visual need. |
+| `scripts/` | Validates the skill, selects the required modules, creates HTML report scaffolds, and runs evaluations. |
+
 ## Other Agent Hosts
 
 Place the repository where the host can read it and explicitly load `SKILL.md`. Automatic discovery differs across hosts. See [Agent Portability and Stability](references/agent-portability.md) for manual and command-line evaluation options.

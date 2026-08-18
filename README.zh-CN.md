@@ -72,6 +72,19 @@ git clone https://github.com/BobbyYue/reader-seat.git ~/.codex/skills/reader-sea
 - 用户没有指定语言时，沿用原材料的主要语言，而不是提示词语言。
 - 未经明确授权，不会发布、覆盖或发送内容。
 
+## 各文件夹提供什么功能
+
+| 文件夹 | 提供的功能 |
+| --- | --- |
+| `.github/` | 在每次代码推送和合并请求时自动检查仓库。 |
+| `agents/` | 帮助支持的 Agent 识别并展示 Reader's Seat。 |
+| `assets/` | 提供自包含 HTML 模板、本地字体以及图表和流程图运行时。 |
+| `config/` | 定义支持的文档场景、模块加载方式、Agent 适配设置和可校验的 skill 约束。 |
+| `evals/` | 提供固定的触发、行为和跨 Agent 测试案例及评判标准。 |
+| `examples/` | 提供可以直接改写使用的常见文档提示词。 |
+| `references/` | 提供按场景、格式、标题、证据和视觉需要选择的详细写作规则。 |
+| `scripts/` | 校验 skill、选择所需模块、创建 HTML 报告骨架并运行评测。 |
+
 ## 在其他 Agent 中使用
 
 将仓库放到该 Agent 可读取的位置，并让它显式加载 `SKILL.md`。不同 Agent 的自动发现方式并不相同，具体评测方法见[跨 Agent 使用与稳定性](references/agent-portability.md)。
