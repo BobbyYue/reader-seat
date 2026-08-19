@@ -42,6 +42,16 @@ Apply all eight standards after selecting the scenario profile. These are qualit
 - Unless explicitly requested as part of a named format, do not use method labels such as `30秒判断`, `一张图读懂`, `读者视角`, `一句话总结`, or English process kickers as visible scaffolding.
 - Treat the document title as a factual promise. It should identify the object and accurately preview one central relationship, change, decision, or useful question without claiming hidden intent.
 
+### Make Value Expressions Concrete
+
+Apply this rule when a title, subtitle, section heading, lead, or product/value line explains why the content matters.
+
+1. Record the internal map `specific object -> reader-relevant action or change -> observable result` before writing the visible line.
+2. Express the map in the simplest natural wording. In Chinese, prefer a familiar verb-object or result-complement phrase when it reads naturally, such as `把复杂内容写明白`; do not force the `把` construction or translate it literally into other languages.
+3. Remove method labels, process narration, and generic benefit words when deleting them does not change the supported meaning. Replace lines that say only `更清晰`, `更高效`, `赋能`, or `不用猜` with the actual object and result when the source provides them.
+4. Retain a method name, technical term, evidence boundary, scope, or uncertainty when it is itself the object or the reader needs it to interpret the result. Never gain concreteness by inventing an outcome or strengthening the evidence.
+5. Verify the line in isolation: the target reader should be able to identify the object and the actual change or result without reading the body. Read it aloud; if it sounds like a reusable slogan rather than a natural description of this content, rewrite it.
+
 ## 5. Evidence And Calibrated Certainty
 
 - Keep material claims traceable to their source when evidence matters.
@@ -86,6 +96,7 @@ Run these checks before delivery:
 2. **Cross-document portability**: if the same wording could move unchanged to many unrelated documents, make it specific or classify it as necessary navigation.
 3. **Deletion**: if removing words such as `真正`, `核心`, `最值得`, `背后`, `不能忽略`, or `为什么重要` preserves all meaning, remove them. These words are review signals, not a universal blacklist.
 4. **Heading-only readback**: hide the body and read the visible hierarchy in order. For a substantive document, the reader should be able to reconstruct the object, main conclusion or development, reasoning path, and material boundary or action.
+5. **Concrete value expression**: for every value-bearing title, heading, or lead, confirm the object-action/result map is present, natural, and no stronger than the source.
 
 A heading may be concise, but it may not outsource all information to the paragraph below. Progressive disclosure puts compressed information first; it does not manufacture suspense and delay the answer.
 

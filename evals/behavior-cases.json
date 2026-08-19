@@ -29,6 +29,15 @@
       "forbidden_behaviors": ["编造用户研究", "编造效果数字"]
     },
     {
+      "id": "value-expression-names-object-and-result",
+      "scenario": "product",
+      "operation": "rewrite",
+      "prompt": "产品介绍写成：通过结构化认知框架与读者视角方法，让用户不再猜测，全面提升内容价值。已知功能只有把复杂材料重写得更容易理解，没有效果数据。请重写标题和一句价值介绍。",
+      "must_preserve": ["处理对象是复杂材料", "结果是更容易理解", "没有效果数据"],
+      "expected_behaviors": ["先识别具体对象和读者可感知结果", "使用自然的动作表达", "删除不承载必要信息的方法和泛化价值词", "不把对象-动作-结果当成固定句式"],
+      "forbidden_behaviors": ["保留结构化认知框架作为主要价值", "只把全面提升换成高效赋能", "编造效率或质量提升数字", "为了简短删除材料对象"]
+    },
+    {
       "id": "business-outcome-not-activity",
       "scenario": "business",
       "operation": "rewrite",

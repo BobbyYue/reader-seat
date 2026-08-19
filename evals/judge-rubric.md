@@ -41,7 +41,9 @@ Score each item from 1 to 5 only after hard gates pass:
 - `evidence_traceability`: material judgments can be matched to the supplied
   evidence or clearly marked absence of evidence.
 - `natural_expression`: wording is professional, audience-fit, and free of
-  ceremonial, promotional, agent-process, or formulaic filler.
+  ceremonial, promotional, agent-process, or formulaic filler. A value-bearing
+  title, heading, or lead identifies its actual object and supported change or
+  result instead of substituting method labels or generic benefit language.
 - `actionability`: when action is intended, ownership, timing, dependency, and
   boundary are usable; otherwise the output does not invent an action.
 

@@ -80,6 +80,12 @@ class RuntimeContractTests(unittest.TestCase):
         self.assertEqual(contract["decisions"]["output_format"], "html")
         self.assertEqual(contract["decisions"]["format_decision_source"], "self-contained-html-default")
 
+    def test_concrete_value_expression_gate_is_mandatory(self) -> None:
+        contract = self.init_contract()
+        self.assertIn("concrete-value-expression", contract["required_semantic_gates"])
+        review = json.loads(self.review.read_text(encoding="utf-8"))
+        self.assertEqual(review["checks"]["concrete-value-expression"]["status"], "pending")
+
     def test_source_snapshot_derives_language_and_hash(self) -> None:
         source = self.base / "source.txt"
         source.write_text(

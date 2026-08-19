@@ -233,6 +233,7 @@ def check_contract(contract: dict, errors: list[str]) -> None:
         "visible-structure-classification",
         "heading-proposition-map",
         "heading-only-readback",
+        "concrete-object-action-result-expression",
     ]
     if contract.get("natural_structure_rules") != expected_natural_structure_rules:
         fail("natural_structure_rules do not match the anti-template contract", errors)
@@ -257,6 +258,7 @@ def check_contract(contract: dict, errors: list[str]) -> None:
         output_text = output_path.read_text(encoding="utf-8")
         required_structure_terms = [
             "### Visible Structure Must Carry Information",
+            "### Make Value Expressions Concrete",
             "content-bearing",
             "navigation-only",
             "decorative",
@@ -265,6 +267,7 @@ def check_contract(contract: dict, errors: list[str]) -> None:
             "dominant language of the primary source document",
             "The language in which the user writes the request is not, by itself",
             "Do not translate or switch languages merely because the prompt",
+            "specific object -> reader-relevant action or change -> observable result",
         ]
         for term in required_structure_terms:
             if term not in output_text:

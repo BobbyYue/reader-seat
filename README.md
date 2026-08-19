@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.17.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.18.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -66,6 +66,7 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 - **Meaning:** facts, quantities, definitions, ownership, commitments, and uncertainty remain intact.
 - **Judgment:** conclusions stay connected to evidence, scope, and credible alternatives.
 - **Reader effort:** titles, structure, and visuals help the reader locate and compare information instead of creating decoration.
+- **Concrete expression:** value-bearing titles, headings, and leads name the actual object and supported result instead of hiding value behind method labels or generic claims.
 - **Output fit:** the default is self-contained HTML in the source material's dominant language, unless another format or language is requested.
 - **Delivery boundary:** language, format, and publication permission are locked before drafting; failed or missing verification blocks delivery.
 

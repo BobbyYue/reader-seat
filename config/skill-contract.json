@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.17.0",
+  "skill_version": "0.18.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -217,7 +217,8 @@
     "avoid-mechanical-symmetry",
     "visible-structure-classification",
     "heading-proposition-map",
-    "heading-only-readback"
+    "heading-only-readback",
+    "concrete-object-action-result-expression"
   ],
   "visible_structure_states": [
     "content-bearing",
@@ -271,6 +272,7 @@
     "publication-authorization-and-target-fidelity",
     "title-content-fidelity",
     "information-empty-visible-structure",
+    "concrete-value-expression",
     "visual-identity-and-provenance",
     "synthetic-visual-disclosure",
     "visual-purpose-and-form-fit",
@@ -318,6 +320,7 @@
     "title-strong-supported-claim-allowed",
     "title-specific-result-beats-generic-hook",
     "visible-structure-carries-content",
+    "value-expression-names-object-and-result",
     "language-source-dominant-default",
     "language-explicit-user-override",
     "html-self-contained-without-external-skill",

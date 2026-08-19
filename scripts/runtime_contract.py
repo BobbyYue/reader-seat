@@ -31,6 +31,7 @@ BASE_SEMANTIC_GATES = (
     "critical-number-and-definition-accuracy",
     "certainty-calibration",
     "information-empty-visible-structure",
+    "concrete-value-expression",
     "scope-and-responsibility-fidelity",
     "action-boundary",
     "scenario-task-completeness",
