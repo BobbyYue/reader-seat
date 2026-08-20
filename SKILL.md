@@ -42,6 +42,8 @@ Apply this priority when goals conflict:
 Every task uses [scripts/runtime_contract.py](scripts/runtime_contract.py).
 Detailed commands and failure behavior remain in
 [references/runtime-enforcement.md](references/runtime-enforcement.md).
+The mandatory work-order and retry policy is in
+[references/execution-efficiency.md](references/execution-efficiency.md).
 
 1. Define the operation, one primary scenario, target reader, reader task,
    channel, risk, source boundary, title need, visual state, and whether the
@@ -59,25 +61,36 @@ Detailed commands and failure behavior remain in
    condition for `G1-task`, `G2-source`, `G3-route`, `G4-build`, `G5-signals`,
    and `G6-verify`. Read full references only for
    troubleshooting, maintenance, or a procedure the packet does not cover.
-5. Draft or revise from the source boundary. Once the exact candidate exists,
+5. Complete the readiness record before building: material claims and source
+   locations, blocking gaps, visual evidence boundaries, reviewer inputs, and
+   independent artifact lanes. For multiple artifacts, share the scope pass,
+   then run isolated lanes concurrently when they do not mutate the same target.
+6. Draft or revise from the source boundary. Stabilize the candidate through
+   deterministic source, content, reading-path, format, asset, visual, and
+   rendered checks. Classify each pre-audit change and rerun only the affected
+   checks; use the union when a change crosses categories.
+7. Once the exact stable candidate exists,
    run `runtime_contract.py bind-review` before filling any review item. This
    creates a separate binding receipt and locks it into the task contract, so
    changing a hash inside the review cannot retarget a completed review.
-6. Complete every semantic gate, execution gate, and selected runtime rule with
+8. Complete every semantic gate, execution gate, and selected runtime rule with
    concrete artifact evidence. Only rules explicitly marked `[conditional]` in
    the task contract may be `not-applicable`, with a task-specific reason.
    Every finished artifact necessarily loads `reading-path-layout`; its plan,
    adjacency, density, spacing, and native-render rules cannot be marked
    `not-applicable` or waived by selecting another output format.
-7. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
+9. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
    to run exactly four fresh, mutually isolated reviewers concurrently:
    no-context, readability, source-reliability, and structure-visual. All four
-   must pass for the exact artifact hash. After a change, rerun all four.
-8. Rounds one and two return failures for revision. After a round-three
+   must pass for the exact artifact hash. The normal path starts one complete
+   batch only after the candidate and packets are stable. If it fails, wait for
+   all results, merge every blocker, revise once, restabilize, then rerun all
+   four for the new hash; never spend a round on a known-incomplete candidate.
+10. Rounds one and two return failures for revision. After a round-three
    non-pass, run `present-draft`; show the current version only as a clearly
    labeled review-incomplete draft, explain unresolved reader impact, ask the
    user which tradeoff to prioritize, and block external actions.
-9. Immediately before an authorized external mutation, run `check-action` with
+11. Immediately before an authorized external mutation, run `check-action` with
    the artifact-bound semantic review, original reader-review results, and the
    independent judge result for high-risk work. Finish with `verify` against the actual
    artifact, unchanged task bundle,
@@ -108,6 +121,8 @@ the control with an informal checklist.
   source.
 - [config/runtime-rules.json](config/runtime-rules.json) is the compact
   operational rule source used by the task contract.
+- [references/execution-efficiency.md](references/execution-efficiency.md) is
+  the mandatory readiness, batch, change-impact, and retry-order contract.
 - [config/skill-contract.json](config/skill-contract.json) is the capability and
   version contract.
 - [references/reading-path-layout.md](references/reading-path-layout.md) is the

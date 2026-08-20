@@ -31,7 +31,10 @@ supports it, and retain the existing independent semantic judge requirement.
 
 ## Prepare One Review Round
 
-Run cheap deterministic format, asset, and rendering checks first. Then prepare
+Complete [execution-efficiency.md](execution-efficiency.md) first. Run source,
+semantic, format, asset, visual, reading-path, responsive-render, and reviewer-
+packet readiness checks before using an independent reviewer. The normal path
+contains one complete four-reviewer batch for the stable candidate. Then prepare
 the four immutable review packets:
 
 ```bash
@@ -134,8 +137,11 @@ and unanimous passage. It returns:
 - `needs-user-decision` after a non-pass in round 3.
 
 Return all blocker and major issues to the main agent. The main agent fixes the
-artifact without inventing evidence, then starts a new round with four new
-subagents. Rerun all dimensions because one repair can regress another.
+artifact without inventing evidence. Wait for all four reports, merge and
+deduplicate their required fixes, make one coherent revision, and restabilize
+the candidate before starting a new round with four new subagents. Rerun all
+dimensions because one repair can regress another. Do not use a review round to
+discover known missing evidence, stale renders, or incomplete packets.
 
 After round 3, do not lower severity, reuse an old review, or start round 4 in
 the same contract. Instead run:

@@ -67,6 +67,25 @@
     }
   ],
   "modules": {
+    "execution-efficiency": [
+      {
+        "id": "efficiency-readiness-before-build",
+        "instruction": "Before build, lock sources, claims, gaps, visual limits, and reviewer inputs; review only a complete, deterministically checked candidate."
+      },
+      {
+        "id": "efficiency-batch-independent-artifacts",
+        "instruction": "For independent artifacts, share the scope pass, keep separate contracts and hashes, and run non-conflicting lanes concurrently when supported.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "efficiency-change-impact-rerun",
+        "instruction": "Before review, record each change and rerun only affected deterministic checks; use the union for cross-category changes."
+      },
+      {
+        "id": "efficiency-merge-review-fixes",
+        "instruction": "After a failed full batch, wait for all results, merge issues, revise once, and restabilize; missing evidence, intent, permission, or external state requires a stop and request."
+      }
+    ],
     "runtime-enforcement": [
       {
         "id": "runtime-init-before-draft",

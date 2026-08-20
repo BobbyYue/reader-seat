@@ -85,6 +85,30 @@ class ModuleResolverTests(unittest.TestCase):
             all(result["runtime_rule_applicability"][rule_id] is False for rule_id in layout_rule_ids)
         )
 
+    def test_execution_efficiency_is_mandatory(self) -> None:
+        namespace = argparse.Namespace(
+            scenario="business",
+            operation="create",
+            artifact=True,
+            chat_output=False,
+            risk="standard",
+            output_format="html",
+            title=True,
+            visual="none",
+            evaluate=False,
+            portability=False,
+            maintenance=False,
+        )
+        result = resolve_modules.resolve(namespace, resolve_modules.load_profiles())
+        self.assertIn("execution-efficiency", {item["id"] for item in result["modules"]})
+        expected = {
+            "efficiency-readiness-before-build",
+            "efficiency-batch-independent-artifacts",
+            "efficiency-change-impact-rerun",
+            "efficiency-merge-review-fixes",
+        }
+        self.assertTrue(expected <= set(result["required_rule_ids"]))
+
     def test_chat_output_does_not_load_artifact_layout_module(self) -> None:
         namespace = argparse.Namespace(
             scenario="business",

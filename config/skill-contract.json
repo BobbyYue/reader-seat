@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.21.0",
+  "skill_version": "0.22.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -30,6 +30,7 @@
   ],
   "shared_modules": [
     "references/runtime-enforcement.md",
+    "references/execution-efficiency.md",
     "references/scenario-routing.md",
     "references/output-standards.md",
     "references/signal-processing.md"
@@ -130,6 +131,12 @@
       "verified-completion-only"
     ],
     "modules": {
+      "execution-efficiency": [
+        "efficiency-readiness-before-build",
+        "efficiency-batch-independent-artifacts",
+        "efficiency-change-impact-rerun",
+        "efficiency-merge-review-fixes"
+      ],
       "runtime-enforcement": [
         "runtime-init-before-draft",
         "runtime-decisions-immutable",

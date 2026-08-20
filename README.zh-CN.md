@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.21.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.22.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 

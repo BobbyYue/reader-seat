@@ -6,6 +6,10 @@
       "path": "references/runtime-enforcement.md",
       "purpose": "lock critical task decisions and require a passing deliverable receipt"
     },
+    "execution-efficiency": {
+      "path": "references/execution-efficiency.md",
+      "purpose": "finish evidence readiness, parallelize independent artifacts, and stabilize candidates before independent review"
+    },
     "reader-validation": {
       "path": "references/reader-validation.md",
       "purpose": "run four isolated reader reviews in parallel and block delivery until all pass"
@@ -93,6 +97,7 @@
   },
   "always_modules": [
     "runtime-enforcement",
+    "execution-efficiency",
     "scenario-routing",
     "output-standards",
     "signal-processing"
@@ -133,6 +138,7 @@
   },
   "load_order": [
     "runtime-enforcement",
+    "execution-efficiency",
     "reader-validation",
     "scenario-routing",
     "output-standards",

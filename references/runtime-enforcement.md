@@ -22,9 +22,12 @@ The runtime flow therefore separates six concerns:
    selected module hashes.
 4. **Action authorization:** check any publish, overwrite, or replacement
    immediately before the side effect and retain a preflight receipt.
-5. **Independent reader validation:** require four fresh subagents to pass one
+5. **Execution efficiency:** complete evidence readiness, isolate and parallelize
+   independent artifact lanes, stabilize candidates before review, and rerun
+   deterministic checks by change impact.
+6. **Independent reader validation:** require four fresh subagents to pass one
    parallel review batch for the exact artifact, with at most three rounds.
-6. **Deliverable verification:** compare the real artifact, reader aggregate, and semantic review
+7. **Deliverable verification:** compare the real artifact, reader aggregate, and semantic review
    with the locked contract and issue one pass/fail receipt.
 
 ## Required Files
@@ -172,6 +175,10 @@ cross-host procedure in [agent-portability.md](agent-portability.md).
 ## Complete Independent Reader Validation
 
 For every finished artifact, follow [reader-validation.md](reader-validation.md).
+First complete [execution-efficiency.md](execution-efficiency.md): do not build
+review packets until the source/claim record, candidate, renders, deterministic
+checks, and reviewer inputs are stable. The normal path spends one complete
+parallel review batch per artifact.
 After the draft passes cheap deterministic checks, use `reader_review.py prepare`
 to create four immutable packets. Launch exactly four fresh subagents in one
 parallel batch for `no-context`, `readability`, `source-reliability`, and
