@@ -44,7 +44,8 @@ Detailed commands and failure behavior remain in
 [references/runtime-enforcement.md](references/runtime-enforcement.md).
 
 1. Define the operation, one primary scenario, target reader, reader task,
-   channel, risk, source boundary, title need, and visual state.
+   channel, risk, source boundary, title need, visual state, and whether the
+   output is a finished artifact.
 2. Select language and format before drafting. A direct language request wins;
    otherwise use the primary source's dominant language, not the prompt
    language. Explicit format wins, then an existing artifact, then chat-only;
@@ -65,6 +66,9 @@ Detailed commands and failure behavior remain in
 6. Complete every semantic gate, execution gate, and selected runtime rule with
    concrete artifact evidence. Only rules explicitly marked `[conditional]` in
    the task contract may be `not-applicable`, with a task-specific reason.
+   Every finished artifact necessarily loads `reading-path-layout`; its plan,
+   adjacency, density, spacing, and native-render rules cannot be marked
+   `not-applicable` or waived by selecting another output format.
 7. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
    to run exactly four fresh, mutually isolated reviewers concurrently:
    no-context, readability, source-reliability, and structure-visual. All four
@@ -106,6 +110,8 @@ the control with an informal checklist.
   operational rule source used by the task contract.
 - [config/skill-contract.json](config/skill-contract.json) is the capability and
   version contract.
+- [references/reading-path-layout.md](references/reading-path-layout.md) is the
+  mandatory finished-artifact layout contract selected by the resolver.
 - Scenario and detailed references remain canonical for rationale, examples,
   and troubleshooting, but are not default runtime context.
 - Use [references/skill-maintenance.md](references/skill-maintenance.md) only

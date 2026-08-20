@@ -18,8 +18,8 @@
     },
     {
       "id": "G4-build",
-      "required_record": "Status and artifact evidence for all selected output, title, format, visual, and scenario rules, including heading propositions and concrete value expressions when applicable.",
-      "exit_condition": "No unsupported, decorative, misleading, or task-incomplete structure remains in the built version."
+      "required_record": "Status and artifact evidence for all selected output, title, format, reading-path layout, visual, and scenario rules, including heading propositions, section reader jobs, evidence adjacency, density rhythm, and concrete value expressions when applicable.",
+      "exit_condition": "The planned reading path is implemented in the artifact and no unsupported, decorative, misleading, obstructive, or task-incomplete structure remains."
     },
     {
       "id": "G5-signals",
@@ -28,8 +28,8 @@
     },
     {
       "id": "G6-verify",
-      "required_record": "Meaning preservation, hard gates, scenario acceptance, selected runtime rules, signal recheck, artifact-bound semantic review, reader review when required, visual checks, rendered checks, and remaining limitations.",
-      "exit_condition": "The exact artifact and its reviews pass the locked contract, or the third-round incomplete-draft path is used without a completion claim or external action."
+      "required_record": "Meaning preservation, hard gates, scenario acceptance, selected runtime rules, signal recheck, artifact-bound semantic review, reader review when required, reading-path and density checks, visual checks, rendered checks, and remaining limitations.",
+      "exit_condition": "The exact artifact and its rendered reading path pass the locked contract, or the third-round incomplete-draft path is used without a completion claim or external action."
     }
   ],
   "core": [
@@ -249,6 +249,36 @@
       {
         "id": "format-portable-baseline",
         "instruction": "Across formats, preserve readable hierarchy, restrained semantic color, stable layout, accessible labels, adjacent evidence, and rendered verification."
+      }
+    ],
+    "reading-path-layout": [
+      {
+        "id": "layout-plan-before-build",
+        "instruction": "Before building a finished artifact, record the reader decision and for every section its reader question, takeaway, evidence form, density, boundary or source placement, and transition to the next question."
+      },
+      {
+        "id": "layout-opening-hierarchy",
+        "instruction": "Make the opening support a quick correct judgment: identify the object and practical takeaway first, then the strongest support, consequence, action, or boundary that the reader actually needs."
+      },
+      {
+        "id": "layout-one-reader-job-per-section",
+        "instruction": "Give each section one primary reader job; use a content-bearing heading and put its takeaway before supporting method, history, or implementation detail."
+      },
+      {
+        "id": "layout-claim-evidence-adjacency",
+        "instruction": "Keep the evidence, definition, source, uncertainty, and boundary that qualify a material claim adjacent to it; do not make the reader search another section to verify the judgment."
+      },
+      {
+        "id": "layout-density-rhythm",
+        "instruction": "Do not stack dense tables, charts, diagrams, code, or long lists without a substantive interpretive bridge; vary form only when the reader task changes and remove repeated containers that add no meaning."
+      },
+      {
+        "id": "layout-spacing-hierarchy",
+        "instruction": "Use four distinguishable spacing relationships in the selected native format: tight within one idea, normal between paragraphs, wider between subsections, and widest between major sections."
+      },
+      {
+        "id": "layout-native-render-verification",
+        "instruction": "Verify the actual target render for heading hierarchy, whitespace, dense-block rhythm, claim-evidence adjacency, overflow, clipping, overlap, table and figure legibility, and mobile or page behavior before delivery."
       }
     ],
     "html-output": [

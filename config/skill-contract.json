@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.20.0",
+  "skill_version": "0.21.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -39,6 +39,11 @@
       "id": "format-decision",
       "condition": "every finished artifact selects a format and portable presentation baseline",
       "reference": "references/format-decision.md"
+    },
+    {
+      "id": "reading-path-layout",
+      "condition": "every finished artifact plans and verifies its reading path, evidence adjacency, density rhythm, and native spacing hierarchy",
+      "reference": "references/reading-path-layout.md"
     },
     {
       "id": "reader-validation",
@@ -104,9 +109,11 @@
     "source_hashes_verified_before_delivery": true,
     "entrypoint_max_lines": 150,
     "entrypoint_max_bytes": 16384,
-    "task_bundle_max_bytes": 24576,
+    "task_bundle_max_bytes": 26624,
     "combined_entrypoint_and_bundle_max_bytes": 40960,
     "format_decision_module": "references/format-decision.md",
+    "reading_path_layout_module": "references/reading-path-layout.md",
+    "reading_path_layout_required_for_finished_artifacts": true,
     "html_implementation_loaded_only_when_selected": true,
     "visual_decision_module": "references/visual-decision.md",
     "visual_implementation_module": "references/visual-communication.md"
@@ -179,6 +186,15 @@
         "format-native-preservation",
         "format-no-html-intermediate",
         "format-portable-baseline"
+      ],
+      "reading-path-layout": [
+        "layout-plan-before-build",
+        "layout-opening-hierarchy",
+        "layout-one-reader-job-per-section",
+        "layout-claim-evidence-adjacency",
+        "layout-density-rhythm",
+        "layout-spacing-hierarchy",
+        "layout-native-render-verification"
       ],
       "html-output": [
         "html-selected-only",
@@ -260,6 +276,7 @@
     "reader_validation_round_three_behavior": "review-incomplete-draft-needs-user-decision",
     "reader_validation_incomplete_draft_user_notice_required": true,
     "reader_validation_incomplete_draft_external_actions_blocked": true,
+    "reading_path_layout_required_for_finished_artifacts": true,
     "semantic_review_required": true,
     "runtime_rule_review_required": true,
     "runtime_rule_inventory_required": true,
@@ -297,6 +314,7 @@
     "information-bearing-title-design",
     "visual-need-decision",
     "chart-diagram-table-color-and-layout-integrity",
+    "mandatory-reading-path-layout-contract",
     "visual-provenance-and-synthetic-disclosure",
     "self-contained-html-rendering",
     "native-non-html-format-preservation",
@@ -388,6 +406,10 @@
     "visible-structure-classification",
     "heading-proposition-map",
     "heading-only-readback",
+    "one-reader-job-per-section",
+    "claim-evidence-adjacency",
+    "dense-block-interpretive-bridge",
+    "four-level-spacing-hierarchy",
     "concrete-object-action-result-expression"
   ],
   "visible_structure_states": [

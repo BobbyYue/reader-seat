@@ -48,7 +48,59 @@ class ModuleResolverTests(unittest.TestCase):
         )
         result = resolve_modules.resolve(namespace, resolve_modules.load_profiles())
         bundle = resolve_modules.render_bundle(result)
-        self.assertLessEqual(len(bundle.encode("utf-8")), 24576)
+        contract = json.loads((ROOT / "config" / "skill-contract.json").read_text(encoding="utf-8"))
+        self.assertLessEqual(
+            len(bundle.encode("utf-8")),
+            contract["runtime_loading"]["task_bundle_max_bytes"],
+        )
+
+    def test_finished_artifact_requires_reading_path_layout_rules(self) -> None:
+        namespace = argparse.Namespace(
+            scenario="business",
+            operation="create",
+            artifact=True,
+            chat_output=False,
+            risk="standard",
+            output_format="html",
+            title=True,
+            visual="none",
+            evaluate=False,
+            portability=False,
+            maintenance=False,
+        )
+        result = resolve_modules.resolve(namespace, resolve_modules.load_profiles())
+        module_ids = {item["id"] for item in result["modules"]}
+        self.assertIn("reading-path-layout", module_ids)
+        layout_rule_ids = {
+            "layout-plan-before-build",
+            "layout-opening-hierarchy",
+            "layout-one-reader-job-per-section",
+            "layout-claim-evidence-adjacency",
+            "layout-density-rhythm",
+            "layout-spacing-hierarchy",
+            "layout-native-render-verification",
+        }
+        self.assertTrue(layout_rule_ids <= set(result["required_rule_ids"]))
+        self.assertTrue(
+            all(result["runtime_rule_applicability"][rule_id] is False for rule_id in layout_rule_ids)
+        )
+
+    def test_chat_output_does_not_load_artifact_layout_module(self) -> None:
+        namespace = argparse.Namespace(
+            scenario="business",
+            operation="create",
+            artifact=False,
+            chat_output=True,
+            risk="standard",
+            output_format="chat",
+            title=False,
+            visual="none",
+            evaluate=False,
+            portability=False,
+            maintenance=False,
+        )
+        result = resolve_modules.resolve(namespace, resolve_modules.load_profiles())
+        self.assertNotIn("reading-path-layout", {item["id"] for item in result["modules"]})
 
     def test_evaluation_harness_uses_task_bundle_not_full_references(self) -> None:
         cases = json.loads(

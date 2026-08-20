@@ -34,6 +34,10 @@
       "path": "references/format-decision.md",
       "purpose": "select the output format and apply the portable native-format presentation baseline"
     },
+    "reading-path-layout": {
+      "path": "references/reading-path-layout.md",
+      "purpose": "plan and verify the cross-section reading path, evidence adjacency, density rhythm, and spacing hierarchy of every finished artifact"
+    },
     "html-output": {
       "path": "references/html-output.md",
       "purpose": "select output format and render self-contained HTML or a portable native-format baseline"
@@ -109,6 +113,7 @@
   },
   "artifact_modules": [
     "format-decision",
+    "reading-path-layout",
     "visual-decision",
     "reader-validation"
   ],
@@ -140,6 +145,7 @@
     "scenario-procedure",
     "diagnosis-and-revision",
     "format-decision",
+    "reading-path-layout",
     "html-output",
     "visual-decision",
     "visual-communication",

@@ -87,7 +87,8 @@ only when the artifact explicitly narrows the claim and discloses the limit.
 ### Structure And Visual
 
 Inspect the artifact and supplied renders. Check the heading-only reading path,
-information order, page flow, table and chart legibility, scale and baseline,
+information order, claim-evidence adjacency, dense-block rhythm, four-level
+spacing hierarchy, page flow, table and chart legibility, scale and baseline,
 color semantics, labels, contrast, responsive behavior, overlap, clipping, and
 whether a retained visual actually reduces reader cost. A text-only artifact
 may pass when no material visual is needed; it may not skip structural review.

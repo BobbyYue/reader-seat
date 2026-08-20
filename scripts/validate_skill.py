@@ -218,6 +218,10 @@ def check_contract(contract: dict, errors: list[str]) -> None:
         "visible-structure-classification",
         "heading-proposition-map",
         "heading-only-readback",
+        "one-reader-job-per-section",
+        "claim-evidence-adjacency",
+        "dense-block-interpretive-bridge",
+        "four-level-spacing-hierarchy",
         "concrete-object-action-result-expression",
     ]
     if contract.get("natural_structure_rules") != expected_natural_structure_rules:
@@ -548,8 +552,13 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     if not conditional_paths.issubset(profile_paths):
         fail("conditional contract modules are not all resolvable by module profiles", errors)
 
-    if profiles.get("artifact_modules") != ["format-decision", "visual-decision", "reader-validation"]:
-        fail("artifact modules must load format, visual decision, and reader validation", errors)
+    if profiles.get("artifact_modules") != [
+        "format-decision",
+        "reading-path-layout",
+        "visual-decision",
+        "reader-validation",
+    ]:
+        fail("artifact modules must load format, reading-path layout, visual decision, and reader validation", errors)
     features = profiles.get("feature_modules", {})
     if features.get("html-output") != ["html-output"]:
         fail("html-output must load only as a selected-format feature", errors)
@@ -598,6 +607,7 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         "information-bearing-title-design",
         "visual-need-decision",
         "chart-diagram-table-color-and-layout-integrity",
+        "mandatory-reading-path-layout-contract",
         "visual-provenance-and-synthetic-disclosure",
         "self-contained-html-rendering",
         "native-non-html-format-preservation",
@@ -615,21 +625,26 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     if set(contract.get("retained_capabilities", [])) != required_capabilities:
         fail("retained_capabilities does not preserve the complete runtime capability set", errors)
 
+    if runtime.get("reading_path_layout_module") != "references/reading-path-layout.md":
+        fail("runtime loading contract must name reading-path-layout.md", errors)
+    if runtime.get("reading_path_layout_required_for_finished_artifacts") is not True:
+        fail("runtime loading contract must require reading-path layout for finished artifacts", errors)
+
     resolver = ROOT / "scripts" / "resolve_modules.py"
     resolver_cases = [
         (
             ["--scenario", "business", "--operation", "create", "--artifact", "--output-format", "native", "--visual", "none"],
-            {"format-decision", "visual-decision", "reader-validation", "scenario-business"},
+            {"format-decision", "reading-path-layout", "visual-decision", "reader-validation", "scenario-business"},
             {"html-output", "visual-communication", "visual-evidence"},
         ),
         (
             ["--scenario", "analysis", "--operation", "rewrite", "--artifact", "--output-format", "html", "--visual", "retained"],
-            {"diagnosis-and-revision", "format-decision", "html-output", "visual-decision", "reader-validation", "visual-communication", "scenario-analysis"},
+            {"diagnosis-and-revision", "format-decision", "reading-path-layout", "html-output", "visual-decision", "reader-validation", "visual-communication", "scenario-analysis"},
             {"visual-evidence"},
         ),
         (
             ["--scenario", "news", "--operation", "create", "--artifact", "--visual", "asset"],
-            {"visual-decision", "reader-validation", "visual-communication", "visual-evidence", "scenario-news"},
+            {"reading-path-layout", "visual-decision", "reader-validation", "visual-communication", "visual-evidence", "scenario-news"},
             set(),
         ),
         (

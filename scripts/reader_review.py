@@ -47,6 +47,8 @@ REQUIRED_CHECKS = {
     "structure-visual": (
         "reading-path-clear",
         "headings-carry-information",
+        "claim-evidence-adjacent",
+        "density-and-spacing-support-path",
         "layout-has-no-obstruction",
         "tables-and-visuals-readable",
         "visual-encoding-not-misleading",
