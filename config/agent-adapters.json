@@ -5,8 +5,12 @@
     "result_transport": "one utf-8 final-answer file per case and repetition",
     "logs": "must remain separate from the final answer",
     "source_policy": "the adapter passes the frozen source without summarizing or translating it",
-    "runtime_init": "the adapter must create and lock a task contract before generation",
-    "external_action_preflight": "the adapter must run check-action and retain its passing action receipt immediately before publish, overwrite, or replace",
+    "runtime_init": "the adapter must create and lock a task contract plus generated task bundle and module manifest before generation",
+    "semantic_review_binding": "the adapter must bind the still-pending semantic and runtime-rule review to the exact artifact and content snapshot, retain the separate binding receipt locked into the task contract, and only then complete review items",
+    "reader_review_orchestration": "the adapter must launch four fresh subagents concurrently from the canonical review packets and retain four machine-readable results",
+    "reader_review_delivery_gate": "the adapter must reject finished or external delivery unless the four-way reader review aggregate is pass for the current artifact hash",
+    "reader_review_incomplete_draft_gate": "after a valid third-round needs-user-decision aggregate, the adapter may show only the exact current artifact with a review-incomplete-draft receipt, unresolved issues, and a user optimization question; external actions remain blocked",
+    "external_action_preflight": "the adapter must run check-action with the artifact-bound semantic review, source-backed reader aggregate, and independent judge result for high-risk work, then retain its passing action receipt immediately before publish, overwrite, or replace",
     "delivery_precondition": "the adapter must reject delivery unless verification-receipt.json has status=pass"
   },
   "adapters": {

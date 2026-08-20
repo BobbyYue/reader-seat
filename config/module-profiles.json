@@ -6,6 +6,10 @@
       "path": "references/runtime-enforcement.md",
       "purpose": "lock critical task decisions and require a passing deliverable receipt"
     },
+    "reader-validation": {
+      "path": "references/reader-validation.md",
+      "purpose": "run four isolated reader reviews in parallel and block delivery until all pass"
+    },
     "scenario-routing": {
       "path": "references/scenario-routing.md",
       "purpose": "select one primary reader task and a bounded secondary task when needed"
@@ -54,6 +58,10 @@
       "path": "references/agent-portability.md",
       "purpose": "package, invoke, and regression-test the canonical skill across agent hosts"
     },
+    "skill-maintenance": {
+      "path": "references/skill-maintenance.md",
+      "purpose": "change the skill without duplicating routing rules or reducing retained capability"
+    },
     "scenario-news": {
       "path": "references/scenario-news.md",
       "purpose": "news and industry brief route"
@@ -101,7 +109,8 @@
   },
   "artifact_modules": [
     "format-decision",
-    "visual-decision"
+    "visual-decision",
+    "reader-validation"
   ],
   "risk_modules": {
     "standard": [],
@@ -114,10 +123,12 @@
     "visual-retained": ["visual-decision", "visual-communication"],
     "visual-asset": ["visual-decision", "visual-communication", "visual-evidence"],
     "explicit-evaluation": ["evaluation"],
-    "portability": ["agent-portability"]
+    "portability": ["agent-portability"],
+    "maintenance": ["skill-maintenance"]
   },
   "load_order": [
     "runtime-enforcement",
+    "reader-validation",
     "scenario-routing",
     "output-standards",
     "signal-processing",
@@ -135,6 +146,7 @@
     "visual-evidence",
     "title-design",
     "evaluation",
-    "agent-portability"
+    "agent-portability",
+    "skill-maintenance"
   ]
 }

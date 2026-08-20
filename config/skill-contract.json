@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.18.0",
+  "skill_version": "0.20.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -41,6 +41,11 @@
       "reference": "references/format-decision.md"
     },
     {
+      "id": "reader-validation",
+      "condition": "every finished artifact undergoes four isolated reader reviews; finished or external delivery requires pass, while a third-round non-pass permits only a labeled user-decision draft",
+      "reference": "references/reader-validation.md"
+    },
+    {
       "id": "diagnosis-and-revision",
       "condition": "the task rewrites or diagnoses an existing document",
       "reference": "references/diagnosis-and-revision.md"
@@ -79,22 +84,161 @@
       "id": "agent-portability",
       "condition": "the skill is installed, adapted, or regression-tested in another agent host",
       "reference": "references/agent-portability.md"
+    },
+    {
+      "id": "skill-maintenance",
+      "condition": "the skill itself is changed, packaged, synchronized, or regression-tested",
+      "reference": "references/skill-maintenance.md"
     }
   ],
   "runtime_loading": {
     "profile": "config/module-profiles.json",
     "resolver": "scripts/resolve_modules.py",
+    "rules": "config/runtime-rules.json",
     "policy": "minimum-complete-module-set",
     "capability_reduction_allowed": false,
     "active_scenario_contract_extracted_from_canonical_module": true,
+    "task_bundle_generated_at_init": true,
+    "module_manifest_generated_at_init": true,
+    "selected_rule_review_required": true,
+    "source_hashes_verified_before_delivery": true,
+    "entrypoint_max_lines": 150,
+    "entrypoint_max_bytes": 16384,
+    "task_bundle_max_bytes": 24576,
+    "combined_entrypoint_and_bundle_max_bytes": 40960,
     "format_decision_module": "references/format-decision.md",
     "html_implementation_loaded_only_when_selected": true,
     "visual_decision_module": "references/visual-decision.md",
     "visual_implementation_module": "references/visual-communication.md"
   },
+  "runtime_rule_inventory": {
+    "core": [
+      "source-scope-priority",
+      "meaning-and-commitment-fidelity",
+      "no-invention",
+      "reader-task-organization",
+      "evidence-calibration",
+      "natural-non-template-expression",
+      "external-action-authorization",
+      "verified-completion-only"
+    ],
+    "modules": {
+      "runtime-enforcement": [
+        "runtime-init-before-draft",
+        "runtime-decisions-immutable",
+        "runtime-review-evidence",
+        "runtime-action-preflight",
+        "runtime-final-verification",
+        "runtime-third-round-draft",
+        "runtime-failure-stop"
+      ],
+      "reader-validation": [
+        "reader-review-four-isolated",
+        "reader-review-packet-boundary",
+        "reader-review-all-pass",
+        "reader-review-revise-and-rerun",
+        "reader-review-three-round-limit"
+      ],
+      "scenario-routing": [
+        "route-by-reader-task",
+        "one-primary-route",
+        "route-clarify-only-when-material"
+      ],
+      "output-standards": [
+        "practical-information-first",
+        "reader-perspective",
+        "progressive-disclosure",
+        "natural-audience-fit-language",
+        "evidence-and-calibrated-certainty",
+        "scope-and-assumption-fidelity",
+        "useful-structure-and-concision",
+        "action-proportional-to-evidence",
+        "concrete-value-expression"
+      ],
+      "signal-processing": [
+        "signals-are-not-errors",
+        "signal-context-decision",
+        "signal-proportional-action",
+        "signal-hard-failure-priority",
+        "signal-recheck"
+      ],
+      "diagnosis-and-revision": [
+        "diagnosis-priority-order",
+        "smallest-effective-revision",
+        "diagnosis-no-silent-rewrite",
+        "meaning-preservation-recheck"
+      ],
+      "evaluation": [
+        "evaluation-freeze-test-card",
+        "evaluation-hard-gates-first",
+        "evaluation-no-cross-scenario-score",
+        "evaluation-stability-evidence"
+      ],
+      "format-decision": [
+        "format-selection-order",
+        "format-native-preservation",
+        "format-no-html-intermediate",
+        "format-portable-baseline"
+      ],
+      "html-output": [
+        "html-selected-only",
+        "html-local-portable-directory",
+        "html-self-identification-hidden",
+        "html-content-led-visual-system",
+        "html-citation-integrity",
+        "html-chart-runtime-integrity",
+        "html-diagram-claim-boundary",
+        "html-responsive-accessible-print",
+        "html-render-verification"
+      ],
+      "visual-decision": [
+        "visual-reader-job",
+        "visual-prose-comparison",
+        "visual-deletion-test",
+        "visual-decision-record"
+      ],
+      "visual-communication": [
+        "visual-form-fit",
+        "visual-source-backed-encoding",
+        "visual-honest-geometry",
+        "visual-context-complete",
+        "visual-derived-values-recomputed",
+        "visual-functional-color",
+        "visual-responsive-layout"
+      ],
+      "visual-evidence": [
+        "visual-claim-inventory",
+        "visual-source-hierarchy",
+        "visual-person-event-hard-gate",
+        "visual-synthetic-disclosure",
+        "visual-fallback-order"
+      ],
+      "title-design": [
+        "title-concrete-anchor",
+        "title-candidate-comparison",
+        "title-evidence-calibrated-verb",
+        "title-no-clickbait",
+        "title-subtitle-distinct",
+        "title-opening-fulfillment"
+      ],
+      "agent-portability": [
+        "portability-canonical-source",
+        "portability-adapter-boundary",
+        "portability-regression-matrix"
+      ],
+      "skill-maintenance": [
+        "maintenance-preserve-capability-contract",
+        "maintenance-single-routing-source",
+        "maintenance-progressive-disclosure",
+        "maintenance-regression-evidence",
+        "maintenance-canonical-sync-approval"
+      ]
+    }
+  },
   "runtime_enforcement": {
     "contract_script": "scripts/runtime_contract.py",
     "unit_tests": "tests/test_runtime_contract.py",
+    "module_resolver_unit_tests": "tests/test_module_resolver.py",
     "required_for_every_task": true,
     "decision_lock": [
       "output-language",
@@ -105,8 +249,28 @@
     ],
     "external_action_guard_required": true,
     "action_preflight_receipt_required": true,
+    "reader_review_script": "scripts/reader_review.py",
+    "reader_review_schema": "config/reader-review-result.schema.json",
+    "reader_validation_required_for_finished_artifacts": true,
+    "reader_validation_context_isolation_required": true,
+    "reader_validation_parallel_required": true,
+    "reader_validation_all_dimensions_must_pass": true,
+    "reader_validation_max_rounds": 3,
+    "reader_validation_rerun_all_after_change": true,
+    "reader_validation_round_three_behavior": "review-incomplete-draft-needs-user-decision",
+    "reader_validation_incomplete_draft_user_notice_required": true,
+    "reader_validation_incomplete_draft_external_actions_blocked": true,
     "semantic_review_required": true,
+    "runtime_rule_review_required": true,
+    "runtime_rule_inventory_required": true,
+    "nonwaivable_rule_enforcement_required": true,
+    "execution_gate_review_required": true,
+    "semantic_review_artifact_binding_required": true,
+    "semantic_review_binding_receipt_required": true,
+    "reader_review_aggregate_revalidates_source_results": true,
     "independent_judge_required_for_high_risk": true,
+    "high_risk_action_preflight_judge_required": true,
+    "module_manifest_full_execution_gate_contract_required": true,
     "verification_receipt_required": true,
     "fail_closed_on_missing_or_failed_receipt": true,
     "host_wrapper_required_for_absolute_enforcement": true
@@ -139,7 +303,13 @@
     "signal-based-diagnosis",
     "hard-gate-and-reader-outcome-evaluation",
     "fail-closed-runtime-contract",
-    "vendor-neutral-command-adapters"
+    "four-way-independent-reader-validation",
+    "vendor-neutral-command-adapters",
+    "task-specific-runtime-bundle",
+    "versioned-runtime-rule-inventory",
+    "artifact-bound-semantic-review",
+    "source-result-revalidated-reader-aggregate",
+    "high-risk-pre-action-independent-judge"
   ],
   "html_output": {
     "reference": "references/html-output.md",
@@ -270,6 +440,7 @@
     "output-language-fidelity",
     "output-format-selection-and-fidelity",
     "publication-authorization-and-target-fidelity",
+    "independent-reader-validation",
     "title-content-fidelity",
     "information-empty-visible-structure",
     "concrete-value-expression",
@@ -328,6 +499,19 @@
     "format-explicit-feishu-uses-portable-baseline",
     "runtime-language-drift-blocked",
     "runtime-format-drift-blocked",
-    "runtime-unauthorized-publication-blocked"
+    "runtime-unauthorized-publication-blocked",
+    "reader-review-missing-blocks-delivery",
+    "reader-review-four-way-pass-required",
+    "reader-review-stale-artifact-blocked",
+    "reader-review-third-round-needs-user-decision",
+    "runtime-task-bundle-minimum-complete",
+    "runtime-task-bundle-tamper-blocked",
+    "runtime-selected-rule-review-required",
+    "runtime-rule-inventory-deletion-blocked",
+    "runtime-nonwaivable-rule-blocked",
+    "semantic-review-stale-artifact-blocked",
+    "task-bundle-reader-and-gates-complete",
+    "reader-review-aggregate-source-result-revalidation",
+    "high-risk-action-preflight-judge-required"
   ]
 }

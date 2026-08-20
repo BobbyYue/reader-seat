@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = ROOT / "config" / "skill-contract.json"
 MODULE_PROFILES_PATH = ROOT / "config" / "module-profiles.json"
+RUNTIME_RULES_PATH = ROOT / "config" / "runtime-rules.json"
 AGENT_ADAPTERS_PATH = ROOT / "config" / "agent-adapters.json"
 
 
@@ -50,56 +51,40 @@ def check_skill_md(contract: dict, errors: list[str]) -> None:
         fail("SKILL.md name does not match contract", errors)
     if "TODO" in text:
         fail("SKILL.md still contains TODO", errors)
-    if len(text.splitlines()) > 500:
-        fail("SKILL.md exceeds the 500-line progressive-disclosure limit", errors)
+    runtime = contract.get("runtime_loading", {})
+    max_lines = runtime.get("entrypoint_max_lines", 150)
+    max_bytes = runtime.get("entrypoint_max_bytes", 16384)
+    if len(text.splitlines()) > max_lines:
+        fail(f"SKILL.md exceeds the {max_lines}-line entrypoint budget", errors)
+    if len(text.encode("utf-8")) > max_bytes:
+        fail(f"SKILL.md exceeds the {max_bytes}-byte entrypoint budget", errors)
 
     for gate in contract.get("mandatory_execution_gates", []):
         if gate not in text:
             fail(f"SKILL.md does not operationalize execution gate: {gate}", errors)
 
-    required_language_terms = [
-        "## Language Selection Gate",
-        "Do not treat the language used to ask the question as an explicit output-language instruction",
-        "Do not begin drafting until the output language is selected",
-    ]
-    for term in required_language_terms:
-        if term not in text:
-            fail(f"SKILL.md missing required language-selection rule: {term}", errors)
-
-    required_format_terms = [
-        "Select the output format before drafting",
-        "use self-contained HTML by default",
-        "references/format-decision.md",
-        "only when HTML is selected",
-        "portable visual and structural principles",
-        "intermediate merely to imitate its appearance",
-    ]
-    for term in required_format_terms:
-        if term not in text:
-            fail(f"SKILL.md missing required output-format rule: {term}", errors)
-
-    required_visual_communication_terms = [
-        "references/visual-decision.md",
-        "references/visual-communication.md",
-        "apply the deletion test",
-        "Do not convert two to four simple conclusions",
-        "every retained visual has a valid reader job",
-        "color has a defined semantic role",
-    ]
-    for term in required_visual_communication_terms:
-        if term not in text:
-            fail(f"SKILL.md missing required visual-communication rule: {term}", errors)
-
-    required_portability_terms = [
+    required_entrypoint_terms = [
+        "## Non-Negotiable Invariants",
+        "## Runtime Sequence",
+        "## Output Behavior",
+        "## Operational Sources",
+        "source truth and scope",
+        "dominant language",
+        "self-contained HTML",
+        "resolved-task-contract.md",
+        "module-manifest.json",
         "config/module-profiles.json",
-        "scripts/resolve_modules.py",
-        "scripts/run_evals.py",
-        "Do not remove an existing route, hard",
-        "at least two explicitly named agent",
+        "config/runtime-rules.json",
+        "scripts/runtime_contract.py",
+        "scripts/reader_review.py",
+        "check-action",
+        "present-draft",
+        "verify",
+        "references/skill-maintenance.md",
     ]
-    for term in required_portability_terms:
+    for term in required_entrypoint_terms:
         if term not in text:
-            fail(f"SKILL.md missing required portability rule: {term}", errors)
+            fail(f"SKILL.md missing required entrypoint invariant: {term}", errors)
 
     for link in re.findall(r"\]\(([^)]+)\)", text):
         if "://" in link or link.startswith("#"):
@@ -428,6 +413,9 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     profiles = load_json(MODULE_PROFILES_PATH, errors)
     if not isinstance(profiles, dict):
         return
+    runtime_rules = load_json(RUNTIME_RULES_PATH, errors)
+    if not isinstance(runtime_rules, dict):
+        return
 
     modules = profiles.get("modules")
     if not isinstance(modules, dict) or not modules:
@@ -438,6 +426,71 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     load_order = profiles.get("load_order", [])
     if len(load_order) != len(set(load_order)) or set(load_order) != module_ids:
         fail("module profile load_order must contain every module exactly once", errors)
+
+    if runtime_rules.get("schema_version") != 1:
+        fail("runtime-rules.json must use schema_version 1", errors)
+    execution_gates = runtime_rules.get("execution_gates")
+    if not isinstance(execution_gates, list):
+        fail("runtime-rules.json must define execution gates", errors)
+        execution_gates = []
+    gate_ids = [item.get("id") for item in execution_gates if isinstance(item, dict)]
+    if gate_ids != contract.get("mandatory_execution_gates"):
+        fail("runtime execution gates do not match the skill contract", errors)
+    for item in execution_gates:
+        if not isinstance(item, dict) or not all(
+            isinstance(item.get(key), str) and item[key].strip()
+            for key in ("id", "required_record", "exit_condition")
+        ):
+            fail("runtime execution gate lacks a record or exit condition", errors)
+    core_rules = runtime_rules.get("core")
+    module_rules = runtime_rules.get("modules")
+    if not isinstance(core_rules, list) or not core_rules:
+        fail("runtime-rules.json must define non-empty core rules", errors)
+        core_rules = []
+    if not isinstance(module_rules, dict):
+        fail("runtime-rules.json must define module rule groups", errors)
+        module_rules = {}
+    rule_ids: list[str] = []
+
+    def check_rule_group(label: str, items: object) -> None:
+        if not isinstance(items, list) or not items:
+            fail(f"runtime rule group {label} must be non-empty", errors)
+            return
+        for item in items:
+            if not isinstance(item, dict):
+                fail(f"runtime rule group {label} contains a non-object", errors)
+                continue
+            rule_id = item.get("id")
+            instruction = item.get("instruction")
+            if not isinstance(rule_id, str) or not rule_id.strip():
+                fail(f"runtime rule group {label} contains an invalid id", errors)
+            else:
+                rule_ids.append(rule_id)
+            if not isinstance(instruction, str) or len(instruction.strip()) < 20:
+                fail(f"runtime rule {rule_id!r} lacks an actionable instruction", errors)
+            if not isinstance(item.get("allow_not_applicable", False), bool):
+                fail(f"runtime rule {rule_id!r} has invalid applicability metadata", errors)
+
+    check_rule_group("core", core_rules)
+    scenario_module_ids = set(profiles.get("scenario_modules", {}).values())
+    for module_id in sorted(module_ids - scenario_module_ids):
+        check_rule_group(module_id, module_rules.get(module_id))
+    unknown_rule_groups = set(module_rules) - (module_ids - scenario_module_ids)
+    if unknown_rule_groups:
+        fail(f"runtime rules contain unknown or scenario groups: {sorted(unknown_rule_groups)}", errors)
+    if len(rule_ids) != len(set(rule_ids)):
+        fail("runtime rule ids must be globally unique", errors)
+    inventory = contract.get("runtime_rule_inventory", {})
+    actual_inventory = {
+        "core": [item.get("id") for item in core_rules if isinstance(item, dict)],
+        "modules": {
+            module_id: [item.get("id") for item in module_rules[module_id] if isinstance(item, dict)]
+            for module_id in sorted(module_rules)
+            if isinstance(module_rules[module_id], list)
+        },
+    }
+    if inventory.get("core") != actual_inventory["core"] or inventory.get("modules") != actual_inventory["modules"]:
+        fail("runtime rule catalog differs from the versioned contract inventory", errors)
 
     for module_id, definition in modules.items():
         if not isinstance(definition, dict):
@@ -495,8 +548,8 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     if not conditional_paths.issubset(profile_paths):
         fail("conditional contract modules are not all resolvable by module profiles", errors)
 
-    if profiles.get("artifact_modules") != ["format-decision", "visual-decision"]:
-        fail("artifact modules must load format-decision and visual-decision", errors)
+    if profiles.get("artifact_modules") != ["format-decision", "visual-decision", "reader-validation"]:
+        fail("artifact modules must load format, visual decision, and reader validation", errors)
     features = profiles.get("feature_modules", {})
     if features.get("html-output") != ["html-output"]:
         fail("html-output must load only as a selected-format feature", errors)
@@ -508,16 +561,28 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         "visual-evidence",
     ]:
         fail("visual-asset must preserve decision, implementation, and evidence modules", errors)
+    if features.get("maintenance") != ["skill-maintenance"]:
+        fail("skill maintenance must load only the maintenance module", errors)
 
     runtime = contract.get("runtime_loading", {})
     if runtime.get("profile") != "config/module-profiles.json":
         fail("runtime loading contract does not name module-profiles.json", errors)
     if runtime.get("resolver") != "scripts/resolve_modules.py":
         fail("runtime loading contract does not name resolve_modules.py", errors)
+    if runtime.get("rules") != "config/runtime-rules.json":
+        fail("runtime loading contract does not name runtime-rules.json", errors)
     if runtime.get("capability_reduction_allowed") is not False:
         fail("runtime loading contract must forbid capability reduction", errors)
     if runtime.get("active_scenario_contract_extracted_from_canonical_module") is not True:
         fail("runtime loading contract must require canonical active-scenario extraction", errors)
+    for key in (
+        "task_bundle_generated_at_init",
+        "module_manifest_generated_at_init",
+        "selected_rule_review_required",
+        "source_hashes_verified_before_delivery",
+    ):
+        if runtime.get(key) is not True:
+            fail(f"runtime loading contract must enable {key}", errors)
     if runtime.get("format_decision_module") != "references/format-decision.md":
         fail("runtime loading contract must name format-decision.md", errors)
     if runtime.get("html_implementation_loaded_only_when_selected") is not True:
@@ -539,7 +604,13 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         "signal-based-diagnosis",
         "hard-gate-and-reader-outcome-evaluation",
         "fail-closed-runtime-contract",
+        "four-way-independent-reader-validation",
         "vendor-neutral-command-adapters",
+        "task-specific-runtime-bundle",
+        "versioned-runtime-rule-inventory",
+        "artifact-bound-semantic-review",
+        "source-result-revalidated-reader-aggregate",
+        "high-risk-pre-action-independent-judge",
     }
     if set(contract.get("retained_capabilities", [])) != required_capabilities:
         fail("retained_capabilities does not preserve the complete runtime capability set", errors)
@@ -548,23 +619,35 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
     resolver_cases = [
         (
             ["--scenario", "business", "--operation", "create", "--artifact", "--output-format", "native", "--visual", "none"],
-            {"format-decision", "visual-decision", "scenario-business"},
+            {"format-decision", "visual-decision", "reader-validation", "scenario-business"},
             {"html-output", "visual-communication", "visual-evidence"},
         ),
         (
             ["--scenario", "analysis", "--operation", "rewrite", "--artifact", "--output-format", "html", "--visual", "retained"],
-            {"diagnosis-and-revision", "format-decision", "html-output", "visual-decision", "visual-communication", "scenario-analysis"},
+            {"diagnosis-and-revision", "format-decision", "html-output", "visual-decision", "reader-validation", "visual-communication", "scenario-analysis"},
             {"visual-evidence"},
         ),
         (
             ["--scenario", "news", "--operation", "create", "--artifact", "--visual", "asset"],
-            {"visual-decision", "visual-communication", "visual-evidence", "scenario-news"},
+            {"visual-decision", "reader-validation", "visual-communication", "visual-evidence", "scenario-news"},
             set(),
         ),
         (
             ["--scenario", "technical", "--operation", "compare", "--chat-output", "--risk", "high"],
             {"diagnosis-and-revision", "evaluation", "scenario-technical"},
             {"html-output"},
+        ),
+        (
+            [
+                "--scenario", "analysis", "--operation", "compare", "--artifact",
+                "--risk", "high", "--output-format", "html", "--title",
+                "--visual", "asset", "--evaluate", "--portability", "--maintenance",
+            ],
+            {
+                "scenario-analysis", "diagnosis-and-revision", "evaluation",
+                "html-output", "visual-evidence", "agent-portability", "skill-maintenance",
+            },
+            set(),
         ),
     ]
     for arguments, required_ids, forbidden_ids in resolver_cases:
@@ -586,15 +669,61 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         except (json.JSONDecodeError, KeyError, TypeError) as exc:
             fail(f"module resolver returned invalid JSON: {exc}", errors)
             continue
-        for field in ("source", "required_content", "evidence_requirements", "acceptance_questions"):
+        for field in (
+            "source",
+            "reader_task",
+            "required_content",
+            "recommended_relationship",
+            "evidence_requirements",
+            "common_failures",
+            "acceptance_questions",
+        ):
             if not isinstance(active_contract.get(field), str) or not active_contract[field].strip():
                 fail(f"module resolver active scenario contract missing {field}", errors)
         if runtime_contract != {
             "required": True,
             "contract_script": "scripts/runtime_contract.py",
+            "reader_review_script": "scripts/reader_review.py",
+            "reader_review_required_for_artifacts": bool(result["task_profile"]["finished_artifact"]),
             "verification_receipt_required": True,
+            "task_bundle_required": True,
+            "module_manifest_required": True,
         }:
             fail("module resolver does not preserve runtime enforcement", errors)
+        if result.get("schema_version") != 2:
+            fail("module resolver must use schema_version 2", errors)
+        required_rule_ids = result.get("required_rule_ids")
+        if not isinstance(required_rule_ids, list) or not required_rule_ids:
+            fail("module resolver did not emit required runtime rules", errors)
+        elif len(required_rule_ids) != len(set(required_rule_ids)):
+            fail("module resolver emitted duplicate runtime rule ids", errors)
+        manifest = result.get("module_manifest", {})
+        if manifest.get("required_rule_ids") != required_rule_ids:
+            fail("module manifest does not preserve the selected runtime rules", errors)
+        if manifest.get("runtime_rule_applicability") != result.get("runtime_rule_applicability"):
+            fail("module manifest does not preserve runtime rule applicability", errors)
+        if manifest.get("required_execution_gate_ids") != contract.get("mandatory_execution_gates"):
+            fail("module manifest does not preserve all execution gates", errors)
+        if manifest.get("execution_gates") != execution_gates:
+            fail("module manifest does not preserve execution gate records and exit conditions", errors)
+        if not result.get("task_profile", {}).get("reader_profile"):
+            fail("module resolver task profile has no target reader", errors)
+        if manifest.get("bundle_characters", 0) <= 0:
+            fail("module resolver did not measure the task bundle", errors)
+        bundle_size = manifest.get("bundle_bytes", 0)
+        max_bundle_size = runtime.get("task_bundle_max_bytes", 24576)
+        if bundle_size > max_bundle_size:
+            fail(
+                f"resolved task bundle exceeds the {max_bundle_size}-byte budget: {bundle_size}",
+                errors,
+            )
+        combined_size = len((ROOT / "SKILL.md").read_bytes()) + bundle_size
+        max_combined_size = runtime.get("combined_entrypoint_and_bundle_max_bytes", 40960)
+        if combined_size > max_combined_size:
+            fail(
+                f"entrypoint plus task bundle exceeds the {max_combined_size}-byte budget: {combined_size}",
+                errors,
+            )
         if "runtime-enforcement" not in resolved_ids:
             fail("module resolver omitted runtime-enforcement", errors)
         missing = required_ids - resolved_ids
@@ -612,6 +741,10 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         else:
             for required in (
                 "runtime_init",
+                "semantic_review_binding",
+                "reader_review_orchestration",
+                "reader_review_delivery_gate",
+                "reader_review_incomplete_draft_gate",
                 "external_action_preflight",
                 "delivery_precondition",
             ):
@@ -655,8 +788,15 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
                 fail(f"references/agent-portability.md missing heading: {heading}", errors)
         for term in (
             "runtime_contract.py init",
+            "runtime_contract.py bind-review",
             "runtime_contract.py check-action",
             "runtime_contract.py verify",
+            "reader_review.py prepare",
+            "reader_review.py aggregate",
+            "exactly four fresh subagents",
+            "stop after round 3",
+            "runtime_contract.py present-draft",
+            "review-incomplete-draft",
             "status=pass",
             "advisory-only",
             "machine-checked return precondition",
@@ -716,8 +856,24 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
         "required_for_every_task",
         "external_action_guard_required",
         "action_preflight_receipt_required",
+        "reader_validation_required_for_finished_artifacts",
+        "reader_validation_context_isolation_required",
+        "reader_validation_parallel_required",
+            "reader_validation_all_dimensions_must_pass",
+            "reader_validation_rerun_all_after_change",
+            "reader_validation_incomplete_draft_user_notice_required",
+            "reader_validation_incomplete_draft_external_actions_blocked",
         "semantic_review_required",
+        "runtime_rule_review_required",
+        "runtime_rule_inventory_required",
+        "nonwaivable_rule_enforcement_required",
+        "execution_gate_review_required",
+        "semantic_review_artifact_binding_required",
+        "semantic_review_binding_receipt_required",
+        "reader_review_aggregate_revalidates_source_results",
         "independent_judge_required_for_high_risk",
+        "high_risk_action_preflight_judge_required",
+        "module_manifest_full_execution_gate_contract_required",
         "verification_receipt_required",
         "fail_closed_on_missing_or_failed_receipt",
         "host_wrapper_required_for_absolute_enforcement",
@@ -737,6 +893,12 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
         fail("runtime_enforcement decision_lock is incomplete", errors)
     if "publication-authorization-and-target-fidelity" not in contract.get("hard_gates", []):
         fail("hard_gates must include publication authorization and target fidelity", errors)
+    if "independent-reader-validation" not in contract.get("hard_gates", []):
+        fail("hard_gates must include independent reader validation", errors)
+    if runtime.get("reader_validation_max_rounds") != 3:
+        fail("runtime_enforcement must limit reader validation to three rounds", errors)
+    if runtime.get("reader_validation_round_three_behavior") != "review-incomplete-draft-needs-user-decision":
+        fail("runtime_enforcement must preserve the third-round user-decision draft behavior", errors)
 
     script_relative = runtime.get("contract_script")
     script = ROOT / str(script_relative)
@@ -750,12 +912,78 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
             capture_output=True,
             check=False,
         )
-        if completed.returncode != 0:
+        if (
+            completed.returncode != 0
+            or "present-draft" not in completed.stdout
+            or "bind-review" not in completed.stdout
+        ):
             fail(f"runtime_contract.py --help failed: {completed.stderr.strip()}", errors)
+        action_help = subprocess.run(
+            [sys.executable, "-B", str(script), "check-action", "--help"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if action_help.returncode != 0 or "--judge-result" not in action_help.stdout:
+            fail("runtime_contract.py check-action must require a high-risk judge input", errors)
+        runtime_source = script.read_text(encoding="utf-8")
+        for term in (
+            "semantic_binding_receipt_path",
+            "validate_semantic_binding_receipt",
+            "independent_judge_sha256",
+        ):
+            if term not in runtime_source:
+                fail(f"runtime_contract.py missing enforcement term: {term}", errors)
+        init_help = subprocess.run(
+            [sys.executable, "-B", str(script), "init", "--help"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if (
+            init_help.returncode != 0
+            or "--task-bundle" not in init_help.stdout
+            or "--module-manifest" not in init_help.stdout
+        ):
+            fail("runtime_contract.py init does not expose task-bundle controls", errors)
 
     tests_relative = runtime.get("unit_tests")
     if tests_relative != "tests/test_runtime_contract.py" or not (ROOT / str(tests_relative)).is_file():
         fail("runtime_enforcement does not reference its unit tests", errors)
+    resolver_tests = runtime.get("module_resolver_unit_tests")
+    if resolver_tests != "tests/test_module_resolver.py" or not (ROOT / str(resolver_tests)).is_file():
+        fail("runtime_enforcement does not reference module resolver unit tests", errors)
+
+    reader_script_relative = runtime.get("reader_review_script")
+    reader_script = ROOT / str(reader_script_relative)
+    if reader_script_relative != "scripts/reader_review.py" or not reader_script.is_file():
+        fail("runtime_enforcement does not reference scripts/reader_review.py", errors)
+    else:
+        completed = subprocess.run(
+            [sys.executable, "-B", str(reader_script), "--help"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if completed.returncode != 0 or "prepare" not in completed.stdout or "aggregate" not in completed.stdout:
+            fail("reader_review.py help smoke test failed", errors)
+        reader_source = reader_script.read_text(encoding="utf-8")
+        for term in ("validate_result(result, manifest, packet)", "original_all_pass", "original_issues"):
+            if term not in reader_source:
+                fail(f"reader_review.py missing source-result revalidation term: {term}", errors)
+
+    reader_schema_relative = runtime.get("reader_review_schema")
+    reader_schema = ROOT / str(reader_schema_relative)
+    if reader_schema_relative != "config/reader-review-result.schema.json" or not reader_schema.is_file():
+        fail("runtime_enforcement does not reference the reader review result schema", errors)
+    else:
+        schema = load_json(reader_schema, errors)
+        dimensions = schema.get("properties", {}).get("dimension", {}).get("enum", []) if isinstance(schema, dict) else []
+        if dimensions != ["no-context", "readability", "source-reliability", "structure-visual"]:
+            fail("reader review result schema does not preserve the four dimensions", errors)
 
     reference = ROOT / "references" / "runtime-enforcement.md"
     if not reference.is_file():
@@ -768,6 +996,7 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
             "Action authorization",
             "Deliverable verification",
             "runtime_contract.py init",
+            "runtime_contract.py bind-review",
             "runtime_contract.py check-action",
             "runtime_contract.py verify",
             "status=pass",
@@ -775,6 +1004,30 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
         ):
             if term not in text:
                 fail(f"runtime-enforcement.md missing required term: {term}", errors)
+
+    reader_reference = ROOT / "references" / "reader-validation.md"
+    if not reader_reference.is_file():
+        fail("missing references/reader-validation.md", errors)
+    else:
+        reader_text = reader_reference.read_text(encoding="utf-8")
+        for term in (
+            "exactly four fresh",
+            "no-context",
+            "readability",
+            "source-reliability",
+            "structure-visual",
+            "parallel batch",
+            "round 3",
+            "needs-user-decision",
+            "review-incomplete-draft",
+            "runtime_contract.py present-draft",
+            "reader_review.py prepare",
+            "reader_review.py aggregate",
+            "--reader-review-aggregate",
+            "four original result",
+        ):
+            if term not in reader_text:
+                fail(f"reader-validation.md missing required term: {term}", errors)
 
 
 def check_html_output(contract: dict, errors: list[str]) -> None:

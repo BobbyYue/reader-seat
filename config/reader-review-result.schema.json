@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Reader's Seat independent reader review result",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_id",
+    "batch_id",
+    "round",
+    "dimension",
+    "artifact_sha256",
+    "packet_sha256",
+    "reviewer",
+    "status",
+    "summary",
+    "checks",
+    "issues"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "contract_id": {"type": "string", "minLength": 1},
+    "batch_id": {"type": "string", "minLength": 1},
+    "round": {"type": "integer", "minimum": 1, "maximum": 3},
+    "dimension": {
+      "enum": ["no-context", "readability", "source-reliability", "structure-visual"]
+    },
+    "artifact_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "packet_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "reviewer": {
+      "type": "object",
+      "required": [
+        "agent_id",
+        "session_id",
+        "context_isolation",
+        "parent_context_received",
+        "invocation_mode"
+      ],
+      "properties": {
+        "agent_id": {"type": "string", "minLength": 1},
+        "session_id": {"type": "string", "minLength": 1},
+        "context_isolation": {"const": "fresh-subagent"},
+        "parent_context_received": {"const": false},
+        "invocation_mode": {"const": "parallel-batch"}
+      },
+      "additionalProperties": true
+    },
+    "status": {"enum": ["pass", "fail", "blocked"]},
+    "summary": {"type": "string", "minLength": 20},
+    "checks": {"type": "object"},
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "severity",
+          "location",
+          "observed_problem",
+          "reader_consequence",
+          "required_fix"
+        ],
+        "properties": {
+          "severity": {"enum": ["blocker", "major", "minor"]},
+          "location": {"type": "string", "minLength": 4},
+          "observed_problem": {"type": "string", "minLength": 4},
+          "reader_consequence": {"type": "string", "minLength": 4},
+          "required_fix": {"type": "string", "minLength": 4}
+        },
+        "additionalProperties": true
+      }
+    },
+    "reader_understanding": {
+      "type": "object",
+      "required": ["object", "main_conclusion", "evidence", "meaning", "action"]
+    }
+  },
+  "additionalProperties": true
+}

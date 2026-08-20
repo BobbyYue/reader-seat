@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.18.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.20.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -67,6 +67,7 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 - **判断有据：**结论能够对应到证据、适用范围和其他合理解释。
 - **降低阅读成本：**标题、结构和视觉元素用于帮助定位和比较信息，而不是装饰。
 - **表达具体：**需要说明价值的标题、章节名和开场句直接写清对象和有依据的结果，不用方法名或空泛价值词代替。
+- **独立复核：**完整文档需分别通过无背景理解、文字可读性、来源可靠性以及结构与视觉障碍四项隔离校验。
 - **输出符合场景：**默认使用原材料的主要语言生成自包含 HTML；用户指定时可以改为飞书、Word、Markdown 等格式。
 - **交付边界明确：**生成前锁定语言、格式和发布权限；校验未通过或缺少回执时不交付。
 

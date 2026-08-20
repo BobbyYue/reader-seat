@@ -68,6 +68,7 @@ def module_plan(case: dict) -> dict:
         visual=case.get("visual", "none"),
         evaluate=False,
         portability=False,
+        maintenance=False,
         emit="json",
     )
     return resolve_modules.resolve(namespace, resolve_modules.load_profiles())
@@ -100,13 +101,15 @@ def locked_test_decisions(case: dict) -> dict:
 
 
 def build_producer_prompt(case: dict, plan: dict) -> str:
-    paths = [plan["canonical_entry"], *[item["path"] for item in plan["modules"]]]
-    absolute_paths = "\n".join(f"- {ROOT / path}" for path in paths)
-    active = plan["active_scenario_contract"]
     decisions = locked_test_decisions(case)
-    return f"""Use the canonical Reader's Seat skill from the files listed below.
-Read every listed file before answering. Apply the rules silently; do not mention
-the skill, this test, module routing, internal records, tools, or evaluation.
+    bundle = resolve_modules.render_bundle(
+        plan,
+        contract_id=f"eval-{case['id']}",
+        output_language=decisions["output_language"],
+    )
+    return f"""Use the generated Reader's Seat task contract below as the complete
+default instruction context. Apply it silently; do not mention the skill, this
+test, module routing, internal records, tools, or evaluation.
 
 The evaluation harness owns runtime enforcement for this frozen, read-only test.
 Do not create runtime files or call external tools. Treat these decisions as the
@@ -115,21 +118,8 @@ locked task contract; the harness will reject a candidate that drifts from them:
 - output_format: {decisions['output_format']}
 - publication_target: none
 
-Required files:
-{absolute_paths}
-
-The resolver extracted the active scenario contract below verbatim from
-{active['source']}. Treat it as a silent completion checklist; it does not
-replace the source file or any loaded rule.
-
-ACTIVE REQUIRED CONTENT
-{active['required_content']}
-
-ACTIVE EVIDENCE REQUIREMENTS
-{active['evidence_requirements']}
-
-ACTIVE ACCEPTANCE QUESTIONS
-{active['acceptance_questions']}
+GENERATED TASK CONTRACT
+{bundle}
 
 Complete the user's request using only the frozen source material. Do not add a
 fact, number, owner, reason, result, or certainty that the source does not
@@ -297,7 +287,8 @@ def prepare_run(args: argparse.Namespace) -> Path:
             stem = f"{case['id']}--r{repetition}"
             prompt_path = run_dir / "prompts" / f"{stem}.txt"
             output_path = run_dir / "outputs" / f"{stem}.txt"
-            prompt_path.write_text(build_producer_prompt(case, plan), encoding="utf-8")
+            producer_prompt = build_producer_prompt(case, plan)
+            prompt_path.write_text(producer_prompt, encoding="utf-8")
             items.append(
                 {
                     "case_id": case["id"],
@@ -306,6 +297,8 @@ def prepare_run(args: argparse.Namespace) -> Path:
                     "output": str(output_path.relative_to(run_dir)),
                     "log": str((run_dir / "logs" / f"{stem}.log").relative_to(run_dir)),
                     "module_ids": [module["id"] for module in plan["modules"]],
+                    "runtime_rule_ids": plan["required_rule_ids"],
+                    "prompt_bytes": len(producer_prompt.encode("utf-8")),
                     "status": "prepared",
                 }
             )
@@ -319,6 +312,7 @@ def prepare_run(args: argparse.Namespace) -> Path:
         "case_file": str(CASES_PATH),
         "case_file_sha256": file_hash(CASES_PATH),
         "module_profile_sha256": file_hash(ROOT / "config" / "module-profiles.json"),
+        "runtime_rules_sha256": file_hash(ROOT / "config" / "runtime-rules.json"),
         "adapter": args.adapter,
         "agent_id": args.agent_id or args.adapter,
         "agent_version": args.agent_version or "not-recorded",

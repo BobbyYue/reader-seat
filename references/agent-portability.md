@@ -26,28 +26,44 @@ Natural wording, paragraph rhythm, and non-material layout details may vary.
 
 ## Adapter Contract
 
-An adapter has eight responsibilities:
+An adapter has eleven responsibilities:
 
 1. make `SKILL.md` discoverable or load it explicitly;
 2. create the runtime source snapshot and run `scripts/runtime_contract.py init`
    before generation;
-3. resolve the required modules with `scripts/resolve_modules.py` or reproduce
-   its result exactly from `config/module-profiles.json`, including the active
-   scenario contract extracted from the canonical scenario file;
+3. provide the generated task contract as the default instruction context and
+   retain its module manifest; do not load all detailed references by default;
 4. provide the complete user request and source material without summarizing
    them first;
 5. preserve authorization boundaries and available-tool constraints;
-6. run `runtime_contract.py check-action` with the exact locked action and target
+6. after the exact candidate exists, run `runtime_contract.py bind-review`
+   before completing any semantic gate, execution gate, or runtime rule, and
+   preserve the separate binding receipt locked into the task contract;
+7. for every finished artifact, launch exactly four fresh subagents concurrently
+   from the packets produced by `reader_review.py prepare`, without parent or
+   peer-review context;
+8. run `reader_review.py aggregate`, return every non-pass issue to the main
+   agent, rerun all four dimensions after a change, and stop after round 3; on a
+   third-round non-pass, run `runtime_contract.py present-draft`, show the
+   current version with unresolved issues, and ask for the user's optimization
+   decision without treating it as verified or publishable;
+9. run `runtime_contract.py check-action` with the exact locked action, artifact,
+   artifact-bound semantic review, target, passing reader aggregate backed by
+   its original result files, and the independent judge result for high-risk work
    immediately before any publish, overwrite, or cross-application replacement;
-7. run `runtime_contract.py verify` against the actual candidate or artifact and
+10. run `runtime_contract.py verify` against the actual candidate or artifact and
    reject delivery unless the resulting receipt has `status=pass`;
-8. return the verified artifact or response separately from logs, runtime files,
-   and internal reasoning.
+11. return the verified artifact or response separately from logs, runtime files,
+   and internal reasoning; the only exception is a valid
+   `review-incomplete-draft` handoff, which must expose its unresolved issues and
+   required user decision while external actions remain blocked.
 
 An adapter must not translate the request, compress the source, add a preferred
 template, silently enable an external action, replace unavailable modules with
 its own writing policy, or treat a generated file as a successful delivery
-without a passing runtime receipt. If the host cannot enforce the runtime
+without a passing runtime receipt. It must not reuse one session for multiple
+reader dimensions or replace an unavailable child-agent facility with main-agent
+self-review. If the host cannot enforce the runtime
 preconditions, label the adapter `advisory-only`; it cannot support a stability
 claim.
 
@@ -68,15 +84,19 @@ python3 scripts/resolve_modules.py \
   --title \
   --visual retained \
   --risk high \
-  --emit json
+  --bundle-out .reader-seat/resolved-task-contract.md \
+  --manifest-out .reader-seat/module-manifest.json \
+  --emit bundle
 ```
 
-`--artifact` always loads the short format and visual decision gates.
-`--output-format html` additionally loads the complete HTML implementation;
-`--output-format word` leaves HTML-only mechanics unloaded. `--visual
-retained` loads the full visual implementation rules; `--visual asset` also
-loads provenance rules. This changes context cost, not capability: every full
-rule remains available before the corresponding output is built.
+`--artifact` selects compact format, visual-decision, and reader-validation
+rules. `--output-format html` adds compact HTML implementation rules;
+`--output-format word` leaves HTML-only mechanics out. `--visual retained` adds
+visual implementation rules; `--visual asset` also adds provenance rules.
+Scenario requirements are extracted from the selected canonical scenario file.
+The generated bundle is the default model context, while the manifest binds it
+to every selected source hash. Full references remain available for unusual
+procedures and troubleshooting. This changes context cost, not capability.
 
 ## Evaluation Protocol
 

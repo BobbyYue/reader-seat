@@ -1,0 +1,430 @@
+{
+  "schema_version": 1,
+  "execution_gates": [
+    {
+      "id": "G1-task",
+      "required_record": "Operation, primary scenario, target reader, reader task, channel, depth, source language, explicit language or format signals, locked output language and format, and consequence of misunderstanding.",
+      "exit_condition": "The reader outcome, language, format, scope, and risk are concrete enough to guide the work."
+    },
+    {
+      "id": "G2-source",
+      "required_record": "Immutable facts, numbers, definitions, scope, claims, evidence, uncertainty, ownership, commitments, title claims, and visual claims with provenance.",
+      "exit_condition": "The source boundary is explicit and every material claim or visual has a support decision."
+    },
+    {
+      "id": "G3-route",
+      "required_record": "Selected scenario, required content, evidence requirements, acceptance questions, compact runtime rules, and any title, visual, format, evaluation, or maintenance modules.",
+      "exit_condition": "One primary route is selected and every applicable scenario and feature requirement is accounted for."
+    },
+    {
+      "id": "G4-build",
+      "required_record": "Status and artifact evidence for all selected output, title, format, visual, and scenario rules, including heading propositions and concrete value expressions when applicable.",
+      "exit_condition": "No unsupported, decorative, misleading, or task-incomplete structure remains in the built version."
+    },
+    {
+      "id": "G5-signals",
+      "required_record": "For every detected risk signal: location, trigger, context, reader impact, confirmed, dismissed, or unresolved decision, action, and recheck result.",
+      "exit_condition": "No signal caused an automatic rewrite and every material confirmed or unresolved signal has a proportional outcome."
+    },
+    {
+      "id": "G6-verify",
+      "required_record": "Meaning preservation, hard gates, scenario acceptance, selected runtime rules, signal recheck, artifact-bound semantic review, reader review when required, visual checks, rendered checks, and remaining limitations.",
+      "exit_condition": "The exact artifact and its reviews pass the locked contract, or the third-round incomplete-draft path is used without a completion claim or external action."
+    }
+  ],
+  "core": [
+    {
+      "id": "source-scope-priority",
+      "instruction": "Resolve conflicts in this order: source truth and scope, explicit user requirements, scenario fit, reader task, natural expression, then brevity and polish."
+    },
+    {
+      "id": "meaning-and-commitment-fidelity",
+      "instruction": "Preserve facts, numbers, definitions, distinctions, scope, stance, ownership, commitments, timing, uncertainty, and intended action."
+    },
+    {
+      "id": "no-invention",
+      "instruction": "Never invent a source, reason, conclusion, decision, owner, deadline, result, visual identity, or level of certainty."
+    },
+    {
+      "id": "reader-task-organization",
+      "instruction": "Organize the output around what the target reader must know, judge, or do, not around the production process."
+    },
+    {
+      "id": "evidence-calibration",
+      "instruction": "Keep observed fact, interpretation, causal claim, recommendation, assumption, and unknown distinguishable; action must not exceed evidence or authority."
+    },
+    {
+      "id": "natural-non-template-expression",
+      "instruction": "Make reader-first design visible through order and emphasis; do not expose method labels, generic suspense, internal machinery, or repetitive template sections."
+    },
+    {
+      "id": "external-action-authorization",
+      "instruction": "Do not publish, overwrite, replace, or mutate an external target without an explicitly locked authorization and a passing action preflight receipt."
+    },
+    {
+      "id": "verified-completion-only",
+      "instruction": "Do not claim finished, verified, validated, or PASS unless the exact delivered artifact has the required passing runtime receipt."
+    }
+  ],
+  "modules": {
+    "runtime-enforcement": [
+      {
+        "id": "runtime-init-before-draft",
+        "instruction": "Run runtime_contract.py init before drafting; draft only after status=locked and use the generated task contract as the default instruction packet."
+      },
+      {
+        "id": "runtime-decisions-immutable",
+        "instruction": "Treat locked language, format, publication target, external action, and source fingerprints as immutable; start a new contract when one must change."
+      },
+      {
+        "id": "runtime-review-evidence",
+        "instruction": "Complete every semantic gate and selected runtime rule with concrete artifact evidence; pending, fail, missing evidence, or an unexplained not-applicable status blocks finished delivery."
+      },
+      {
+        "id": "runtime-action-preflight",
+        "instruction": "Immediately before any authorized external mutation, run check-action against the exact artifact, target, action, and reader-review aggregate.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "runtime-final-verification",
+        "instruction": "Run verify against the actual artifact and unchanged task contract; a failed, stale, or missing task bundle, module manifest, review, or receipt blocks finished delivery."
+      },
+      {
+        "id": "runtime-third-round-draft",
+        "instruction": "After a valid third-round reader-review non-pass, use present-draft and show only a clearly labeled review-incomplete draft with unresolved issues and a user decision request; external actions remain blocked.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "runtime-failure-stop",
+        "instruction": "If the runtime scripts cannot execute, do not replace them with an informal checklist or imply completion."
+      }
+    ],
+    "reader-validation": [
+      {
+        "id": "reader-review-four-isolated",
+        "instruction": "For every finished artifact, use reader_review.py prepare and launch exactly four fresh, mutually isolated reviewers concurrently: no-context, readability, source-reliability, and structure-visual."
+      },
+      {
+        "id": "reader-review-packet-boundary",
+        "instruction": "Give each reviewer only its generated packet and named files; the main agent may not impersonate, replace, or share parent context with a reviewer."
+      },
+      {
+        "id": "reader-review-all-pass",
+        "instruction": "Aggregate only after all four results return; every dimension must pass for the exact artifact hash before finished or external delivery."
+      },
+      {
+        "id": "reader-review-revise-and-rerun",
+        "instruction": "When rounds one or two fail, revise proportionally, create a new artifact hash, and rerun all four dimensions with fresh sessions.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "reader-review-three-round-limit",
+        "instruction": "Do not exceed three rounds or weaken reviewer severity; a third-round non-pass requires the review-incomplete draft path."
+      }
+    ],
+    "scenario-routing": [
+      {
+        "id": "route-by-reader-task",
+        "instruction": "Choose the scenario from the reader's main task, not the title, filename, existing headings, or authoring department."
+      },
+      {
+        "id": "one-primary-route",
+        "instruction": "Use one primary scenario for the document; add one secondary scenario only for a clearly bounded subsection with a different reader task."
+      },
+      {
+        "id": "route-clarify-only-when-material",
+        "instruction": "Ask for clarification only when the missing fact can materially change structure, claim strength, tone, scope, or required action; otherwise record a conservative assumption."
+      }
+    ],
+    "output-standards": [
+      {
+        "id": "practical-information-first",
+        "instruction": "Lead with the practical takeaway, strongest support, consequence, and required action when applicable; place background and method later."
+      },
+      {
+        "id": "reader-perspective",
+        "instruction": "Supply the context the intended reader needs without requiring hidden project history or specialist inference."
+      },
+      {
+        "id": "progressive-disclosure",
+        "instruction": "Arrange information from quick judgment to essential support to optional detail; do not turn this relationship into fixed visible headings."
+      },
+      {
+        "id": "natural-audience-fit-language",
+        "instruction": "Use natural language suited to the reader; retain familiar terms, explain or replace niche terms at first use, and avoid bureaucratic, promotional, or AI-sounding prose."
+      },
+      {
+        "id": "evidence-and-calibrated-certainty",
+        "instruction": "Put support near material claims and qualify claims when evidence is incomplete, conflicting, indirect, or unable to establish causality."
+      },
+      {
+        "id": "scope-and-assumption-fidelity",
+        "instruction": "Preserve supplied scope and distinctions; label assumptions and revisit every affected conclusion when a premise changes."
+      },
+      {
+        "id": "useful-structure-and-concision",
+        "instruction": "Keep only structure and prose that improve understanding or action; headings must carry content or necessary navigation, and a heading-only readback must expose the document path."
+      },
+      {
+        "id": "action-proportional-to-evidence",
+        "instruction": "Make owner, next step, timing, tradeoff, and unresolved risk explicit when relevant, without prescribing action beyond the evidence or authority."
+      },
+      {
+        "id": "concrete-value-expression",
+        "instruction": "For value-bearing titles, headings, leads, and product lines, identify the specific object, reader-relevant action or change, and observable supported result before writing natural prose."
+      }
+    ],
+    "signal-processing": [
+      {
+        "id": "signals-are-not-errors",
+        "instruction": "Treat length, terminology density, passive voice, formulas, headings, and readability metrics as risk signals, not automatic rewrite triggers."
+      },
+      {
+        "id": "signal-context-decision",
+        "instruction": "For each detected signal, record location, trigger, context, reader impact, and a confirmed, dismissed, or unresolved decision."
+      },
+      {
+        "id": "signal-proportional-action",
+        "instruction": "Use no change, local edit, section rebuild, full restructure, or surface-to-user according to reader impact; explain dismissals and unresolved material risks."
+      },
+      {
+        "id": "signal-hard-failure-priority",
+        "instruction": "Fix factual drift, unsupported claims, scope changes, ambiguous ownership, missing critical context, and unsafe action before style signals."
+      },
+      {
+        "id": "signal-recheck",
+        "instruction": "Recheck every changed passage against source fidelity, scenario acceptance, and any affected hard gate."
+      }
+    ],
+    "diagnosis-and-revision": [
+      {
+        "id": "diagnosis-priority-order",
+        "instruction": "Diagnose in this order: hard failures, scenario failures, output-standard failures, then optional style choices."
+      },
+      {
+        "id": "smallest-effective-revision",
+        "instruction": "Make the smallest change that materially improves reader outcome; preserve recognizable voice and rebuild the whole structure only when local repair cannot serve the reader task."
+      },
+      {
+        "id": "diagnosis-no-silent-rewrite",
+        "instruction": "When the user asks only for diagnosis, do not silently rewrite; when a rewrite is requested, return the usable result before a concise explanation."
+      },
+      {
+        "id": "meaning-preservation-recheck",
+        "instruction": "After revision, compare facts, quantities, definitions, negation, ownership, commitments, uncertainty, and intended action with the source."
+      }
+    ],
+    "evaluation": [
+      {
+        "id": "evaluation-freeze-test-card",
+        "instruction": "Freeze reader, scenario, task, source, format, and judging rule before scoring or comparing versions."
+      },
+      {
+        "id": "evaluation-hard-gates-first",
+        "instruction": "Reject factual, scope, authorization, or other hard-gate failures before calculating reader-outcome or proxy scores."
+      },
+      {
+        "id": "evaluation-no-cross-scenario-score",
+        "instruction": "Do not compare aggregate scores across different readers, scenarios, tasks, or evidence boundaries."
+      },
+      {
+        "id": "evaluation-stability-evidence",
+        "instruction": "For stability claims, use the declared repetitions and agent hosts, semantic judging, and report the worst run rather than only the average.",
+        "allow_not_applicable": true
+      }
+    ],
+    "format-decision": [
+      {
+        "id": "format-selection-order",
+        "instruction": "Select format before drafting: explicit user format wins, then an existing artifact being edited, then an explicit chat-only request; otherwise a finished document defaults to self-contained HTML."
+      },
+      {
+        "id": "format-native-preservation",
+        "instruction": "For Feishu, Word, Markdown, slides, or another non-HTML target, preserve native behavior and use native headings, spacing, tables, callouts, figures, captions, and sources."
+      },
+      {
+        "id": "format-no-html-intermediate",
+        "instruction": "Do not create an HTML intermediate merely to imitate its appearance in a selected non-HTML format."
+      },
+      {
+        "id": "format-portable-baseline",
+        "instruction": "Across formats, preserve readable hierarchy, restrained semantic color, stable layout, accessible labels, adjacent evidence, and rendered verification."
+      }
+    ],
+    "html-output": [
+      {
+        "id": "html-selected-only",
+        "instruction": "Apply HTML mechanics only when the locked output format is HTML; Reader's Seat scenario, evidence, language, title, and visual rules still govern the content."
+      },
+      {
+        "id": "html-local-portable-directory",
+        "instruction": "Use the bundled scaffold and deliver portable local HTML with relative assets; no CDN, remote fonts, absolute local paths, file URLs, or base64 assets."
+      },
+      {
+        "id": "html-self-identification-hidden",
+        "instruction": "Keep the required generator comment as the first line, but do not expose Reader's Seat or its checks in visible content."
+      },
+      {
+        "id": "html-content-led-visual-system",
+        "instruction": "Let subject and audience determine the visual system; avoid decorative gradients, floating or nested cards, generic method headings, and visuals added only to fill layout."
+      },
+      {
+        "id": "html-citation-integrity",
+        "instruction": "Place numbered citations near material claims and provide matching direct source entries; every citation must resolve and every listed source must support a claim."
+      },
+      {
+        "id": "html-chart-runtime-integrity",
+        "instruction": "When charts are justified, use the bundled local ECharts runtime, source-backed values, SVG rendering, no animation, responsive resize, and explicit unit, denominator, period, baseline, missing-data, and uncertainty context.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "html-diagram-claim-boundary",
+        "instruction": "Use HTML/CSS for simple flows and bundled Mermaid only when complexity justifies it; label proposals or syntheses and never present a conceptual diagram as implementation evidence.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "html-responsive-accessible-print",
+        "instruction": "Verify stable widths, readable text, WCAG AA contrast, redundant status cues, table overflow, intentional mobile collapse, keyboard focus, long-content wrapping, and print behavior."
+      },
+      {
+        "id": "html-render-verification",
+        "instruction": "Run validate_html_output.py, then inspect the actual artifact around 1440px and 390px; verify assets, overflow, overlap, truncation, links, interactions, charts, citations, and absence of placeholders."
+      }
+    ],
+    "visual-decision": [
+      {
+        "id": "visual-reader-job",
+        "instruction": "Before retaining a chart, diagram, table, screenshot, callout, card group, semantic color, or encoded layout, state the reader question it answers."
+      },
+      {
+        "id": "visual-prose-comparison",
+        "instruction": "Compare the proposed visual with concise prose and use the least complex faithful form."
+      },
+      {
+        "id": "visual-deletion-test",
+        "instruction": "Remove the visual when deletion does not make the target reader slower, less accurate, or less able to verify the answer; do not convert a few simple conclusions into decorative cards."
+      },
+      {
+        "id": "visual-decision-record",
+        "instruction": "Record the decision state, reader job, prose alternative, deletion result, and reason before implementation."
+      }
+    ],
+    "visual-communication": [
+      {
+        "id": "visual-form-fit",
+        "instruction": "Choose chart, table, diagram, timeline, matrix, or prose from the comparison or relationship the reader must understand, not from decoration preference."
+      },
+      {
+        "id": "visual-source-backed-encoding",
+        "instruction": "Every encoded value, order, link, area, length, annotation, and omission must be supported by the source or visibly labeled as synthesis."
+      },
+      {
+        "id": "visual-honest-geometry",
+        "instruction": "Use honest geometry and scale: quantitative bars start at zero, 3D is absent, and dual axes require explicit proof that the relationship cannot be shown more safely."
+      },
+      {
+        "id": "visual-context-complete",
+        "instruction": "Provide applicable unit, denominator, period, comparison basis, metric definition, missing-data treatment, uncertainty, and adjacent source context."
+      },
+      {
+        "id": "visual-derived-values-recomputed",
+        "instruction": "Recompute every displayed difference, rate, average, share, interval, annotation, and tooltip from the source with the correct denominator and period."
+      },
+      {
+        "id": "visual-functional-color",
+        "instruction": "Give color a stable semantic role, meet applicable contrast requirements, and never rely on color alone for a decision-critical distinction."
+      },
+      {
+        "id": "visual-responsive-layout",
+        "instruction": "Use stable responsive dimensions and verify that legends, labels, long text, tables, charts, and controls do not overlap, truncate, or shift incoherently."
+      }
+    ],
+    "visual-evidence": [
+      {
+        "id": "visual-claim-inventory",
+        "instruction": "For each selected or existing visual, record the identity, event, time, location, state, comparison, or causal claim a reader may infer."
+      },
+      {
+        "id": "visual-source-hierarchy",
+        "instruction": "Verify identity and context from the original publisher or creator when possible; search snippets, aggregator captions, filenames, and alt text are discovery clues only."
+      },
+      {
+        "id": "visual-person-event-hard-gate",
+        "instruction": "Reject an unverified real-person or real-event image; a plausible resemblance is not evidence."
+      },
+      {
+        "id": "visual-synthetic-disclosure",
+        "instruction": "Label generated, conceptual, reconstructed, or illustrative visuals next to the asset so they cannot be mistaken for documentary evidence.",
+        "allow_not_applicable": true
+      },
+      {
+        "id": "visual-fallback-order",
+        "instruction": "When a factual visual cannot be verified, prefer a verified source visual, then a non-person conceptual visual, then no visual."
+      }
+    ],
+    "title-design": [
+      {
+        "id": "title-concrete-anchor",
+        "instruction": "Anchor the title in the actual person, product, event, decision, system, or result and one central verified relationship."
+      },
+      {
+        "id": "title-candidate-comparison",
+        "instruction": "Generate at least three internal candidates from distinct accurate angles and select for information value after factual hard gates pass."
+      },
+      {
+        "id": "title-evidence-calibrated-verb",
+        "instruction": "Choose verbs and certainty that match the evidence; do not imply causality, completion, intent, or scale that the body cannot support."
+      },
+      {
+        "id": "title-no-clickbait",
+        "instruction": "Reject falsehood, exaggeration, unrelated hooks, manufactured suspense, hidden intent, and promises the body does not fulfill."
+      },
+      {
+        "id": "title-subtitle-distinct",
+        "instruction": "Use a subtitle only when it adds distinct scope, evidence, mechanism, or reader value rather than repeating the title."
+      },
+      {
+        "id": "title-opening-fulfillment",
+        "instruction": "Ensure the opening and body visibly fulfill every material title claim."
+      }
+    ],
+    "agent-portability": [
+      {
+        "id": "portability-canonical-source",
+        "instruction": "Use one declared canonical skill root and do not treat copied or generated installations as independent sources of truth."
+      },
+      {
+        "id": "portability-adapter-boundary",
+        "instruction": "Keep host adapters limited to invocation and tool differences; do not weaken Reader's Seat rules to fit a host."
+      },
+      {
+        "id": "portability-regression-matrix",
+        "instruction": "For cross-agent stability claims, test at least two named hosts, at least three repetitions per host and model, semantic judging, and the worst run.",
+        "allow_not_applicable": true
+      }
+    ],
+    "skill-maintenance": [
+      {
+        "id": "maintenance-preserve-capability-contract",
+        "instruction": "Treat skill-contract.json as the capability and version contract; do not remove a route, hard gate, output standard, mode, or implementation module to reduce context."
+      },
+      {
+        "id": "maintenance-single-routing-source",
+        "instruction": "Treat module-profiles.json as the only routing source and runtime-rules.json as the compact operational rule source; references provide detailed rationale and procedures."
+      },
+      {
+        "id": "maintenance-progressive-disclosure",
+        "instruction": "Keep SKILL.md limited to purpose, invariants, runtime sequence, delivery states, and links; move conditional detail behind deterministic routing."
+      },
+      {
+        "id": "maintenance-regression-evidence",
+        "instruction": "Update the version and affected evals, then run unit tests, static validation, official skill validation, an affected frozen case, and an unaffected forward case."
+      },
+      {
+        "id": "maintenance-canonical-sync-approval",
+        "instruction": "Before replacing or synchronizing the canonical skill directory, show the intended diff and backup path and obtain explicit approval.",
+        "allow_not_applicable": true
+      }
+    ]
+  }
+}
