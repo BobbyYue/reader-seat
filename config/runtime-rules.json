@@ -297,7 +297,7 @@
       },
       {
         "id": "layout-native-render-verification",
-        "instruction": "Verify the actual target render for heading hierarchy, whitespace, dense-block rhythm, claim-evidence adjacency, overflow, clipping, overlap, table and figure legibility, and mobile or page behavior before delivery."
+        "instruction": "Verify the actual target render for heading hierarchy, whitespace, dense-block rhythm, claim-evidence adjacency, overflow, clipping, overlap, and table and figure legibility before delivery."
       }
     ],
     "html-output": [
@@ -323,7 +323,7 @@
       },
       {
         "id": "html-chart-runtime-integrity",
-        "instruction": "When charts are justified, use the bundled local ECharts runtime, source-backed values, SVG rendering, no animation, responsive resize, and explicit unit, denominator, period, baseline, missing-data, and uncertainty context.",
+        "instruction": "When charts are justified, use the bundled local ECharts runtime, source-backed values, SVG rendering, no animation, container-aware resize, and explicit unit, denominator, period, baseline, missing-data, and uncertainty context.",
         "allow_not_applicable": true
       },
       {
@@ -332,12 +332,12 @@
         "allow_not_applicable": true
       },
       {
-        "id": "html-responsive-accessible-print",
-        "instruction": "Verify stable widths, readable text, WCAG AA contrast, redundant status cues, table overflow, intentional mobile collapse, keyboard focus, long-content wrapping, and print behavior."
+        "id": "html-accessible-print-layout",
+        "instruction": "Verify stable widths at the selected target size, readable text, WCAG AA contrast, redundant status cues, contained table overflow, keyboard focus, long-content wrapping, and print behavior."
       },
       {
         "id": "html-render-verification",
-        "instruction": "Run validate_html_output.py, then inspect the actual artifact around 1440px and 390px; verify assets, overflow, overlap, truncation, links, interactions, charts, citations, and absence of placeholders."
+        "instruction": "Run validate_html_output.py, then inspect the actual artifact at the selected desktop target size; verify assets, overflow, overlap, truncation, links, interactions, charts, citations, and absence of placeholders."
       }
     ],
     "visual-decision": [
@@ -384,8 +384,8 @@
         "instruction": "Give color a stable semantic role, meet applicable contrast requirements, and never rely on color alone for a decision-critical distinction."
       },
       {
-        "id": "visual-responsive-layout",
-        "instruction": "Use stable responsive dimensions and verify that legends, labels, long text, tables, charts, and controls do not overlap, truncate, or shift incoherently."
+        "id": "visual-stable-layout",
+        "instruction": "Use stable dimensions at the selected target size and verify that legends, labels, long text, tables, charts, and controls do not overlap, truncate, or shift incoherently."
       }
     ],
     "visual-evidence": [

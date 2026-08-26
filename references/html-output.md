@@ -7,7 +7,7 @@ has no dependency on a separately installed HTML-report skill.
 
 Reader's Seat still owns the reader task, source boundary, scenario structure,
 title, evidence, language, and portable presentation baseline. This module owns
-HTML file layout, local runtime assets, responsive behavior, and browser
+HTML file layout, local runtime assets, layout stability, and browser
 verification.
 
 ## Output Contract
@@ -46,11 +46,11 @@ For every HTML task, decide these items internally before authoring:
 1. artifact type, target reader, reader task, and chosen output language;
 2. content structure from the selected Reader's Seat scenario;
 3. visual personality appropriate to the domain and audience;
-4. page width, reading width, mobile collapse behavior, and print behavior;
+4. page width, reading width, overflow handling, and print behavior;
 5. palette variables, type hierarchy, table treatment, callouts, and figures;
 6. planned visuals, their reader jobs, deletion-test results, and the factual claim each visual may imply;
 7. citation inventory and source-to-claim mapping;
-8. verification viewports and any interaction states that need testing.
+8. target render sizes and any interaction states that need testing.
 
 Create a `plan.md` beside the report when the document has at least five
 substantive sections, multiple visuals, or interactions whose consistency would
@@ -162,7 +162,7 @@ below are HTML runtime requirements.
 
 - Reference `./_shared/js/echarts.min.js` before the report-local chart script.
 - Put chart configuration in `assets/charts.js`, not an inline script.
-- Use the SVG renderer, disable animation, and resize on viewport changes.
+- Use the SVG renderer, disable animation, and resize when the chart container changes.
 - Read chart colors from the report's CSS variables; do not use the library's
   default rainbow palette.
 - Include units, denominators, periods, comparison bases, zero baselines where
@@ -183,19 +183,18 @@ justify it.
 - Do not present a conceptual diagram as proof that a real system has been
   implemented.
 
-## Responsive, Accessible, And Print-Safe Output
+## Accessible And Print-Safe Layout
 
-- Use a stable max-width and responsive constraints for every fixed-format
-  element.
+- Use a stable max-width and explicit dimensions for fixed-format elements at
+  the selected target size.
 - Keep normal body text at least 14px and use readable line height.
 - Maintain WCAG AA contrast for substantive text and controls.
 - Do not communicate status by color alone.
 - Wrap every table in `.table-wrap` with horizontal scrolling. A table with
   four or more columns must use the full content width rather than sit inside a
   multi-column grid.
-- Collapse multi-column layouts at an intentional breakpoint. Do not scale text
-  with viewport width.
-- Ensure long terms, URLs, code, headings, and buttons fit on a 390px viewport.
+- Ensure long terms, URLs, code, headings, and buttons wrap or scroll inside
+  their intended containers without obscuring adjacent content.
 - Provide keyboard focus states for links and controls.
 - Add print styles that remove nonessential interaction, preserve contrast, and
   avoid splitting tightly related figures or callouts when practical.
@@ -211,14 +210,13 @@ python3 <reader-seat-dir>/scripts/validate_html_output.py <report-file.html>
 Then open the actual file in a browser and verify at least:
 
 1. desktop around 1440px wide;
-2. mobile around 390px wide;
-3. fonts and all local assets load;
-4. body scroll width does not exceed the viewport;
-5. tables and code scroll only inside their intended containers;
-6. title, first-screen conclusion, headings, labels, and captions do not
+2. fonts and all local assets load;
+3. page-level overflow does not obscure content at the selected target size;
+4. tables and code scroll only inside their intended containers;
+5. title, first-screen conclusion, headings, labels, and captions do not
    overlap or truncate;
-7. source links, citation jumps, navigation, charts, and interactions work;
-8. the final visible artifact contains no scaffold placeholders.
+6. source links, citation jumps, navigation, charts, and interactions work;
+7. the final visible artifact contains no scaffold placeholders.
 
 For an interactive report, also test keyboard access, empty/error states, and
 the primary workflow. A loading file is not enough to claim verification.
@@ -235,5 +233,6 @@ the primary workflow. A loading file is not enough to claim verification.
   in a broken state?
 - Does the artifact work after the separate HTML-report skill is removed or was
   never installed?
-- Is the delivered directory portable, locally renderable, responsive, and
+- Is the delivered directory portable, locally renderable, stable at the
+  selected target size, and
   free of unresolved asset paths?

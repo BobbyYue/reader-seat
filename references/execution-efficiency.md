@@ -37,7 +37,7 @@ Before review, classify each change and rerun only affected checks:
 | Change | Required rerun |
 | --- | --- |
 | Source, number, certainty, or action | source, claim, semantic, and mapped visual checks |
-| Heading, prose, term, or order | content, reading path, overflow, and responsive render |
+| Heading, prose, term, or order | content, reading path, overflow, and target render |
 | Chart, table, image, color, or spacing | provenance, encoding, accessibility, overflow, and render |
 | Format, asset, link, or export | format, asset, link, fallback, and target render |
 | Publication placement only | action preflight and live-target verification |

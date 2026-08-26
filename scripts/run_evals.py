@@ -11,6 +11,7 @@ import os
 import re
 import subprocess
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 
 import resolve_modules
@@ -87,6 +88,33 @@ def dominant_language(text: str) -> str:
     if share <= 0.10:
         return "en"
     return "mixed"
+
+
+class VisibleHTMLTextParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.hidden_depth = 0
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in {"style", "script", "noscript", "svg", "code", "pre"}:
+            self.hidden_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"style", "script", "noscript", "svg", "code", "pre"} and self.hidden_depth:
+            self.hidden_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if not self.hidden_depth:
+            self.parts.append(data)
+
+
+def language_evidence(case: dict, text: str) -> str:
+    if case.get("artifact") and case.get("output_format", "html") == "html":
+        parser = VisibleHTMLTextParser()
+        parser.feed(text)
+        return " ".join(parser.parts)
+    return text
 
 
 def locked_test_decisions(case: dict) -> dict:
@@ -370,7 +398,7 @@ def deterministic_grade(case: dict, text: str) -> dict:
     failures: list[str] = []
     signals: list[str] = []
     decisions = locked_test_decisions(case)
-    detected_language = dominant_language(text)
+    detected_language = dominant_language(language_evidence(case, text))
     if detected_language != decisions["output_language"]:
         failures.append(
             f"output language is {detected_language}, expected {decisions['output_language']}"

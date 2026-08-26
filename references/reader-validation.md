@@ -17,7 +17,7 @@ subagents:
 3. `source-reliability` checks claim traceability, source quality and recency,
    factual fidelity, definitions, certainty, and visual provenance;
 4. `structure-visual` checks reading path, headings, layout, tables, charts,
-   visual encoding, responsive rendering, and accessibility.
+   visual encoding, target-size rendering, and accessibility.
 
 Do not run the four dimensions sequentially in one conversation. Do not let a
 reviewer inherit the main agent context, another review result, prior round
@@ -32,7 +32,7 @@ supports it, and retain the existing independent semantic judge requirement.
 ## Prepare One Review Round
 
 Complete [execution-efficiency.md](execution-efficiency.md) first. Run source,
-semantic, format, asset, visual, reading-path, responsive-render, and reviewer-
+semantic, format, asset, visual, reading-path, target-render, and reviewer-
 packet readiness checks before using an independent reviewer. The normal path
 contains one complete four-reviewer batch for the stable candidate. Then prepare
 the four immutable review packets:
@@ -42,7 +42,6 @@ python3 scripts/reader_review.py prepare \
   --contract .reader-seat/task-contract.json \
   --artifact path/to/report.html \
   --render-evidence .reader-seat/render-desktop.png \
-  --render-evidence .reader-seat/render-mobile.png \
   --round 1 \
   --output-dir .reader-seat/reviews/round-1
 ```
@@ -92,7 +91,7 @@ only when the artifact explicitly narrows the claim and discloses the limit.
 Inspect the artifact and supplied renders. Check the heading-only reading path,
 information order, claim-evidence adjacency, dense-block rhythm, four-level
 spacing hierarchy, page flow, table and chart legibility, scale and baseline,
-color semantics, labels, contrast, responsive behavior, overlap, clipping, and
+color semantics, labels, contrast, target-size stability, overlap, clipping, and
 whether a retained visual actually reduces reader cost. A text-only artifact
 may pass when no material visual is needed; it may not skip structural review.
 

@@ -52,7 +52,7 @@ REQUIRED_CHECKS = {
         "layout-has-no-obstruction",
         "tables-and-visuals-readable",
         "visual-encoding-not-misleading",
-        "responsive-and-accessible-presentation",
+        "stable-and-accessible-presentation",
     ),
 }
 SEVERITIES = {"blocker", "major", "minor"}

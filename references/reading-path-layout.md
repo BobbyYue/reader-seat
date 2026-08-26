@@ -58,12 +58,12 @@ A finished artifact is blocked when any of these conditions applies:
 - dense blocks are stacked without an interpretive bridge;
 - heading-only readback does not reveal the document path;
 - spacing, containers, or color obscure hierarchy or create repetitive visual noise;
-- the actual target render has overlap, clipping, overflow, unreadable tables or figures, broken mobile/page behavior, or misleading emphasis.
+- the actual target render has overlap, clipping, overflow, unreadable tables or figures, broken page behavior, or misleading emphasis.
 
 These rules are mandatory runtime rules. They cannot be downgraded to style advice, marked not applicable for a finished artifact, or replaced by a self-review.
 
 ## Verification
 
-Complete the `reading-path-layout` runtime rules with artifact-specific evidence in the semantic review. Then supply real target render evidence to the independent `structure-visual` reviewer. That reviewer separately checks reading path, heading information, claim-evidence adjacency, density and spacing, obstruction, table and visual readability, encoding, responsiveness, and accessibility.
+Complete the `reading-path-layout` runtime rules with artifact-specific evidence in the semantic review. Then supply real target render evidence to the independent `structure-visual` reviewer. That reviewer separately checks reading path, heading information, claim-evidence adjacency, density and spacing, obstruction, table and visual readability, encoding, target-size stability, and accessibility.
 
 After any structural or visual change, update the artifact hash and rerun all four reader-review dimensions. A local source or clean screenshot without an artifact-bound passing aggregate does not satisfy delivery.

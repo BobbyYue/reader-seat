@@ -250,8 +250,8 @@
       "operation": "create",
       "prompt": "把一份有六个章节、两张数据表和十二条来源的技术调查制作成自包含HTML。测试环境只安装Reader's Seat，没有安装html-report。",
       "must_preserve": ["六个章节", "两张数据表", "十二条来源", "环境只安装Reader's Seat"],
-      "expected_behaviors": ["加载Reader's Seat内置HTML模块", "使用内置脚手架和本地字体", "所有资源采用可解析的相对路径", "表格在移动端容器内滚动", "正文引用与来源双向完整", "执行静态验证和桌面移动端渲染检查"],
-      "forbidden_behaviors": ["要求安装或调用html-report", "使用CDN脚本或远程字体", "把HTML格式规则替代技术场景结构", "未检查实际渲染就声称完成"]
+      "expected_behaviors": ["加载Reader's Seat内置HTML模块", "使用内置脚手架和本地字体", "所有资源采用可解析的相对路径", "过宽表格只在自身容器内滚动", "正文引用与来源双向完整", "执行静态验证和选定桌面目标的渲染检查"],
+      "forbidden_behaviors": ["要求安装或调用html-report", "使用CDN脚本或远程字体", "把HTML格式规则替代技术场景结构", "默认要求移动端适配或移动端渲染证据", "未检查实际渲染就声称完成"]
     },
     {
       "id": "language-source-dominant-default",
@@ -277,8 +277,8 @@
       "operation": "create",
       "prompt": "基于给定来源写一份完整的AI数据分析可行性调查报告。用户要求生成一份可直接阅读和分享的文档，但没有指定文件或平台格式。",
       "must_preserve": ["完整调查报告", "可直接阅读和分享", "用户没有指定输出格式"],
-      "expected_behaviors": ["将自包含HTML选为默认输出格式", "使用Reader's Seat内置HTML脚手架和本地资源", "应用分析场景的内容与证据要求", "验证静态资源以及桌面和移动端渲染"],
-      "forbidden_behaviors": ["停下来询问用户选择HTML还是飞书", "默认只返回Markdown或聊天正文", "要求另行安装html-report", "因默认HTML而省略来源和分析边界"]
+      "expected_behaviors": ["将自包含HTML选为默认输出格式", "使用Reader's Seat内置HTML脚手架和本地资源", "应用分析场景的内容与证据要求", "验证静态资源以及选定桌面目标的实际渲染"],
+      "forbidden_behaviors": ["停下来询问用户选择HTML还是飞书", "默认只返回Markdown或聊天正文", "要求另行安装html-report", "默认要求移动端适配或移动端渲染证据", "因默认HTML而省略来源和分析边界"]
     },
     {
       "id": "format-explicit-feishu-uses-portable-baseline",

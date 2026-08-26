@@ -12,6 +12,7 @@ import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
+from xml.etree import ElementTree
 
 from reader_review import (
     DIMENSIONS as READER_REVIEW_DIMENSIONS,
@@ -624,6 +625,12 @@ class VisibleTextParser(HTMLParser):
 
 def extract_visible_text(path: Path, actual_format: str) -> tuple[str, str | None]:
     text = path.read_text(encoding="utf-8")
+    if actual_format == "xml":
+        try:
+            root = ElementTree.fromstring(f"<root>{text}</root>")
+        except ElementTree.ParseError:
+            return text, None
+        return " ".join(root.itertext()), None
     if actual_format != "html":
         return text, None
     parser = VisibleTextParser()
@@ -894,8 +901,8 @@ def expected_extension(output_format: str) -> set[str]:
         "word": {".docx"},
         "slides": {".pptx"},
         "chat": {".txt", ".md"},
-        "feishu": {".txt", ".md", ".html"},
-        "lark": {".txt", ".md", ".html"},
+        "feishu": {".txt", ".md", ".html", ".xml"},
+        "lark": {".txt", ".md", ".html", ".xml"},
         "other": set(),
     }.get(output_format, set())
 
@@ -955,8 +962,11 @@ def command_verify(args: argparse.Namespace) -> None:
             failures.append(f"content snapshot does not exist: {content_snapshot}")
             visible_text, html_lang = "", None
         else:
+            snapshot_suffix = content_snapshot.suffix.lower()
             snapshot_format = (
-                "html" if content_snapshot.suffix.lower() in {".html", ".htm"} else "plain-text"
+                "html"
+                if snapshot_suffix in {".html", ".htm"}
+                else ("xml" if snapshot_suffix == ".xml" else "plain-text")
             )
             visible_text, html_lang = extract_visible_text(
                 content_snapshot,

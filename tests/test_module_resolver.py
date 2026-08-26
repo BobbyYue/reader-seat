@@ -153,6 +153,26 @@ class ModuleResolverTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "versioned skill contract inventory"):
             resolve_modules.resolve(namespace, resolve_modules.load_profiles(), rules)
 
+    def test_html_language_check_uses_visible_text_not_css(self) -> None:
+        case = {
+            "id": "html-language-check",
+            "scenario": "technical",
+            "operation": "create",
+            "artifact": True,
+            "output_format": "html",
+            "source_material": "这是一份中文技术说明，正文应保持中文。" * 5,
+            "hard_checks": {"must_contain": ["技术说明"]},
+        }
+        html = (
+            "<!doctype html><html><head><style>"
+            + ".layout { background: white; display: grid; }" * 80
+            + "</style></head><body><h1>技术说明</h1><p>"
+            + "采集、校验和发布三个阶段均有明确边界。" * 8
+            + "</p></body></html>"
+        )
+        result = run_evals.deterministic_grade(case, html)
+        self.assertEqual(result["verdict"], "pass", result["failures"])
+
 
 if __name__ == "__main__":
     unittest.main()

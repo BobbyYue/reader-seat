@@ -49,7 +49,7 @@ Before building each material visual, record:
 | Context | Unit, denominator, period, baseline, sample, definition, missing data, and uncertainty as applicable |
 | Color semantics | What each non-neutral color means and where else that meaning is used |
 | Reader alternative | Text equivalent, direct labels, table, caption, or other redundant channel |
-| Responsive behavior | Stable dimensions, collapse, wrapping, internal scrolling, and print behavior |
+| Layout behavior | Stable dimensions, wrapping, internal scrolling, and print behavior at the selected target size |
 | Deletion result | The reader cost that would increase if the visual were removed |
 | Verification | Value match, rendered state, accessibility, and source/caption result |
 
@@ -145,9 +145,9 @@ Color must carry a defined role and must never be the only information channel.
   long prose that needs narrative order. Keep row and column headers explicit.
 - Annotate screenshots only to locate a real state or action. Crop irrelevant
   chrome while retaining enough context to orient the reader.
-- Give fixed-format elements stable responsive dimensions. On small screens,
-  stack or scroll the element inside its own container rather than expanding
-  the entire page.
+- Give fixed-format elements stable dimensions. When content exceeds its
+  container, wrap or scroll it inside that container rather than obscuring
+  adjacent content.
 - Keep captions, units, definitions, uncertainty, source notes, and synthetic
   labels adjacent to the element they qualify.
 
@@ -198,7 +198,7 @@ Keep these levels distinct during review.
 - direct labels when readable;
 - tables for exact values and charts for patterns;
 - no 3D and no dual axis;
-- responsive single-column fallback on narrow screens.
+- stable layout at the selected target size.
 
 ### Review signals
 
@@ -227,8 +227,8 @@ Before delivery, verify:
    alter the apparent conclusion;
 6. color roles are consistent, accessible, and redundantly encoded;
 7. titles, captions, annotations, and sources remain adjacent and legible;
-8. desktop, mobile, print, and target-platform rendering preserve the reading
-   path without page-level overflow, overlap, truncation, or blank charts;
+8. desktop, print, and target-platform rendering preserve the reading path
+   without page-level overflow, overlap, truncation, or blank charts;
 9. the artifact still works when nonessential decoration is removed;
 10. visual provenance and synthetic disclosure pass
    [visual-evidence.md](visual-evidence.md) when applicable.

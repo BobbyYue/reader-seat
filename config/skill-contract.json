@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.22.0",
+  "skill_version": "0.23.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -211,7 +211,7 @@
         "html-citation-integrity",
         "html-chart-runtime-integrity",
         "html-diagram-claim-boundary",
-        "html-responsive-accessible-print",
+        "html-accessible-print-layout",
         "html-render-verification"
       ],
       "visual-decision": [
@@ -227,7 +227,7 @@
         "visual-context-complete",
         "visual-derived-values-recomputed",
         "visual-functional-color",
-        "visual-responsive-layout"
+        "visual-stable-layout"
       ],
       "visual-evidence": [
         "visual-claim-inventory",
@@ -402,7 +402,7 @@
     "functional-color-semantics",
     "no-color-only-meaning",
     "adjacent-context-and-source",
-    "responsive-render-verification"
+    "stable-render-verification"
   ],
   "natural_structure_rules": [
     "progressive-disclosure-is-a-relationship",
@@ -479,7 +479,7 @@
     "visual-encoding-integrity",
     "visual-color-accessibility",
     "html-local-asset-integrity",
-    "html-responsive-rendering",
+    "html-layout-rendering",
     "html-citation-integrity",
     "scope-and-responsibility-fidelity",
     "action-boundary",
