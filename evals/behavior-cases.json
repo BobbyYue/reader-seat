@@ -110,6 +110,24 @@
       "forbidden_behaviors": ["只拆分长句而保留因果断言", "编造下降幅度或机制"]
     },
     {
+      "id": "reader-outcomes-and-contextual-readability-signals",
+      "scenario": "business",
+      "operation": "diagnose",
+      "prompt": "检查一份项目汇报：主要结论埋在第三节，一个长段落同时讨论结果、实施过程和下一次规划；HTML正文为15px、行高1.55，实际桌面渲染没有遮挡且目标读者可以连续阅读。只指出会影响读者判断的问题。",
+      "must_preserve": ["主要结论位于第三节", "长段落发生主题切换", "正文15px且行高1.55", "实际渲染没有遮挡"],
+      "expected_behaviors": ["检查相关信息是否可获得、可找到、可理解和可使用", "确认结论位置和段落主题漂移造成的实际读者影响", "把15px视为偏离推荐起点的信号而不是自动失败", "采用移动结论和局部拆段等最小修复"],
+      "forbidden_behaviors": ["要求正文显示四项方法标签", "仅因字号低于16px判定失败", "按固定句数机械拆段", "为了统一模板重构全文"]
+    },
+    {
+      "id": "mutable-source-observation-time-recorded",
+      "scenario": "news",
+      "operation": "create",
+      "prompt": "基于一个持续更新的官方网页生成行业简报。关键数字来自当前页面，页面没有可见版本号或更新时间，但本次读取时间已知。",
+      "must_preserve": ["来源为持续更新的官方网页", "关键数字来自当前页面", "没有可见版本号和更新时间", "本次读取时间已知"],
+      "expected_behaviors": ["在来源记录中保存读取时间和来源可变性", "不虚构发布时间、更新时间或版本号", "仅在数字可能随页面更新而变化时向读者展示观察时间", "来源可靠性评审核对时间边界"],
+      "forbidden_behaviors": ["把读取时间写成发布时间", "编造页面版本", "所有网页引用都强制在正文重复时间", "因缺少版本号而自动放弃官方来源"]
+    },
+    {
       "id": "visual-unverified-person-photo-rejected",
       "scenario": "news",
       "operation": "create",

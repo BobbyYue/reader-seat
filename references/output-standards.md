@@ -11,6 +11,10 @@ Apply all eight standards after selecting the scenario profile. These are qualit
 ## 2. Reader Perspective
 
 - Organize around the reader's questions, decisions, and workflow.
+- Check four outcomes against the named task: the reader can access the relevant
+  information, find the task-critical point, understand it without a material
+  misreading, and use it for the intended judgment or action. Apply these as
+  acceptance questions, not visible section labels.
 - Include methodology or implementation process only when it changes trust, interpretation, replication, or execution.
 - Exclude prompts, skill names, tool names, commands, schemas, checks, and generation history unless they materially affect a reader decision.
 
@@ -61,6 +65,10 @@ Apply this rule when a title, subtitle, section heading, lead, or product/value 
 - Distinguish observation, interpretation, correlation, causal claim, recommendation, assumption, and unknown.
 - State material uncertainty, missing information, conflicting evidence, and credible alternative explanations.
 - When numbers matter, include the applicable object, direction, magnitude, comparison basis, unit, period, denominator, sample, and definition.
+- For a mutable online source, record the observed or retrieved time and any
+  visible publication, update, or version marker in source metadata when a later
+  page state could change the claim. Show that timing in the artifact only when
+  readers need it to interpret or reproduce the result.
 
 ## 6. Scope And Assumption Fidelity
 

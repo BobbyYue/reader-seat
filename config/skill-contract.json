@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.23.0",
+  "skill_version": "0.23.1",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -505,6 +505,8 @@
     "signal-long-sentence-dismissed",
     "signal-owner-ambiguity-confirmed",
     "signal-hard-failure-override",
+    "reader-outcomes-and-contextual-readability-signals",
+    "mutable-source-observation-time-recorded",
     "visual-unverified-person-photo-rejected",
     "visual-verified-original-photo-allowed",
     "visual-generated-concept-labeled",

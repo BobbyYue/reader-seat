@@ -64,23 +64,29 @@ to rewrite the document.
 
 The reviewer must state, in `reader_understanding`, the object, main conclusion,
 supporting evidence, practical meaning, and required action. It must mark a
-major issue when the artifact alone supports two materially different readings,
-requires hidden project history, leaves a decision-critical term undefined, or
-cannot identify who should do what and when when action is required.
+major issue when the artifact alone supports two materially different readings;
+task-critical information is not accessible, findable, correctly understandable,
+or usable by the named reader; understanding depends on hidden project history;
+a decision-critical term is undefined; or the reader cannot identify who should
+do what and when when action is required.
 
 ### Readability
 
 Judge whether the named reader can follow the prose accurately without decoding
 unnecessary abstraction. Flag ambiguous references, unexplained niche terms,
-broken reasoning transitions, repeated conclusions, empty framing, and stiff or
+broken reasoning transitions, overloaded sentence relationships, paragraph
+topic drift, repeated conclusions, empty framing, and stiff or
 AI-sounding language only when they increase reader effort or error. Sentence
-length, term density, and formula scores are risk signals, not automatic
+length, paragraph length, term density, and formula scores are risk signals, not automatic
 failures. Preserve precise specialist language when the target reader needs it.
 
 ### Source Reliability
 
 Inspect the source bundle directly. Every material claim must be traceable and
 calibrated to the authority, recency, scope, and limitations of its source.
+For a mutable source, check that the source bundle records the observed or
+retrieved time and any visible update or version marker when timing affects the
+claim; do not require that metadata in visible prose when it does not affect use.
 Distinguish source fact, interpretation, causal claim, advice, assumption, and
 unknown. `User-provided` is provenance, not proof of independent accuracy. An
 inaccessible or missing material source is `blocked`; weak evidence can pass
@@ -94,6 +100,9 @@ spacing hierarchy, page flow, table and chart legibility, scale and baseline,
 color semantics, labels, contrast, target-size stability, overlap, clipping, and
 whether a retained visual actually reduces reader cost. A text-only artifact
 may pass when no material visual is needed; it may not skip structural review.
+Treat body size, line height, prose measure, alignment, and paragraph metrics as
+review signals above the hard accessibility and integrity floors; fail only when
+the actual render obstructs the reader task or breaches a hard floor.
 
 ## Result Contract
 

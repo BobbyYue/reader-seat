@@ -137,6 +137,23 @@ class ModuleResolverTests(unittest.TestCase):
         self.assertNotIn("Read every listed file", prompt)
         self.assertNotIn("references/scenario-technical.md", prompt)
 
+    def test_readability_extensions_reuse_existing_runtime_rules(self) -> None:
+        rules = resolve_modules.load_runtime_rules()
+        modules = rules["modules"]
+        self.assertEqual(len(modules["output-standards"]), 9)
+        self.assertEqual(len(modules["signal-processing"]), 5)
+        self.assertEqual(len(modules["html-output"]), 9)
+
+        by_id = {
+            item["id"]: item["instruction"]
+            for group in modules.values()
+            for item in group
+        }
+        self.assertIn("accessible, findable", by_id["reader-perspective"])
+        self.assertIn("paragraph topic drift", by_id["signals-are-not-errors"])
+        self.assertIn("start near 16px", by_id["html-accessible-print-layout"])
+        self.assertIn("not rewrite triggers", by_id["signals-are-not-errors"])
+
     def test_deleted_mandatory_rule_is_rejected(self) -> None:
         rules = copy.deepcopy(resolve_modules.load_runtime_rules())
         rules["core"] = [item for item in rules["core"] if item["id"] != "no-invention"]

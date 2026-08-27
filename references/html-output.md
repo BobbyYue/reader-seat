@@ -187,7 +187,12 @@ justify it.
 
 - Use a stable max-width and explicit dimensions for fixed-format elements at
   the selected target size.
-- Keep normal body text at least 14px and use readable line height.
+- Keep normal body text at least 14px as a hard floor. For long-form reading,
+  start near 16px, use a line height of at least 1.5, control the prose measure,
+  and left-align body text. These preferred values are starting points: a
+  departure triggers rendered review, not an automatic rewrite or failure,
+  unless it breaches accessibility, clips content, or demonstrably obstructs
+  the reader task.
 - Maintain WCAG AA contrast for substantive text and controls.
 - Do not communicate status by color alone.
 - Wrap every table in `.table-wrap` with horizontal scrolling. A table with

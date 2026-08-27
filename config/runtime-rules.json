@@ -3,12 +3,12 @@
   "execution_gates": [
     {
       "id": "G1-task",
-      "required_record": "Operation, primary scenario, target reader, reader task, channel, depth, source language, explicit language or format signals, locked output language and format, and consequence of misunderstanding.",
-      "exit_condition": "The reader outcome, language, format, scope, and risk are concrete enough to guide the work."
+      "required_record": "Record operation and scenario, reader/task, channel/depth, source language, explicit signals, locked output language/format, misunderstanding risk, and the access-find-understand-use path.",
+      "exit_condition": "Reader outcome, language, format, scope, risk, and that path are testable without visible framework labels."
     },
     {
       "id": "G2-source",
-      "required_record": "Immutable facts, numbers, definitions, scope, claims, evidence, uncertainty, ownership, commitments, title claims, and visual claims with provenance.",
+      "required_record": "Record sourced facts, numbers, definitions, scope, claims, uncertainty, ownership, commitments, title/visual claims, and provenance; for mutable sources, add observation and visible version/update time when material.",
       "exit_condition": "The source boundary is explicit and every material claim or visual has a support decision."
     },
     {
@@ -158,23 +158,23 @@
     "output-standards": [
       {
         "id": "practical-information-first",
-        "instruction": "Lead with the practical takeaway, strongest support, consequence, and required action when applicable; place background and method later."
+        "instruction": "Lead with the takeaway, strongest support, consequence, and action when relevant; background and method follow."
       },
       {
         "id": "reader-perspective",
-        "instruction": "Supply the context the intended reader needs without requiring hidden project history or specialist inference."
+        "instruction": "Make task-critical information accessible, findable, understandable, and usable to the named reader without hidden history or specialist inference."
       },
       {
         "id": "progressive-disclosure",
-        "instruction": "Arrange information from quick judgment to essential support to optional detail; do not turn this relationship into fixed visible headings."
+        "instruction": "Order quick judgment, essential support, and optional detail without exposing them as fixed headings."
       },
       {
         "id": "natural-audience-fit-language",
-        "instruction": "Use natural language suited to the reader; retain familiar terms, explain or replace niche terms at first use, and avoid bureaucratic, promotional, or AI-sounding prose."
+        "instruction": "Match the reader's language; keep familiar terms, explain niche terms at first use, and avoid bureaucratic, promotional, or AI-sounding prose."
       },
       {
         "id": "evidence-and-calibrated-certainty",
-        "instruction": "Put support near material claims and qualify claims when evidence is incomplete, conflicting, indirect, or unable to establish causality."
+        "instruction": "Place support near material claims; qualify incomplete, conflicting, indirect, or non-causal evidence."
       },
       {
         "id": "scope-and-assumption-fidelity",
@@ -182,7 +182,7 @@
       },
       {
         "id": "useful-structure-and-concision",
-        "instruction": "Keep only structure and prose that improve understanding or action; headings must carry content or necessary navigation, and a heading-only readback must expose the document path."
+        "instruction": "Keep only structure and prose that improve understanding or action; headings must carry content or navigation and expose the document path on readback."
       },
       {
         "id": "action-proportional-to-evidence",
@@ -190,13 +190,13 @@
       },
       {
         "id": "concrete-value-expression",
-        "instruction": "For value-bearing titles, headings, leads, and product lines, identify the specific object, reader-relevant action or change, and observable supported result before writing natural prose."
+        "instruction": "Value-bearing titles, headings, leads, and product lines must name the object, reader-relevant action or change, and supported observable result."
       }
     ],
     "signal-processing": [
       {
         "id": "signals-are-not-errors",
-        "instruction": "Treat length, terminology density, passive voice, formulas, headings, and readability metrics as risk signals, not automatic rewrite triggers."
+        "instruction": "Treat sentence relation load, paragraph topic drift, length, jargon, passive voice, formulas, headings, measure, and readability metrics as risk signals, not rewrite triggers."
       },
       {
         "id": "signal-context-decision",
@@ -303,11 +303,11 @@
     "html-output": [
       {
         "id": "html-selected-only",
-        "instruction": "Apply HTML mechanics only when the locked output format is HTML; Reader's Seat scenario, evidence, language, title, and visual rules still govern the content."
+        "instruction": "Apply HTML mechanics only to locked HTML output; scenario, evidence, language, title, and visual rules still govern content."
       },
       {
         "id": "html-local-portable-directory",
-        "instruction": "Use the bundled scaffold and deliver portable local HTML with relative assets; no CDN, remote fonts, absolute local paths, file URLs, or base64 assets."
+        "instruction": "Use the bundled scaffold and relative assets; forbid CDN, remote fonts, absolute paths, file URLs, and base64 assets."
       },
       {
         "id": "html-self-identification-hidden",
@@ -319,25 +319,25 @@
       },
       {
         "id": "html-citation-integrity",
-        "instruction": "Place numbered citations near material claims and provide matching direct source entries; every citation must resolve and every listed source must support a claim."
+        "instruction": "Place numbered citations near material claims with matching direct sources; every citation must resolve and every source must support a claim."
       },
       {
         "id": "html-chart-runtime-integrity",
-        "instruction": "When charts are justified, use the bundled local ECharts runtime, source-backed values, SVG rendering, no animation, container-aware resize, and explicit unit, denominator, period, baseline, missing-data, and uncertainty context.",
+        "instruction": "For justified charts, use local ECharts, sourced values, SVG, no animation, responsive resize, and explicit unit, denominator, period, baseline, missing data, and uncertainty.",
         "allow_not_applicable": true
       },
       {
         "id": "html-diagram-claim-boundary",
-        "instruction": "Use HTML/CSS for simple flows and bundled Mermaid only when complexity justifies it; label proposals or syntheses and never present a conceptual diagram as implementation evidence.",
+        "instruction": "Use HTML/CSS for simple flows and Mermaid only when complexity warrants it; label proposals or syntheses and never treat conceptual diagrams as implementation evidence.",
         "allow_not_applicable": true
       },
       {
         "id": "html-accessible-print-layout",
-        "instruction": "Verify stable widths at the selected target size, readable text, WCAG AA contrast, redundant status cues, contained table overflow, keyboard focus, long-content wrapping, and print behavior."
+        "instruction": "Enforce stable width, at least 14px text, WCAG AA, redundant cues, contained overflow, keyboard focus, wrapping, and print integrity. For long-form HTML, start near 16px with at least 1.5 line height, controlled measure, and left alignment; deviations are signals unless the reader task fails."
       },
       {
         "id": "html-render-verification",
-        "instruction": "Run validate_html_output.py, then inspect the actual artifact at the selected desktop target size; verify assets, overflow, overlap, truncation, links, interactions, charts, citations, and absence of placeholders."
+        "instruction": "Run validate_html_output.py and inspect the artifact at the desktop target; verify assets, overflow, overlap, truncation, links, interactions, charts, citations, and no placeholders."
       }
     ],
     "visual-decision": [

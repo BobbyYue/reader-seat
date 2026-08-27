@@ -23,7 +23,7 @@ Do not expose the full register in a normal finished document. For diagnostic re
 Process each detected signal in this order:
 
 1. **Locate**: identify the smallest affected unit. Do not diagnose an entire document from an aggregate score alone.
-2. **Name the observation**: describe what is measurable or visible, such as a long sentence, dense terminology, delayed conclusion, repeated claim, or unnamed actor.
+2. **Name the observation**: describe what is measurable or visible, such as a sentence carrying several logical relationships, a paragraph changing topic, dense terminology, delayed conclusion, repeated claim, unusual reading measure, or an unnamed actor.
 3. **Run the context test**: judge against the target reader, scenario task, local context, and consequence of misunderstanding.
 4. **Decide**:
    - `confirmed`: evidence shows the signal impairs the reader task or factual integrity;
@@ -49,7 +49,8 @@ No signal may remain unclassified. A confirmed signal may remain unchanged only 
 | Template residue | Generic method heading; repeated English kicker plus Chinese title; every section repeats the same question-card-callout pattern; visual exists only to satisfy a format | The visible scaffolding draws attention to the writing method, creates repetition, or could be transplanted unchanged into an unrelated document | Rename the local heading from its content, remove the redundant label, vary the affected section, or omit the nonessential visual |
 | Information-empty scaffolding | Heading or label says only `最值得关注`, `真正改变`, `核心洞察`, `背后`, `不能忽略`, `为什么重要`, or another importance or suspense cue | After reading it, the reader learns only that content is supposedly important and still cannot identify the object, result, relationship, action, or boundary | Derive a heading from the section proposition, retain only necessary navigation, or remove the element |
 | Title fit | Object missing; generic promise; hidden intent claimed; title stronger than body; title and subtitle repeat; headline could fit an unrelated document | The reader cannot predict the true scope or is likely to infer a fact, cause, certainty, or value the body does not support | Add a concrete anchor, replace the overstated verb, express the core relationship, remove repetition, or rewrite the title |
-| Sentence complexity | Long sentence; deep nesting; many conjunctions; multiple propositions | The reader cannot reliably identify subject, relationship, qualification, or conclusion | Split or reorder only the confusing propositions |
+| Sentence relationship load | Length; deep nesting; several causal, contrastive, conditional, or exception relationships; multiple propositions | The reader cannot reliably identify subject, relationship, qualification, or conclusion | Split or reorder only the confusing relationships |
+| Paragraph coherence | Topic, claim, evidence, boundary, and a second reader question drift into one paragraph; short fragments break one continuous argument | The target reader cannot identify the paragraph's main job or reconstruct the reasoning across fragments | Split at the topic change, move the stray unit, or recombine fragments; do not optimize for a sentence count |
 | Terminology | Dense acronyms; unexplained niche term; familiar abbreviation with ambiguous local definition | The intended reader is unlikely to share the meaning, or a different interpretation would matter | Define locally, add a plain-language gloss, or retain unchanged for expert readers |
 | Responsibility | Passive voice; missing actor; vague pronoun; action without owner | The reader cannot tell who decides, executes, verifies, or responds | Name the known owner or flag the missing owner; never invent one |
 | Evidence and certainty | Unsupported certainty; claim separated from source; correlation phrased as causality | The wording exceeds the available evidence or prevents traceability | Qualify the claim, move evidence closer, or surface the missing source |
@@ -57,6 +58,7 @@ No signal may remain unclassified. A confirmed signal may remain unchanged only 
 | Concision | Repeated conclusion; duplicated evidence; throat-clearing; process detail | Removal does not reduce understanding, trust, reproducibility, or actionability | Delete or consolidate the smallest redundant unit |
 | Actionability | Request hidden; no timing or dependency; recommendation beyond evidence | The scenario requires action and the reader cannot execute or decide safely | Clarify the known action fields or surface what is missing |
 | Visual encoding | Misleading scale; decorative color; inaccessible contrast; chart type conflicts with the comparison | The visual can cause a materially wrong interpretation or blocks access | Correct the encoding while preserving the underlying data |
+| Typography and measure | Body size, line height, line measure, alignment, or paragraph length departs from the selected format's preferred range | The actual target render increases line-tracking effort, obscures grouping, or prevents the named reader task; a numerical threshold alone is insufficient | Adjust the smallest layout or content unit, keeping accessibility and integrity floors separate from preferred defaults |
 
 Counts, thresholds, and formulas may prioritize review order, but they cannot confirm any family by themselves.
 
