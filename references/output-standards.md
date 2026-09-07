@@ -50,11 +50,14 @@ Apply all eight standards after selecting the scenario profile. These are qualit
 
 Apply this rule when a title, subtitle, section heading, lead, or product/value line explains why the content matters.
 
-1. Record the internal map `specific object -> reader-relevant action or change -> observable result` before writing the visible line.
-2. Express the map in the simplest natural wording. In Chinese, prefer a familiar verb-object or result-complement phrase when it reads naturally, such as `把复杂内容写明白`; do not force the `把` construction or translate it literally into other languages.
+1. Use the existing expression map to identify the specific object and supported fact, question, change, condition, tradeoff, or impact. A result is optional when the source gives none.
+2. Express the relationship that matters to the reader with the fewest necessary words. Preserve a clear single fact without adding contrast. Use parallel clauses only for a real comparison on shared dimensions; never manufacture an opposite, a winner, or a causal mechanism for symmetry. Let reader background determine how much explanation is needed.
 3. Remove method labels, process narration, and generic benefit words when deleting them does not change the supported meaning. Replace lines that say only `更清晰`, `更高效`, `赋能`, or `不用猜` with the actual object and result when the source provides them.
 4. Retain a method name, technical term, evidence boundary, scope, or uncertainty when it is itself the object or the reader needs it to interpret the result. Never gain concreteness by inventing an outcome or strengthening the evidence.
-5. Verify the line in isolation: the target reader should be able to identify the object and the actual change or result without reading the body. Read it aloud; if it sounds like a reusable slogan rather than a natural description of this content, rewrite it.
+5. Put supporting evidence and explanation in the next layer, while keeping any condition that changes interpretation in or immediately beside the lead. Preserve subject, direction, scope, time, and uncertainty. Do not turn a local observation into a general rule.
+6. In the existing reader/source reviews, check whether the reader can accurately restate the fact or relationship and its conditions from the lead and adjacent qualifiers. Fix material ambiguity or meaning drift; stop when clear and accurate. Word count, symmetry, and rhythm alone do not justify revision or another review round.
+
+For example, `A方案上线更快，B方案后续维护工作更少，尚未确定优先级` supports `A更快上线，B更省维护工作；选择取决于优先级`. It does not support declaring either option best. A precise conditional statement may need more words than a slogan.
 
 ## 5. Evidence And Calibrated Certainty
 

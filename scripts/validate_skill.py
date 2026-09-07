@@ -256,7 +256,7 @@ def check_contract(contract: dict, errors: list[str]) -> None:
             "dominant language of the primary source document",
             "The language in which the user writes the request is not, by itself",
             "Do not translate or switch languages merely because the prompt",
-            "specific object -> reader-relevant action or change -> observable result",
+            "supported fact, question, change, condition, tradeoff, or impact",
         ]
         for term in required_structure_terms:
             if term not in output_text:
@@ -1180,8 +1180,8 @@ def check_evals(contract: dict, errors: list[str]) -> None:
             if field not in case or case[field] in (None, "", []):
                 fail(f"behavior case {case.get('id', '<unknown>')} missing {field}", errors)
 
-    if len(cross_agent_cases) != 12:
-        fail(f"cross-agent suite must contain 12 frozen cases, found {len(cross_agent_cases)}", errors)
+    if len(cross_agent_cases) < 12:
+        fail(f"cross-agent suite must retain at least 12 frozen cases, found {len(cross_agent_cases)}", errors)
     route_counts = {route_id: 0 for route_id in route_ids}
     required_cross_fields = (
         "id",
@@ -1224,8 +1224,8 @@ def check_evals(contract: dict, errors: list[str]) -> None:
             for alternatives in hard_checks.get("must_contain_any", []):
                 if not isinstance(alternatives, list) or not alternatives:
                     fail(f"cross-agent case {case_id} has an invalid must_contain_any group", errors)
-    if any(count != 2 for count in route_counts.values()):
-        fail(f"cross-agent suite must contain two cases per route: {route_counts}", errors)
+    if any(count < 2 for count in route_counts.values()):
+        fail(f"cross-agent suite must retain at least two cases per route: {route_counts}", errors)
 
     rubric_path = ROOT / "evals" / "judge-rubric.md"
     if rubric_path.is_file():

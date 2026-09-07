@@ -16,6 +16,48 @@ import run_evals  # noqa: E402
 
 
 class ModuleResolverTests(unittest.TestCase):
+    def test_analysis_summary_and_requested_advice_share_scoped_guidance(self) -> None:
+        cases = run_evals.selected_cases([
+            "xagent-relation-repeated-observation", "xagent-analysis-causality"
+        ])
+        for case in cases:
+            prompt = run_evals.build_producer_prompt(case, run_evals.module_plan(case))
+            self.assertIn("summary or wording-only title/conclusion rewrite", prompt)
+            self.assertIn("add a next step only if the source supplies it or the user", prompt)
+        self.assertIn("验证方向", cases[1]["request"])
+
+    def test_relation_rule_reaches_generated_contract_without_extra_rule(self) -> None:
+        rules = resolve_modules.load_runtime_rules()["modules"]["output-standards"]
+        rule = next(item for item in rules if item["id"] == "concrete-value-expression")
+        cases = run_evals.selected_cases([
+            "xagent-relation-tradeoff-no-winner", "xagent-relation-clear-fact-keep"
+        ])
+        for case in cases:
+            for artifact in (False, True):
+                with self.subTest(case=case["id"], artifact=artifact):
+                    case = dict(case, artifact=artifact)
+                    plan = run_evals.module_plan(case)
+                    bundle = resolve_modules.render_bundle(plan)
+                    self.assertIn(rule["id"], plan["required_rule_ids"])
+                    self.assertEqual(bundle.count(rule["instruction"]), 1)
+        self.assertEqual(len(rules), 9)
+
+    def test_explicit_eval_language_allows_short_source(self) -> None:
+        case = run_evals.selected_cases(["xagent-relation-clear-fact-keep"])[0]
+        self.assertEqual(run_evals.locked_test_decisions(case)["output_language"], "zh")
+        prompt = run_evals.build_producer_prompt(case, run_evals.module_plan(case))
+        self.assertIn(case["source_material"], prompt)
+        for behavior in case["forbidden_behaviors"]:
+            self.assertNotIn(behavior, prompt)
+        grade = run_evals.deterministic_grade(case, case["source_material"])
+        self.assertEqual(grade["verdict"], "pass")
+        self.assertTrue(any("semantic review" in signal for signal in grade["signals"]))
+        wrong = run_evals.deterministic_grade(
+            case,
+            "The report has been updated through Wednesday, while Thursday data remain incomplete.",
+        )
+        self.assertEqual(wrong["verdict"], "fail")
+
     def test_legacy_caller_can_omit_new_optional_flags(self) -> None:
         namespace = argparse.Namespace(
             scenario="news",

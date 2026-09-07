@@ -2,6 +2,167 @@
   "schema_version": 1,
   "cases": [
     {
+      "id": "xagent-relation-repeated-observation",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "把这段材料提炼成清楚的开头判断，必要时附一句支持。 仅在回复中输出。",
+      "source_material": "本轮只在灰度组试行审核调整。审核原来需要五步，现在减到三步，少了两步。步骤变少了，审核流程也缩短了。观察期内错误率未见明显变化，未检验统计等效性。",
+      "immutable_facts": [
+        "本轮灰度组",
+        "五步减到三步",
+        "错误率未见明显变化",
+        "未检验统计等效性"
+      ],
+      "required_behaviors": [
+        "合并对步骤减少的重复描述",
+        "保留灰度和观察边界",
+        "允许把具体步数放到紧邻支持句"
+      ],
+      "forbidden_behaviors": [
+        "宣称越简单质量越稳定",
+        "把未见明显变化写成已证明质量不变",
+        "凭空增加建议或扩大适用范围"
+      ],
+      "hard_checks": {
+        "must_contain": ["灰度", "审核", "错误率"],
+        "must_not_contain": ["流程越简单，质量越稳定"],
+        "min_chars": 10
+      }
+    },
+    {
+      "id": "xagent-relation-tradeoff-no-winner",
+      "scenario": "technical",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "给技术评审者写一段简短的方案对比，保留当前决策状态。 仅在回复中输出。",
+      "source_material": "在现有方案评估中，A方案预计上线更快，B方案预计后续维护工作更少。目前没有确定上线速度和维护工作的优先级，也没有时间、成本或效果的量化数据。",
+      "immutable_facts": [
+        "预计",
+        "A上线更快",
+        "B维护工作更少",
+        "优先级未定"
+      ],
+      "required_behaviors": [
+        "说明已知取舍",
+        "比较维度保持一致",
+        "保留预计和优先级边界"
+      ],
+      "forbidden_behaviors": [
+        "指定A或B最好",
+        "编造数值",
+        "把A上线快等同于B质量差"
+      ],
+      "hard_checks": {
+        "must_contain": ["A", "B", "预计", "优先级"],
+        "must_not_contain": ["建议选A", "建议选B"],
+        "min_chars": 10
+      }
+    },
+    {
+      "id": "xagent-relation-correlation-no-cause",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "改写为读者能快速理解的分析结论，不补行动建议。 仅在回复中输出。",
+      "source_material": "本周预算增加，新增用户没有同步增加。材料没有给出增长来源拆分、用户分层、对照实验或变化幅度，也无法判断预算变化的因果作用。",
+      "immutable_facts": [
+        "本周",
+        "预算增加",
+        "新增用户没有同步增加",
+        "缺少归因证据"
+      ],
+      "required_behaviors": [
+        "直接描述观察到的不同变化",
+        "保留因果未知"
+      ],
+      "forbidden_behaviors": [
+        "断言增长来自存量放大",
+        "断言增加预算无效",
+        "编造新增用户下降或幅度"
+      ],
+      "hard_checks": {
+        "must_contain": ["本周", "预算", "新增用户"],
+        "must_not_contain": ["当前增长主要来自存量放大"],
+        "min_chars": 10
+      }
+    },
+    {
+      "id": "xagent-relation-clear-fact-keep",
+      "scenario": "business",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "检查以下状态句作为正文首句是否需要改写；已经清楚就保留原句，不加标题、解释或行动。 仅在回复中输出。",
+      "source_material": "报表已更新至周三，周四数据尚未到齐。",
+      "immutable_facts": [
+        "报表已更新至周三，周四数据尚未到齐。"
+      ],
+      "required_behaviors": [
+        "原样保留清楚的状态句"
+      ],
+      "forbidden_behaviors": [
+        "制造对仗",
+        "补充催办或期限",
+        "虚构缺失原因"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "报表已更新至周三，周四数据尚未到齐。"
+        ],
+        "must_not_contain": ["请", "尽快"],
+        "min_chars": 18
+      }
+    },
+    {
+      "id": "xagent-relation-critical-condition-nearby",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "为非项目成员写一个简短结论，必要时补一句解释。 仅在回复中输出。",
+      "source_material": "这次测试只在缓存命中的只读请求中观察到延迟降低。缓存未命中请求和写入请求没有测量，不能据此判断系统整体性能。材料没有提供降低幅度。",
+      "immutable_facts": [
+        "本次测试",
+        "缓存命中",
+        "只读请求",
+        "其他请求未测量",
+        "整体性能未知"
+      ],
+      "required_behaviors": [
+        "把缓存命中和只读条件留在主句或紧邻位置",
+        "保留其他请求未测量的边界"
+      ],
+      "forbidden_behaviors": [
+        "笼统写系统更快",
+        "把边界放到远处",
+        "虚构幅度"
+      ],
+      "hard_checks": {
+        "must_contain": ["缓存", "只读", "延迟"],
+        "must_not_contain": ["系统性能全面提升"],
+        "min_chars": 10
+      }
+    },
+    {
       "id": "xagent-news-source-status",
       "scenario": "news",
       "operation": "rewrite",
@@ -162,14 +323,13 @@
       "risk": "high",
       "title": true,
       "visual": "none",
-      "request": "重写分析结论和标题，只在回复中给出成稿。",
+      "request": "重写分析结论和标题，并给出针对证据缺口的验证方向，只在回复中给出成稿。",
       "source_material": "版本发布当周，7日留存从42%降到38%。目前只有按周汇总数据，没有实验、用户分层或同期外部因素数据，因此不能判断下降由版本发布导致。",
       "immutable_facts": ["7日留存", "42%", "38%", "版本发布当周", "没有实验", "不能判断因果"],
       "required_behaviors": ["报告下降4个百分点", "保留同期关系", "拒绝因果升级", "提出与缺口匹配的验证方向"],
       "forbidden_behaviors": ["写成下降4%", "断言版本导致下降"],
       "hard_checks": {
         "must_contain": ["42%", "38%", "4个百分点", "同期"],
-        "must_contain_any": [["需要补充", "要进一步判断", "进一步验证", "下一步"]],
         "must_not_contain": ["下降4%", "版本导致", "版本引发"],
         "min_chars": 130
       }

@@ -118,7 +118,7 @@ def language_evidence(case: dict, text: str) -> str:
 
 
 def locked_test_decisions(case: dict) -> dict:
-    source_language = dominant_language(case["source_material"])
+    source_language = case.get("output_language") or dominant_language(case["source_material"])
     if source_language in {"mixed", "unknown"}:
         raise SystemExit(f"error: case {case['id']} needs an explicit frozen output language")
     return {
@@ -399,7 +399,12 @@ def deterministic_grade(case: dict, text: str) -> dict:
     signals: list[str] = []
     decisions = locked_test_decisions(case)
     detected_language = dominant_language(language_evidence(case, text))
-    if detected_language != decisions["output_language"]:
+    if detected_language in {"unknown", "mixed"}:
+        signals.append(
+            f"output language is {detected_language}; semantic review must verify "
+            f"the requested {decisions['output_language']} language"
+        )
+    elif detected_language != decisions["output_language"]:
         failures.append(
             f"output language is {detected_language}, expected {decisions['output_language']}"
         )

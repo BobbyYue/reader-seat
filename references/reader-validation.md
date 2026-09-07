@@ -70,6 +70,10 @@ or usable by the named reader; understanding depends on hidden project history;
 a decision-critical term is undefined; or the reader cannot identify who should
 do what and when when action is required.
 
+Use the existing main-conclusion and meaning fields to restate the lead's fact
+or relationship and its applicable conditions from the artifact alone. A single
+fact needs no contrast. Do not receive an expected restatement from the author.
+
 ### Readability
 
 Judge whether the named reader can follow the prose accurately without decoding
@@ -79,6 +83,8 @@ topic drift, repeated conclusions, empty framing, and stiff or
 AI-sounding language only when they increase reader effort or error. Sentence
 length, paragraph length, term density, and formula scores are risk signals, not automatic
 failures. Preserve precise specialist language when the target reader needs it.
+Check whether compression hides necessary context; do not request a slogan,
+parallel clauses, fewer words, or another round when the prose is already clear.
 
 ### Source Reliability
 
@@ -91,6 +97,10 @@ Distinguish source fact, interpretation, causal claim, advice, assumption, and
 unknown. `User-provided` is provenance, not proof of independent accuracy. An
 inaccessible or missing material source is `blocked`; weak evidence can pass
 only when the artifact explicitly narrows the claim and discloses the limit.
+Check compressed leads and adjacent qualifiers for changed subject, direction,
+scope, time, or certainty, and invented opposites, winners, causes, or requests.
+Interpretation-changing conditions must remain beside the claim, not only in a
+distant limitation section.
 
 ### Structure And Visual
 

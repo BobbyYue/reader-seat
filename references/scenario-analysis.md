@@ -13,12 +13,10 @@ Enable the reader to understand what changed or differs, assess the evidence and
 - explanation, alternative explanations, and causal boundary;
 - uncertainty, limitations, missing data, and generalizability;
 - implication or recommendation no stronger than the evidence.
-- when a material conclusion depends on named evidence gaps, a next-validation
-  direction that directly addresses those gaps; do not invent an owner,
-  deadline, experiment design, or implementation detail that was not supplied.
-  This remains required in a concise title-and-conclusion rewrite: use one short
-  final sentence unless the user explicitly requests description only and no
-  next step.
+- for full analysis or requested decision advice, tie next validation to the
+  evidence gap; do not invent owners, deadlines, designs, or execution detail.
+  In a summary or wording-only title/conclusion rewrite, preserve the evidence
+  gap; add a next step only if the source supplies it or the user asks for advice.
 
 ## Recommended Relationship
 
@@ -49,8 +47,9 @@ Use “object + change or impact + key evidence + meaning” for an analytical c
 3. Can the reader distinguish observation, explanation, causal claim, and unknown?
 4. Are metric definition, source, grain, filters, denominator, and freshness adequate?
 5. Does the recommendation stay within the evidence boundary?
-6. When evidence gaps block the judgment, does the next validation address the
-   named gap without adding unsupported execution detail?
+6. When validation advice is part of the task, does it address the named gap
+   without unsupported execution detail? In a summary, is the gap preserved
+   without adding an unrequested action?
 
 ## Industry Basis
 

@@ -24,7 +24,8 @@ Apply this priority when goals conflict:
   turn reader goals such as quick judgment or visual understanding into default
   visible labels.
 - Every value-bearing title, heading, or lead must identify a specific object
-  and a supported reader-relevant change, action, relationship, or result.
+  and a supported fact, question, change, condition, tradeoff, or impact;
+  preserve decisive qualifiers without forcing an outcome or contrast.
 - Reject deceptive titles, unsupported certainty, manufactured suspense, and
   any promise the body does not fulfill.
 - Treat every retained visual as an evidence-bearing claim. Verify provenance,

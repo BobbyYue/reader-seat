@@ -195,6 +195,12 @@ def command_prepare(args: argparse.Namespace) -> None:
             "artifact": {"path": str(artifact), "sha256": artifact_sha256},
             "reader_profile": config.get("reader_profile"),
             "required_checks": list(REQUIRED_CHECKS[dimension]),
+            "reading_guidance": {
+                "no-context": "In the existing main_conclusion and meaning fields, restate the lead's fact or relationship and its applicable conditions from the artifact alone. Do not demand a contrast or action for a simple fact.",
+                "readability": "Check whether compressed wording preserves necessary context. Shortness, symmetry and rhythm alone are not acceptance criteria; stop when accurate understanding is easy.",
+                "source-reliability": "Check leads and adjacent qualifiers against source subject, direction, scope, time and certainty. Reject invented opposites, winners, causes or requests and decision-changing conditions moved out of view.",
+                "structure-visual": "Check that headings and visuals convey the same relationship and qualifications as the supporting text; keep interpretation-changing conditions beside the claim.",
+            }[dimension],
             "context_policy": {
                 "fresh_subagent_required": True,
                 "parent_context_forbidden": True,

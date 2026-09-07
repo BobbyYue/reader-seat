@@ -17,6 +17,25 @@ HTML_VALIDATOR = ROOT / "scripts" / "validate_html_output.py"
 
 
 class RuntimeContractTests(unittest.TestCase):
+    def test_relation_guidance_reaches_isolated_review_packets(self) -> None:
+        self.init_contract()
+        artifact = self.base / "report.html"
+        artifact.write_text("<html><body>Observed changes in the pilot only.</body></html>", encoding="utf-8")
+        aggregate = self.complete_reader_review(artifact)
+        packets = [
+            json.loads(path.read_text(encoding="utf-8"))
+            for path in aggregate.parent.glob("*-packet.json")
+        ]
+        self.assertEqual(len(packets), 4)
+        for packet in packets:
+            self.assertTrue(packet["reading_guidance"])
+            self.assertTrue(packet["context_policy"]["parent_context_forbidden"])
+            self.assertEqual(packet["artifact"]["sha256"], hashlib.sha256(artifact.read_bytes()).hexdigest())
+            if packet["dimension"] != "source-reliability":
+                self.assertIsNone(packet["source_bundle"])
+        blind = next(item for item in packets if item["dimension"] == "no-context")
+        self.assertIn("main_conclusion and meaning", blind["reading_guidance"])
+
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.base = Path(self.temp.name)
