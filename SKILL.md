@@ -40,7 +40,7 @@ Apply this priority when goals conflict:
 
 ## Runtime Sequence
 
-Every task uses [scripts/runtime_contract.py](scripts/runtime_contract.py).
+Use [scripts/runtime_contract.py](scripts/runtime_contract.py); narrow native text patches use the separate two-stage route below.
 Detailed commands and failure behavior remain in
 [references/runtime-enforcement.md](references/runtime-enforcement.md).
 The mandatory work-order and retry policy is in
@@ -53,7 +53,7 @@ The mandatory work-order and retry policy is in
    otherwise use the primary source's dominant language, not the prompt
    language. Explicit format wins, then an existing artifact, then chat-only;
    otherwise a finished document defaults to self-contained HTML.
-3. Save the substantive source and run `runtime_contract.py init`. It locks the
+3. Save the source and a pre-draft [required-answer plan](references/required-reader-answers.md); pass `--reader-answer-plan` to `runtime_contract.py init`. It locks the
    decisions and generates `resolved-task-contract.md`,
    `module-manifest.json`, and the semantic review.
 4. Continue only when `status=locked`. Read the generated task contract as the
@@ -82,7 +82,7 @@ The mandatory work-order and retry policy is in
    `not-applicable` or waived by selecting another output format.
 9. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
    to run exactly four fresh, mutually isolated reviewers concurrently:
-   no-context, readability, source-reliability, and structure-visual. All four
+   no-context (extracted surface only), readability, source-reliability, and structure-visual. The source reviewer then matches the frozen raw replay to every required answer. All four
    must pass for the exact artifact hash. The normal path starts one complete
    batch only after the candidate and packets are stable. If it fails, wait for
    all results, merge every blocker, revise once, restabilize, then rerun all
@@ -101,6 +101,8 @@ The mandatory work-order and retry policy is in
 If a required script cannot execute, a bundle or source hash changes, a review
 is incomplete, or a receipt fails, stop before finished delivery. Do not replace
 the control with an informal checklist.
+
+For an authorized, standard-risk Feishu text-only replacement, use [native-text-patch.md](references/native-text-patch.md). Writing may follow `prewrite-approved`; completion requires exact live readback and native render inspection. Never use this exception for layout, charts, structural edits or broader publishing.
 
 ## Output Behavior
 

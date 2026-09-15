@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.23.2-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.24.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -67,11 +67,16 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 - **判断有据：**结论能够对应到证据、适用范围和其他合理解释。
 - **降低阅读成本：**关键信息必须可获取、可找到、可理解、可使用；标题、结构和视觉元素服务于这条阅读路径，而不是装饰。
 - **表达具体：**需要说明价值的标题、章节名和开场句直接写清对象和有依据的结果，不用方法名或空泛价值词代替。
+- **开头信息完整：**先明确这位读者必须知道什么，再检查只读标题或开头的人能否复述这些答案。原文已知但遗漏的信息需要补齐，原文没有的信息保持未知。
 - **独立复核：**完整文档需分别通过无背景理解、文字可读性、来源可靠性以及结构与视觉障碍四项隔离校验。
 - **输出符合场景：**默认使用原材料的主要语言生成自包含 HTML；用户指定时可以改为飞书、Word、Markdown 等格式。
 - **交付边界明确：**生成前锁定语言、格式和发布权限；校验未通过或缺少回执时不交付。
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
+
+### 升级至 0.24.0
+
+完整产物初始化时需提供有来源依据的读者必答信息计划。旧审阅记录若缺少对应的理解证据，需重新生成后才能用于已验证交付。限定范围的原生文字修改也必须在写入后回读并检查排版，写入前通过不等于完成。详见[版本说明](CHANGELOG.md)和[必答信息流程](references/required-reader-answers.md)。
 
 <details>
 <summary><strong>仓库结构、校验和许可证</strong></summary>

@@ -3,7 +3,7 @@
   "execution_gates": [
     {
       "id": "G1-task",
-      "required_record": "Record operation and scenario, reader/task, channel/depth, source language, explicit signals, locked output language/format, misunderstanding risk, and the access-find-understand-use path.",
+      "required_record": "Record scenario, reader/context/decision, reading surface, source-backed required answers/unknowns, channel, language/format, risk and access-find-understand-use path.",
       "exit_condition": "Reader outcome, language, format, scope, risk, and that path are testable without visible framework labels."
     },
     {
@@ -47,7 +47,7 @@
     },
     {
       "id": "reader-task-organization",
-      "instruction": "Organize the output around what the target reader must know, judge, or do, not around the production process."
+      "instruction": "Lock source-backed required answers before prose. State specific findings, not generic usefulness; never invent numbers, contrasts or actions."
     },
     {
       "id": "evidence-calibration",
@@ -89,7 +89,7 @@
     "runtime-enforcement": [
       {
         "id": "runtime-init-before-draft",
-        "instruction": "Run runtime_contract.py init before drafting; draft only after status=locked and use the generated task contract as the default instruction packet."
+        "instruction": "Before drafting artifacts, init with --reader-answer-plan; follow references/required-reader-answers.md and the locked task contract."
       },
       {
         "id": "runtime-decisions-immutable",
@@ -125,11 +125,11 @@
       },
       {
         "id": "reader-review-packet-boundary",
-        "instruction": "Give each reviewer only its generated packet and named files; the main agent may not impersonate, replace, or share parent context with a reviewer."
+        "instruction": "No-context gets only the extracted surface, no source/body/answers. Freeze answer_responses for source review's answer_evaluation; never coach or impersonate."
       },
       {
         "id": "reader-review-all-pass",
-        "instruction": "Aggregate only after all four results return; every dimension must pass for the exact artifact hash before finished or external delivery."
+        "instruction": "Require four passes plus all required answers and source fidelity. Omitted decisive answers block; source unknowns and optional details do not force expansion."
       },
       {
         "id": "reader-review-revise-and-rerun",
@@ -414,7 +414,7 @@
     "title-design": [
       {
         "id": "title-concrete-anchor",
-        "instruction": "Anchor the title in the actual person, product, event, decision, system, or result and one central verified relationship."
+        "instruction": "Name the decisive feature/change and supported result. Topics and usefulness promises are not findings; keep scope beside the heading."
       },
       {
         "id": "title-candidate-comparison",

@@ -46,6 +46,7 @@ jobs:
           --adapter manual
           --agent-id ci-manual-smoke
           --case xagent-analysis-causality
+          --case xagent-required-answers-workflow-features
           --repetitions 1
           --output-dir /tmp/reader-seat-eval
 

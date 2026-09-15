@@ -14,6 +14,8 @@ RUNTIME = ROOT / "scripts" / "runtime_contract.py"
 READER_REVIEW = ROOT / "scripts" / "reader_review.py"
 SCAFFOLD = ROOT / "scripts" / "new-html-report.sh"
 HTML_VALIDATOR = ROOT / "scripts" / "validate_html_output.py"
+sys.path.insert(0, str(ROOT / "scripts"))
+import reader_answers
 
 
 class RuntimeContractTests(unittest.TestCase):
@@ -30,7 +32,8 @@ class RuntimeContractTests(unittest.TestCase):
         for packet in packets:
             self.assertTrue(packet["reading_guidance"])
             self.assertTrue(packet["context_policy"]["parent_context_forbidden"])
-            self.assertEqual(packet["artifact"]["sha256"], hashlib.sha256(artifact.read_bytes()).hexdigest())
+            if packet["dimension"] != "no-context":
+                self.assertEqual(packet["artifact"]["sha256"], hashlib.sha256(artifact.read_bytes()).hexdigest())
             if packet["dimension"] != "source-reliability":
                 self.assertIsNone(packet["source_bundle"])
         blind = next(item for item in packets if item["dimension"] == "no-context")
@@ -50,6 +53,13 @@ class RuntimeContractTests(unittest.TestCase):
             encoding="utf-8",
         )
         self.review_counter = 0
+        self.answer_plan = self.base / "reader-plan.json"
+        reader_answers.save(self.answer_plan, {
+            "version": reader_answers.CONTRACT_VERSION,
+            "reader": {"profile": "Test reader", "known_context": "No project history", "decision": "Inspect the specified fixture"},
+            "surfaces": [{"id": "fixture", "mode": "full", "reason": "Full-document structural fixture; semantic extraction has separate tests"}],
+            "answers": [{"id": "A1", "question": "What does this fixture state?", "expected_information": "Fixture content only", "source_location": "Test source bundle", "source_status": "supported", "required_on": ["fixture"]}]
+        })
 
     def tearDown(self) -> None:
         self.temp.cleanup()
@@ -59,6 +69,8 @@ class RuntimeContractTests(unittest.TestCase):
         if arguments and arguments[0] == "init" and "--channel" in arguments:
             channel = arguments[arguments.index("--channel") + 1]
             if channel == "artifact":
+                if "--reader-answer-plan" not in arguments:
+                    arguments.extend(["--reader-answer-plan", str(self.answer_plan)])
                 if "--reader-profile" not in arguments:
                     arguments.extend(["--reader-profile", "A target reader without project history"])
                 if "--source-bundle" not in arguments:
@@ -120,6 +132,12 @@ class RuntimeContractTests(unittest.TestCase):
         self.run_reader_cli(*prepare_args)
 
         result_paths: list[Path] = []
+        answer_manifest = reader_answers.load(review_dir / "answers" / "surface-manifest.json")
+        surface = answer_manifest["surfaces"][0]
+        responses = [{"surface_id": surface["id"], "surface_sha256": surface["sha256"],
+                      "reader_id": f"agent-no-context-{self.review_counter}",
+                      "findings": ["This is structural fixture evidence, not a genuine semantic reader test."],
+                      "remaining_questions": []}]
         for packet_path in sorted(review_dir.glob("*-packet.json")):
             packet = json.loads(packet_path.read_text(encoding="utf-8"))
             dimension = packet["dimension"]
@@ -164,12 +182,23 @@ class RuntimeContractTests(unittest.TestCase):
                 "issues": issues,
             }
             if dimension == "no-context":
+                result["answer_responses"] = responses
                 result["reader_understanding"] = {
                     "object": "The documented workflow",
                     "main_conclusion": "The workflow should preserve relevant evidence and context.",
                     "evidence": "The report explains the supporting mechanisms and constraints.",
                     "meaning": "Readers can choose the bounded recommended action.",
                     "action": "Follow the stated recommendation and retain the evidence boundary.",
+                }
+            if dimension == "source-reliability":
+                result["answer_evaluation"] = {
+                    "manifest_sha256": reader_answers.object_digest(answer_manifest),
+                    "response_sha256": reader_answers.object_digest(responses),
+                    "reviewer_id": result["reviewer"]["agent_id"],
+                    "plan_source_coverage": "pass", "source_coverage_evidence": "Structural fixture only",
+                    "source_fidelity": "pass", "questions": [],
+                    "answers": [{"answer_id": "A1", "surface_id": surface["id"], "status": "pass",
+                                 "reader_quote": responses[0]["findings"][0], "rationale": "Structural fixture only"}]
                 }
             result_path = review_dir / f"{dimension}-result.json"
             result_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")

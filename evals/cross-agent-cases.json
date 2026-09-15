@@ -2,6 +2,53 @@
   "schema_version": 1,
   "cases": [
     {
+      "id": "xagent-required-answers-workflow-features",
+      "scenario": "analysis",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": true,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "这是完全虚构的流程分析测试材料，不代表真实业务结果。为没有读过分析过程的产品和研发负责人改写小节标题，必要时加一句紧邻说明。读者只看标题和这句说明，不读正文。原标题：提交前就能从流程信息中识别验收表现差异。只输出修改后的内容。",
+      "source_material": "虚构测试数据：同一文档流程内，分析对象为每月提交不少于20份材料的团队。资料完整度、检查清单完成率、自动校验覆盖率分别按中位数划分为高/低；三项均高组的首次验收通过率为84%，三项均低组为52%。首次验收通过率的分母为该组首次提交的全部材料数。这是分组观察，未检验因果关系或预测模型效果。",
+      "immutable_facts": [
+        "虚构测试数据",
+        "同一文档流程",
+        "每月提交不少于20份",
+        "三项均高vs均低",
+        "首次验收通过率84%vs52%",
+        "按中位数",
+        "分组观察"
+      ],
+      "required_behaviors": [
+        "在限定阅读面说明哪三项特征和哪个比较结果",
+        "标题直接陈述发现而不只承诺有帮助",
+        "决定解释的样本条件留在标题或紧邻说明"
+      ],
+      "forbidden_behaviors": [
+        "只列特征名而不表达高低组关系",
+        "宣称模型准确率提高",
+        "把分组差异写成连续因果规律",
+        "让正文补全必答信息"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "资料完整度",
+          "检查清单完成率",
+          "自动校验覆盖率",
+          "84%",
+          "52%",
+          "20"
+        ],
+        "must_not_contain": [
+          "准确率提升",
+          "提高就能"
+        ],
+        "min_chars": 25
+      }
+    },
+    {
       "id": "xagent-relation-repeated-observation",
       "scenario": "analysis",
       "operation": "rewrite",

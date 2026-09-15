@@ -176,6 +176,17 @@ def command_prepare(args: argparse.Namespace) -> None:
     if output_dir.exists() and any(output_dir.iterdir()):
         fail(f"reader review output directory is not empty: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
+    import reader_answers
+    try:
+        answer_lock = config.get("answer_lock")
+        if not answer_lock:
+            fail("runtime contract is missing its pre-draft reader answer plan")
+        lock_path = output_dir / "answer-lock.json"
+        write_json(lock_path, answer_lock)
+        answer_manifest = reader_answers.prepare(lock_path, artifact, output_dir / "answers", args.content_snapshot)
+        primary_surface = answer_manifest["surfaces"][0]
+    except (ValueError, OSError) as exc:
+        fail(str(exc))
 
     batch_id = hashlib.sha256(
         f"{contract.get('contract_id')}:{args.round}:{artifact_sha256}:{utc_now()}".encode("utf-8")
@@ -192,7 +203,8 @@ def command_prepare(args: argparse.Namespace) -> None:
             "round": args.round,
             "invocation_mode": "parallel-batch",
             "dimension": dimension,
-            "artifact": {"path": str(artifact), "sha256": artifact_sha256},
+            "artifact": ({"path": primary_surface["path"], "sha256": primary_surface["sha256"]}
+                         if dimension == "no-context" else {"path": str(artifact), "sha256": artifact_sha256}),
             "reader_profile": config.get("reader_profile"),
             "required_checks": list(REQUIRED_CHECKS[dimension]),
             "reading_guidance": {
@@ -209,6 +221,12 @@ def command_prepare(args: argparse.Namespace) -> None:
             "source_bundle": source if dimension == "source-reliability" else None,
             "render_evidence": renders if dimension == "structure-visual" else [],
         }
+        if dimension == "no-context":
+            packet["answer_packet"] = reader_answers.load(primary_surface["packet_path"])
+            packet["reading_guidance"] += " Read only this extracted surface; never open the full artifact. Include answer_responses as a one-item array using answer_packet.response_fields. Do not score against unseen expected answers."
+        if dimension == "source-reliability":
+            packet["answer_manifest"] = str(output_dir / "answers" / "surface-manifest.json")
+            packet["reading_guidance"] += " After the no-context response is frozen, independently evaluate it against the locked answer plan. Include answer_evaluation using reader_answers.py contract; do not alter or coach the raw response."
         packet["packet_sha256"] = object_hash(packet)
         packet_path = output_dir / f"{dimension}-packet.json"
         write_json(packet_path, packet)
@@ -232,6 +250,8 @@ def command_prepare(args: argparse.Namespace) -> None:
         "all_must_pass": True,
         "max_rounds": MAX_ROUNDS,
         "packets": packets,
+        "answer_manifest": {"path": str(output_dir / "answers" / "surface-manifest.json"),
+                            "sha256": file_hash(output_dir / "answers" / "surface-manifest.json")},
     }
     manifest_path = output_dir / "round-manifest.json"
     write_json(manifest_path, manifest)
@@ -247,7 +267,7 @@ def validate_result(result: dict, manifest: dict, packet: dict) -> list[str]:
         "batch_id": manifest["batch_id"],
         "round": manifest["round"],
         "dimension": dimension,
-        "artifact_sha256": manifest["artifact_sha256"],
+        "artifact_sha256": packet["artifact"]["sha256"],
         "packet_sha256": packet["packet_sha256"],
     }
     for field, value in expected.items():
@@ -331,6 +351,34 @@ def validate_result(result: dict, manifest: dict, packet: dict) -> list[str]:
                 if len(str(understanding.get(field, "")).strip()) < 2:
                     failures.append(f"no-context reader understanding lacks {field}")
     return failures
+
+
+def validate_answer_evidence(manifest, contract, results):
+    """Consume raw blind replay plus the existing source review, not a fifth audit."""
+    import reader_answers
+    try:
+        entry = manifest["answer_manifest"]
+        if file_hash(Path(entry["path"])) != entry["sha256"]:
+            return ["reader answer manifest changed"]
+        answer_manifest = reader_answers.load(entry["path"])
+        plan = reader_answers.verify_manifest(answer_manifest)
+        lock, _ = reader_answers.open_lock(answer_manifest["lock_path"])
+        if lock != contract["decisions"]["reader_validation"].get("answer_lock"):
+            return ["reader answer plan differs from the pre-draft contract"]
+        if answer_manifest["artifact"]["sha256"] != manifest["artifact_sha256"]:
+            return ["reader answer surface belongs to another artifact"]
+        blind = results["no-context"]
+        source = results["source-reliability"]
+        responses = blind["answer_responses"]
+        evaluation = source["answer_evaluation"]
+        failures = reader_answers.validate_answers(answer_manifest, responses, evaluation)
+        if any(r["reader_id"] != blind["reviewer"]["agent_id"] for r in responses):
+            failures.append("answer response identity differs from the no-context reviewer")
+        if evaluation["reviewer_id"] != source["reviewer"]["agent_id"]:
+            failures.append("answer evaluator identity differs from the source reviewer")
+        return failures
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        return [f"missing or invalid required reader answers: {exc}"]
 
 
 def command_aggregate(args: argparse.Namespace) -> None:
@@ -431,6 +479,7 @@ def command_aggregate(args: argparse.Namespace) -> None:
             "result_sha256": file_hash(result_path),
         })
 
+    failures.extend(validate_answer_evidence(manifest, contract, {k: v[0] for k, v in results.items()}))
     round_number = manifest.get("round")
     if not isinstance(round_number, int) or not 1 <= round_number <= MAX_ROUNDS:
         failures.append("reader review manifest has an invalid round")
@@ -624,6 +673,12 @@ def validate_aggregate_for_artifact(
             if isinstance(issue, dict):
                 original_issues.append({"dimension": dimension, **issue})
 
+    if manifest is not None:
+        raw_results = {key: read_json(Path(record["result_path"])) for key, record in review_map.items()
+                       if Path(str(record.get("result_path", ""))).is_file()}
+        answer_failures = validate_answer_evidence(manifest, contract, raw_results)
+        failures.extend(answer_failures)
+        original_all_pass = original_all_pass and not answer_failures
     expected_status = "pass" if original_all_pass else (
         "needs-user-decision" if aggregate.get("round") == MAX_ROUNDS else "revision-required"
     )
@@ -643,6 +698,7 @@ def build_parser() -> argparse.ArgumentParser:
     prepare = subparsers.add_parser("prepare", help="prepare four isolated review packets")
     prepare.add_argument("--contract", type=Path, required=True)
     prepare.add_argument("--artifact", type=Path, required=True)
+    prepare.add_argument("--content-snapshot", type=Path)
     prepare.add_argument("--render-evidence", type=Path, action="append", default=[])
     prepare.add_argument("--round", type=int, required=True)
     prepare.add_argument("--previous-aggregate", type=Path)

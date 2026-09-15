@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.23.2",
+  "skill_version": "0.24.0",
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -274,6 +274,9 @@
     "action_preflight_receipt_required": true,
     "reader_review_script": "scripts/reader_review.py",
     "reader_review_schema": "config/reader-review-result.schema.json",
+    "reader_answer_plan_required_before_drafting": true,
+    "reader_answer_script": "scripts/reader_answers.py",
+    "native_text_patch_script": "scripts/native_text_patch.py",
     "reader_validation_required_for_finished_artifacts": true,
     "reader_validation_context_isolation_required": true,
     "reader_validation_parallel_required": true,

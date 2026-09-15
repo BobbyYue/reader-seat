@@ -377,6 +377,18 @@ def command_init(args: argparse.Namespace) -> None:
         "path": str(source_bundle_path),
         "sha256": hashlib.sha256(source_bundle_path.read_bytes()).hexdigest(),
     }
+    reader_answer_lock = None
+    if reader_validation_required:
+        import reader_answers
+        if not args.reader_answer_plan:
+            fail("finished artifacts require --reader-answer-plan before drafting")
+        try:
+            reader_answer_lock = reader_answers.lock_plan(args.reader_answer_plan, source_bundle_path)
+            answer_plan = reader_answers.load(args.reader_answer_plan)
+            if len(answer_plan["surfaces"]) != 1:
+                fail("select one primary reading surface per independent no-context reviewer")
+        except (ValueError, OSError) as exc:
+            fail(str(exc))
 
     if args.publication_target != "none":
         expected_format = "feishu" if args.publication_target in {"feishu", "lark"} else "other"
@@ -438,6 +450,7 @@ def command_init(args: argparse.Namespace) -> None:
                 "required": reader_validation_required,
                 "reader_profile": reader_profile,
                 "source_bundle": reader_source_bundle,
+                "answer_lock": reader_answer_lock,
                 "context_isolation": "fresh-subagent",
                 "parallel_required": True,
                 "dimensions": list(READER_REVIEW_DIMENSIONS),
@@ -1146,6 +1159,7 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--channel", choices=("chat", "artifact"), required=True)
     init.add_argument("--risk", choices=RISK_LEVELS, default="standard")
     init.add_argument("--reader-profile", default="")
+    init.add_argument("--reader-answer-plan", type=Path)
     init.add_argument("--source-file", type=Path)
     init.add_argument("--source-bundle", type=Path)
     init.add_argument("--source-language", default="none")

@@ -26,6 +26,14 @@ the contract, not a suggestion. If the host cannot launch fresh subagents, the
 finished artifact is blocked; a main-agent self-review is not a substitute.
 
 Context isolation reduces anchoring but does not guarantee model independence.
+The only permitted dependency is source evaluation of the frozen raw no-context
+replay. See [required-reader-answers.md](required-reader-answers.md): no-context
+receives an actually extracted primary surface, not the full document. The
+source reviewer may receive that raw replay after its independent source pass;
+never share another reviewer's verdict or coach the reader. This reuses the four
+reviewers rather than adding a fifth audit. Store `answer_responses` in the blind
+result and `answer_evaluation` in the source result; aggregation and final
+verification require both and reopen their bindings.
 For high-risk work, use a different model for `source-reliability` when the host
 supports it, and retain the existing independent semantic judge requirement.
 
