@@ -16,6 +16,20 @@ import run_evals  # noqa: E402
 
 
 class ModuleResolverTests(unittest.TestCase):
+    def test_expression_scan_is_required_in_every_scenario_without_new_module(self):
+        baseline = run_evals.selected_cases(["xagent-relation-clear-fact-keep"])[0]
+        for scenario in ("news", "technical", "product", "business", "analysis", "procedure"):
+            for artifact in (False, True):
+                with self.subTest(scenario=scenario, artifact=artifact):
+                    plan = run_evals.module_plan(dict(baseline, scenario=scenario, artifact=artifact))
+                    bundle = resolve_modules.render_bundle(plan)
+                    for rule in ("natural-non-template-expression", "signal-context-decision", "signal-proportional-action", "signal-recheck"):
+                        self.assertIn(rule, plan["required_rule_ids"])
+                    self.assertIn("Expression scan completed", bundle)
+                    self.assertIn("protected meaning", bundle)
+                    self.assertIn("Style preference alone cannot block", bundle)
+                    self.assertNotIn("expression-review", {m["id"] for m in plan["modules"]})
+
     def test_analysis_summary_and_requested_advice_share_scoped_guidance(self) -> None:
         cases = run_evals.selected_cases([
             "xagent-relation-repeated-observation", "xagent-analysis-causality"

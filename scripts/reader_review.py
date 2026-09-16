@@ -209,9 +209,9 @@ def command_prepare(args: argparse.Namespace) -> None:
             "required_checks": list(REQUIRED_CHECKS[dimension]),
             "reading_guidance": {
                 "no-context": "In the existing main_conclusion and meaning fields, restate the lead's fact or relationship and its applicable conditions from the artifact alone. Do not demand a contrast or action for a simple fact.",
-                "readability": "Check whether compressed wording preserves necessary context. Shortness, symmetry and rhythm alone are not acceptance criteria; stop when accurate understanding is easy.",
-                "source-reliability": "Check leads and adjacent qualifiers against source subject, direction, scope, time and certainty. Reject invented opposites, winners, causes or requests and decision-changing conditions moved out of view.",
-                "structure-visual": "Check that headings and visuals convey the same relationship and qualifications as the supporting text; keep interpretation-changing conditions beside the claim.",
+                "readability": "Check empty abstraction, template-driven structure, purposeless repetition and audience mismatch as context-dependent signals. Preserve necessary context, legitimate terminology and useful repetition. For expression issues quote the passage in observed_problem, name concrete impact in reader_consequence, and give the smallest fix plus protected meaning in required_fix. AI-like alone is not evidence; style preference alone is nonblocking and cannot start another round. Stop when accurate understanding is easy.",
+                "source-reliability": "Check leads and adjacent qualifiers against source subject, direction, scope, time and certainty. Reject invented opposites, winners, causes or requests and decision-changing conditions moved out of view. For rhetorical overstatement, quote the claim and its source boundary; require a minimal fix without invented specificity or erased uncertainty.",
+                "structure-visual": "Check that headings and visuals convey the same relationship and qualifications as the supporting text; keep interpretation-changing conditions beside the claim. Check empty visual packaging by reader impact, not counts of cards, tables or repeated layouts. Locate the element, explain the reading obstacle and smallest fix; style preference alone is nonblocking and cannot start another round.",
             }[dimension],
             "context_policy": {
                 "fresh_subagent_required": True,

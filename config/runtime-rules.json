@@ -23,7 +23,7 @@
     },
     {
       "id": "G5-signals",
-      "required_record": "For every detected risk signal: location, trigger, context, reader impact, confirmed, dismissed, or unresolved decision, action, and recheck result.",
+      "required_record": "Expression scan completed (even if clear); signals record quote/location, impact, confirmed/dismissed/unresolved, smallest fix, protected meaning and recheck.",
       "exit_condition": "No signal caused an automatic rewrite and every material confirmed or unresolved signal has a proportional outcome."
     },
     {
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Make reader-first design visible through order and emphasis; do not expose method labels, generic suspense, internal machinery, or repetitive template sections."
+      "instruction": "Before review scan for empty abstraction, template structure, purposeless repetition, overstatement, audience mismatch and empty visual packaging. Judge impact, not AI authorship."
     },
     {
       "id": "external-action-authorization",
@@ -162,7 +162,7 @@
       },
       {
         "id": "reader-perspective",
-        "instruction": "Make task-critical information accessible, findable, understandable, and usable to the named reader without hidden history or specialist inference."
+        "instruction": "Make critical information accessible, findable, understandable and usable without hidden history or specialist inference."
       },
       {
         "id": "progressive-disclosure",
@@ -200,11 +200,11 @@
       },
       {
         "id": "signal-context-decision",
-        "instruction": "For each detected signal, record location, trigger, context, reader impact, and a confirmed, dismissed, or unresolved decision."
+        "instruction": "Use G5 records; cite reader impact or explicit style mismatch, not 'AI-like'. For ambiguous cases read signal-processing.md."
       },
       {
         "id": "signal-proportional-action",
-        "instruction": "Use no change, local edit, section rebuild, full restructure, or surface-to-user according to reader impact; explain dismissals and unresolved material risks."
+        "instruction": "Merge issues; edit minimally once before review. Keep justified patterns and unknowns. Style preference alone cannot block or start another round."
       },
       {
         "id": "signal-hard-failure-priority",
@@ -212,7 +212,7 @@
       },
       {
         "id": "signal-recheck",
-        "instruction": "Recheck every changed passage against source fidelity, scenario acceptance, and any affected hard gate."
+        "instruction": "Recheck meaning, voice, scope and gates with existing reviewers/limits; no extra loop. Edits invalidate bound reviews."
       }
     ],
     "diagnosis-and-revision": [

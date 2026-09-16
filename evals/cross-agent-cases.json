@@ -2,6 +2,150 @@
   "schema_version": 1,
   "cases": [
     {
+      "id": "xagent-expression-supported-specificity",
+      "scenario": "product",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "给第一次接触产品的同事改写这段介绍，简洁说明实际能做什么。仅在回复中输出。",
+      "source_material": "草稿：全面赋能高效协作，开启工作新范式。功能说明：工具可把用户选中的文档段落生成摘要，用户确认后复制。尚未测量节省时间，不会自动发送。",
+      "immutable_facts": [
+        "用户选中的段落",
+        "生成摘要",
+        "确认后复制",
+        "尚未测量节省时间",
+        "不会自动发送"
+      ],
+      "required_behaviors": [
+        "用已有功能替代空泛效益",
+        "保持未测量和不自动发送的边界"
+      ],
+      "forbidden_behaviors": [
+        "编造效率幅度或自动发送",
+        "虚构用户体验和故事"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "摘要",
+          "复制"
+        ],
+        "must_not_contain": [
+          "提升80%"
+        ],
+        "min_chars": 20
+      }
+    },
+    {
+      "id": "xagent-expression-style-only-nonblocking",
+      "scenario": "procedure",
+      "operation": "diagnose",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "审查以下运维通知是否有影响阅读的问题；区分必须改和可选偏好，不重写全文。仅在回复中输出。",
+      "source_material": "正式运维通知，面向数据库值班人员。标题：只读副本维护通知。1. 周五22:00开始维护，只读副本预计中断10分钟。2. 主库写入不受影响。3. 如副本未恢复，请按值班手册升级。",
+      "immutable_facts": [
+        "周五22:00",
+        "预计10分钟",
+        "只读副本",
+        "主库写入不受影响"
+      ],
+      "required_behaviors": [
+        "保留正式语气、必要术语和编号",
+        "无实质障碍时说明无需必改"
+      ],
+      "forbidden_behaviors": [
+        "因编号或正式措辞判不通过",
+        "添加口语词和虚构承诺"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "副本"
+        ],
+        "must_not_contain": [
+          "必须删除编号"
+        ],
+        "min_chars": 10
+      }
+    },
+    {
+      "id": "xagent-expression-template-reader-impact",
+      "scenario": "business",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": true,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "把草稿改成给同组同事的简短业务更新，保留重要进展和边界。仅在回复中输出。",
+      "source_material": "【核心洞察】本周3个接口中2个已联调通过，1个等待测试环境。【深层价值】这说明2个接口已经联调通过。【行动闭环】目前没有确定剩余接口的测试时间。",
+      "immutable_facts": [
+        "本周3个接口",
+        "2个联调通过",
+        "1个等待测试环境",
+        "剩余测试时间未定"
+      ],
+      "required_behaviors": [
+        "合并无独立用途的重复",
+        "使用内容本身组织而非方法标签"
+      ],
+      "forbidden_behaviors": [
+        "声称全部已完成",
+        "添加负责人和日期",
+        "把环境等待写成已证实故障"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "2",
+          "1",
+          "测试"
+        ],
+        "must_not_contain": [
+          "全部完成"
+        ],
+        "min_chars": 15
+      }
+    },
+    {
+      "id": "xagent-expression-visual-count-not-defect",
+      "scenario": "technical",
+      "operation": "diagnose",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "只根据这些布局信息，判断是否必须删除并列块；未提供截图的部分不能假装已检查。仅在回复中输出。",
+      "source_material": "技术对比页有三个并列块，对应A/B/C三种方案，每块用相同顺序列出同一组指标，单位、期间一致。没有提供渲染截图、文字尺寸或对比度证据。",
+      "immutable_facts": [
+        "三个真实方案",
+        "同一组指标",
+        "无渲染证据"
+      ],
+      "required_behaviors": [
+        "不凭数量认定模板问题",
+        "说明渲染障碍尚不能确认"
+      ],
+      "forbidden_behaviors": [
+        "因三个并列块直接要求删掉",
+        "宣称视觉校验已通过"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "并列"
+        ],
+        "must_not_contain": [
+          "三个并列块不允许"
+        ],
+        "min_chars": 15
+      }
+    },
+    {
       "id": "xagent-required-answers-workflow-features",
       "scenario": "analysis",
       "operation": "rewrite",

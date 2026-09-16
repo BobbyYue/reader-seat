@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.24.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.24.1-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -77,6 +77,8 @@ Reader's Seat does not publish, overwrite, or send content without explicit auth
 ### Upgrading to 0.24.0
 
 Artifact initialization now requires a source-backed reader-answer plan. Older review records without the required-answer evidence must be regenerated before they can authorize verified delivery. A narrowly scoped native text patch also needs post-write readback and layout inspection; pre-write approval alone is not completion. See the [release notes](CHANGELOG.md) and [required-answer workflow](references/required-reader-answers.md).
+
+Version 0.24.1 adds contextual expression review: locate the passage, explain its reader impact, and make the smallest meaning-preserving edit. Clear professional language stays unchanged; reviewer taste alone cannot trigger another round. This reuses the existing reviewers and retry limits.
 
 <details>
 <summary><strong>Repository structure, validation, and licenses</strong></summary>

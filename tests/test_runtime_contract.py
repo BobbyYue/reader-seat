@@ -38,6 +38,14 @@ class RuntimeContractTests(unittest.TestCase):
                 self.assertIsNone(packet["source_bundle"])
         blind = next(item for item in packets if item["dimension"] == "no-context")
         self.assertIn("main_conclusion and meaning", blind["reading_guidance"])
+        by_dimension = {p["dimension"]: p for p in packets}
+        wording = by_dimension["readability"]["reading_guidance"]
+        for field in ("observed_problem", "reader_consequence", "required_fix", "protected meaning"):
+            self.assertIn(field, wording)
+        self.assertIn("nonblocking", wording)
+        self.assertIn("rhetorical overstatement", by_dimension["source-reliability"]["reading_guidance"])
+        self.assertIn("not counts", by_dimension["structure-visual"]["reading_guidance"])
+        self.assertNotIn("empty abstraction", blind["reading_guidance"])
 
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
