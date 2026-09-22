@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.25.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.26.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -74,9 +74,9 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents rather than short-message polishing or unsupported content expansion.
 
-### Upgrading to 0.25.0
+### Upgrading to 0.26.0
 
-Reviews now need specific passages and evidence showing why wording, content selection, and layout help the reader. Missing, outdated, or unresolved records cannot authorize delivery. Regenerate affected reviews after upgrading; clear originals and necessary caveats should stay intact.
+Reviews now check whether details are supported, passages advance understanding, and sentences are easy to follow without changing the writer's voice. Existing reviewers record specific passages; no extra review round or banned-phrase list is added. Regenerate older reviews for the version 2 evidence format. Clear originals, useful examples and decisive caveats stay intact. See the [writing examples](references/writing-craft.md).
 
 Artifact initialization now requires a source-backed reader-answer plan. Older review records without the required-answer evidence must be regenerated before they can authorize verified delivery. A narrowly scoped native text patch also needs post-write readback and layout inspection; pre-write approval alone is not completion. See the [release notes](CHANGELOG.md) and [required-answer workflow](references/required-reader-answers.md).
 

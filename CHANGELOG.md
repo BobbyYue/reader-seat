@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.26.0 - 2026-09-22
+
+- Use source-grounded details, purposeful progression and natural reading flow within existing document reviews.
+- Require anchored craft checks and source detail support in version 2 reader-value records; reject missing, stale or unresolved evidence.
+- Add fictional paired examples, fix/keep/fidelity cases and regression tests. No source facts, output formats, reviewers or retry limits are removed.
+- Upgrade: regenerate old review records. These checks enforce evidence completeness, not automatic literary taste or guaranteed cross-agent quality.
+
 ## 0.25.0 - 2026-09-22
 
 - Require passage-level evidence for concrete expression, necessary content, source fidelity, and rendered reading order in the existing reviews.

@@ -84,7 +84,7 @@ The mandatory work-order and retry policy is in
    to run exactly four fresh, mutually isolated reviewers concurrently:
    no-context (extracted surface only), readability, source-reliability, and structure-visual. The source reviewer then matches the frozen raw replay to every required answer. All four
    must pass for the exact artifact hash. Complete the prepared `reader_value`
-   fields in the same reviews: anchored expression, content necessity, source
+   fields in the same reviews: supported detail, progression, reading flow, content necessity, source
    meaning and actual reading layout. Missing or unresolved fields block both
    aggregation and final verification; do not add reviewers or visible checklists.
    The normal path starts one complete

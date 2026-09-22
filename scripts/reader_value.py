@@ -11,8 +11,13 @@ import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 
-VERSION = 1
+VERSION = 2
 EMPTY_ATTESTATIONS = {"pass", "passed", "ok", "yes", "checked", "none", "n/a", "true", "false", "通过", "正常", "无", "已检查"}
+CRAFT_GUIDANCE = {
+    "concrete_detail": "Quote the highest-risk or representative passage. Restate the actual event, operation, finding or question the reader learns; do not require invented details, stories or numbers when evidence is thin.",
+    "progression": "Quote a passage with its transition where needed. Explain how it advances or supports understanding, rather than restating praise. A necessary example, bridge, emotion or short acknowledgement can suffice without a new fact; no fixed paragraph template.",
+    "reading_flow": "Quote a sentence in context. Explain whether subject, conditions and emphasis can be followed without rereading; retain the writer's register. Change only an actual obstacle or explicit style mismatch, never a sentence-length ratio, punctuation quota or forced casual voice.",
+}
 GUIDANCE = {
     "expression": "Identify a concrete proposition or real contrast. Keep useful contrasts; revise empty framing only when it delays or distorts understanding. No banned phrase list.",
     "selection": "Explain what misunderstanding would result from removing the quoted passage. Keep decisive caveats and helpful transitions/examples; remove boilerplate, defer lookup detail. Do not request additions merely for completeness.",
@@ -20,6 +25,8 @@ GUIDANCE = {
     "meaning": "Compare the source and final text: facts, request/refusal, urgency, ownership, numbers and uncertainty must survive. Natural wording must not weaken or invent a request.",
     "unit_roles": "Explain the different reader jobs of the takeaway, picture and question table. Useful repetition is allowed; copying the same explanation three times is not. Preserve P0 and weighted coverage, never hide claims to lower the denominator.",
 }
+GUIDANCE["expression"] += " Complete all craft_checks with an anchored quote, pass/fail and concrete reason. Review the whole candidate, record representative or problematic spans; a clear short message may reuse one span. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
+GUIDANCE["meaning"] += " Explain detail_support: match vivid or specific details to the supplied source; retain unknowns and label permitted illustrative examples. Never trade a factual boundary for a story or hide the conclusion as literary suspense."
 
 
 class VisibleText(HTMLParser):
@@ -127,9 +134,28 @@ def validate(review, axes, binding, text, *, source="", renders=()):
             errors.append(f"{prefix} requires a content disposition")
         if item.get("status") != "pass" or item.get("action") != "keep":
             errors.append(f"{prefix} retains an unresolved reader problem")
+        if axis == "expression":
+            probes = item.get("craft_checks")
+            if not isinstance(probes, dict) or set(probes) != set(CRAFT_GUIDANCE):
+                errors.append(f"{prefix} requires concrete_detail, progression and reading_flow evidence")
+            else:
+                for name, probe in probes.items():
+                    label = f"{prefix}.craft_checks.{name}"
+                    if not isinstance(probe, dict):
+                        errors.append(f"{label} must be an object")
+                        continue
+                    evidence = probe.get("quote", "")
+                    if not isinstance(evidence, str) or not normalize(evidence) or normalize(evidence) not in normalize(text):
+                        errors.append(f"{label} quote not found in reviewed text")
+                    if not substantive(probe.get("reason")):
+                        errors.append(f"{label} requires a concrete reader-effect reason")
+                    if probe.get("status") != "pass":
+                        errors.append(f"{label} missing or unresolved; no extra style-only review round")
         if axis == "selection" and not substantive(item.get("removal_effect")):
             errors.append(f"{prefix} must explain the consequence of removing this passage")
         if axis == "meaning":
+            if not substantive(item.get("detail_support")):
+                errors.append(f"{prefix} must explain source support for specificity")
             quote = item.get("source_quote", "")
             if not isinstance(quote, str) or not normalize(quote) or normalize(quote) not in normalize(source):
                 errors.append(f"{prefix} source quote not found")
@@ -154,10 +180,13 @@ def template(axes, binding):
     for axis in axes:
         item = {"status": "fail", "action": "revise", "location": "", "quote": "",
                 "reader_effect": "", "protected_meaning": ""}
+        if axis == "expression":
+            item["craft_checks"] = {name: {"status": "fail", "quote": "", "reason": ""} for name in CRAFT_GUIDANCE}
         if axis == "selection":
             item["removal_effect"] = ""
         if axis == "meaning":
             item["source_quote"] = ""
+            item["detail_support"] = ""
         if axis == "presentation":
             item.update(render_path="", observation="")
         if axis == "unit_roles":

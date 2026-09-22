@@ -8,10 +8,14 @@ def structural_review(axes, binding, text, source="", render=""):
         item.update(status="pass", action="keep", location="STRUCTURAL TEST FIXTURE",
                     quote=text[:100], reader_effect="STRUCTURAL FIXTURE, not a reader judgment.",
                     protected_meaning="STRUCTURAL FIXTURE, not source verification.")
+        if axis == "expression":
+            for probe in item["craft_checks"].values():
+                probe.update(status="pass", quote=text[:100], reason="STRUCTURAL FIXTURE, not an assessment of writing quality.")
         if axis == "selection":
             item["removal_effect"] = "STRUCTURAL FIXTURE: removed text would be absent."
         if axis == "meaning":
             item["source_quote"] = source[:100]
+            item["detail_support"] = "STRUCTURAL FIXTURE, not evidence that details are supported."
         if axis == "presentation":
             item.update(render_path=str(render), observation="STRUCTURAL FIXTURE, not rendered inspection.")
         if axis == "unit_roles":

@@ -28,6 +28,42 @@ class ReaderValueTests(unittest.TestCase):
     def test_complete_evidence_passes(self):
         self.assertEqual(self.errors(self.review), [])
 
+    def test_missing_craft_check_blocks_existing_expression_pass(self):
+        for name in reader_value.CRAFT_GUIDANCE:
+            review = copy.deepcopy(self.review)
+            del review["checks"]["expression"]["craft_checks"][name]
+            self.assertTrue(self.errors(review))
+
+    def test_unanchored_or_empty_craft_evidence_blocks(self):
+        for field, value in (("quote", "Invented result"), ("quote", ""), ("reason", "PASS"), ("reason", [])):
+            review = copy.deepcopy(self.review)
+            review["checks"]["expression"]["craft_checks"]["concrete_detail"][field] = value
+            self.assertTrue(self.errors(review))
+
+    def test_unresolved_flow_cannot_hide_behind_parent_pass(self):
+        self.review["checks"]["expression"]["craft_checks"]["reading_flow"]["status"] = "fail"
+        self.assertTrue(self.errors(self.review))
+
+    def test_detail_support_required_from_source_review(self):
+        del self.review["checks"]["meaning"]["detail_support"]
+        self.assertTrue(self.errors(self.review))
+
+    def test_old_review_requires_regeneration(self):
+        self.review["version"] = 1
+        self.assertTrue(self.errors(self.review))
+
+    def test_prepared_craft_checks_are_pending_not_auto_approved(self):
+        prepared = reader_value.template(self.axes, self.binding)
+        self.assertTrue(self.errors(prepared))
+        self.assertEqual(set(prepared["checks"]["expression"]["craft_checks"]), set(reader_value.CRAFT_GUIDANCE))
+
+    def test_clear_acknowledgement_needs_no_invented_progression(self):
+        self.text = self.source = "收到，谢谢。"
+        review = structural_review(self.axes, self.binding, self.text, self.source, self.render)
+        for probe in review["checks"]["expression"]["craft_checks"].values():
+            probe["reason"] = "A short acknowledgement completes the message job; no second sentence, story or new fact is needed."
+        self.assertEqual(self.errors(review), [])
+
     def test_missing_evidence_blocks(self):
         self.assertTrue(self.errors(None))
         for axis in self.axes:

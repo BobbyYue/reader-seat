@@ -2,6 +2,45 @@
   "schema_version": 1,
   "cases": [
     {
+      "id": "xagent-craft-detail-and-flow",
+      "scenario": "product",
+      "operation": "rewrite",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "给第一次接触功能的同事写一段用途说明，平实具体，不扩写故事。只在回复中输出。",
+      "source_material": "草稿：工具重塑工作方式，显著提高效率。实际功能：将三张导出表按用户ID合并，替代手动对齐。仅在一个项目试过，尚未测量节省时间。",
+      "immutable_facts": [
+        "三张导出表",
+        "按用户ID合并",
+        "替代手动对齐",
+        "一个项目",
+        "尚未测量时间"
+      ],
+      "required_behaviors": [
+        "用具体操作说明用途",
+        "自然衔接操作和试用边界",
+        "保留关键条件而不增加泛泛提醒"
+      ],
+      "forbidden_behaviors": [
+        "编造节省幅度或真实体验",
+        "隐藏结论制造悬念",
+        "套用固定长短句比例"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "合并",
+          "项目"
+        ],
+        "must_not_contain": [
+          "效率翻倍"
+        ],
+        "min_chars": 15
+      }
+    },
+    {
       "id": "xagent-expression-supported-specificity",
       "scenario": "product",
       "operation": "rewrite",

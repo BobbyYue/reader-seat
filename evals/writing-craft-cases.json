@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "data_origin": "fictional; created only for writing-craft evaluation",
+  "evaluation_note": "Freeze request and source for the producer. Give expected and forbidden behaviors only to an independent judge. Structural corpus tests do not certify generation quality.",
+  "cases": [
+    {
+      "id": "craft-supported-detail",
+      "kind": "should_fix",
+      "request": "面向同事，简短介绍这个工具的实际用途；不要宣传腔。只输出一段正文。",
+      "source_material": "草稿：这不仅是一次工具升级，更是工作方式的重塑，显著提升效率。实际功能：把三张导出表按用户ID合并，原来需要手动对齐。只在一个项目试过，还没有测量节省的时间。",
+      "expected_behaviors": [
+        "以三表合并和手动对齐的变化说明用途",
+        "保留一个项目和未测量的范围",
+        "去掉没有依据的显著提升"
+      ],
+      "forbidden_behaviors": [
+        "增加节省时间的数值",
+        "虚构使用者的疲惫或喜悦",
+        "制造悬念而不交代功能"
+      ]
+    },
+    {
+      "id": "craft-reading-flow",
+      "kind": "should_fix",
+      "request": "把这段上线状态说清楚，可以调整断句，但不要改变条件和计划。只输出正文。",
+      "source_material": "只有在复核通过且值班负责人确认后才会向新用户开放的导出入口目前已经完成开发但由于复核尚未完成所以还没有开放，老用户仍然走原入口，也没有确定开放时间。",
+      "expected_behaviors": [
+        "先区分开发完成与尚未开放",
+        "保持复核通过和负责人确认两个必要条件",
+        "保留新老用户区别和时间未定"
+      ],
+      "forbidden_behaviors": [
+        "写成已经上线",
+        "把且改成或",
+        "补充开放日期"
+      ]
+    },
+    {
+      "id": "craft-useful-bridge",
+      "kind": "should_not_fix",
+      "request": "检查这段解释是否有多余句子。没有影响理解的问题就保留，不要为了短而删。",
+      "source_material": "共享说明：删除快捷方式不会删除原文件。这两个入口指向同一份文件，所以另一处仍能打开。",
+      "expected_behaviors": [
+        "保留解释两个入口与同一文件关系的桥接句",
+        "允许所以表达真实逻辑",
+        "没有实质问题时不制造修改"
+      ],
+      "forbidden_behaviors": [
+        "仅因没有新数据删除解释",
+        "机械删除所以",
+        "补充权限或备份保证"
+      ]
+    },
+    {
+      "id": "craft-formal-control",
+      "kind": "should_not_fix",
+      "request": "检查这条正式运维通知是否读得清楚；已经清楚就原样保留。",
+      "source_material": "维护通知：周五22:00开始维护，只读副本预计中断10分钟，主库写入不受影响。",
+      "expected_behaviors": [
+        "保留正式语气和完整原文",
+        "保留预计、只读副本和主库区别"
+      ],
+      "forbidden_behaviors": [
+        "添加俏皮话或感叹",
+        "把预计中断改为保证恢复",
+        "仅因句长拆成机械排比"
+      ]
+    },
+    {
+      "id": "craft-thin-source",
+      "kind": "relation_preservation",
+      "request": "把这段说明写得具体一点，有依据就举例，没有材料就不要补故事。",
+      "source_material": "目前只知道这个功能正在测试，还没有提供功能细节、测试结果、用户反馈或时间安排。",
+      "expected_behaviors": [
+        "保持功能正在测试及其信息缺口",
+        "可以说明还需要哪些材料但不填造事实"
+      ],
+      "forbidden_behaviors": [
+        "编造测试用户和结果",
+        "编造功能操作步骤",
+        "假装亲历体验"
+      ]
+    },
+    {
+      "id": "craft-qualifier",
+      "kind": "relation_preservation",
+      "request": "压缩这段结论，去掉重复解释，保留判断所需的信息。",
+      "source_material": "本轮仅测试缓存命中的请求，延迟比旧版低；未测试缓存未命中的请求，因此不能判断整体性能是否提升。换句话说，目前只能说明命中缓存的这部分请求延迟降低了。",
+      "expected_behaviors": [
+        "合并重复结果",
+        "保留只测命中请求和整体性能未知",
+        "把限制靠近结论"
+      ],
+      "forbidden_behaviors": [
+        "写成整体性能已提升",
+        "删除未测范围来追求简短",
+        "虚构降幅"
+      ]
+    }
+  ]
+}
