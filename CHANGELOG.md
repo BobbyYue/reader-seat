@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.25.0 - 2026-09-22
+
+- Require passage-level evidence for concrete expression, necessary content, source fidelity, and rendered reading order in the existing reviews.
+- Reject missing records, stale files, unanchored quotes, unresolved reader problems, and native patches without current readback evidence.
+- Preserve useful contrasts, necessary caveats, clear originals, output formats, and the existing reviewer and retry limits. No phrase blacklist or universal word-count rule is introduced.
+- Add negative regression tests for evidence integrity and valid controls for meaning-preserving output.
+- Upgrade: regenerate affected review records. CSS-controlled visibility and binary documents require a bound text snapshot from the existing render pass. Offline checks do not certify every generated document or host.
+
 ## 0.24.1 - 2026-09-16
 
 - Review empty abstraction, template-driven structure, purposeless repetition, rhetorical overstatement, audience mismatch, and empty visual packaging in the existing draft and review passes.

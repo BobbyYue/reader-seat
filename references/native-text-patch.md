@@ -42,6 +42,8 @@ python3 scripts/native_text_patch.py verify \
   --inspection inspection.json --output verified.json
 ```
 
+Include `reader_value` in the existing inspection: use `reader_value.template` with axes `expression`, `selection`, `meaning`, `presentation` and the readback SHA256. Anchor quotations to readback text, source quotation to the original baseline, and presentation to the supplied native render. Explain retention and protected meaning. Missing/stale/unresolved editorial evidence blocks completion; do not add a separate review round.
+
 The script performs no external mutation. Its input and inspection schemas are
 documented in its module header. It rejects undeclared content/style/order
 changes, stale baseline/answer evidence, mismatched readback and stale render

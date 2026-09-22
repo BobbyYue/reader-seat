@@ -331,6 +331,14 @@ def verify(prewrite, readback, render, inspection):
         raise ValueError("readback revision must change after the native write")
     image_format = _image_format(render)
     _validate_inspection(load(inspection), originals["readback"]["sha256"], originals["render"]["sha256"])
+    import reader_value
+    editorial_errors = reader_value.validate(
+        load(inspection).get("reader_value"), ("expression", "selection", "meaning", "presentation"),
+        originals["readback"]["sha256"], reader_value.read_text(readback),
+        source=reader_value.read_text(inputs["baseline"]["path"]), renders=[render],
+    )
+    if editorial_errors:
+        raise ValueError("native text patch editorial review: " + "; ".join(editorial_errors))
     for name, item in originals.items():
         check_reference(item, name)
     for name, item in inputs.items():

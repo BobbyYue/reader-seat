@@ -17,6 +17,7 @@
     "issues"
   ],
   "properties": {
+    "reader_value": {"type": "object", "required": ["version", "artifact_binding", "checks"]},
     "answer_responses": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"type": "object", "required": ["surface_id", "surface_sha256", "reader_id", "findings", "remaining_questions"]}},
     "answer_evaluation": {"type": "object", "required": ["manifest_sha256", "response_sha256", "reviewer_id", "plan_source_coverage", "source_coverage_evidence", "source_fidelity", "answers", "questions"]},
     "schema_version": {"const": 1},
@@ -75,5 +76,6 @@
       "required": ["object", "main_conclusion", "evidence", "meaning", "action"]
     }
   },
+  "allOf": [{"if": {"properties": {"dimension": {"enum": ["readability", "source-reliability", "structure-visual"]}}}, "then": {"required": ["reader_value"]}}],
   "additionalProperties": true
 }

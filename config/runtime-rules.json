@@ -47,7 +47,7 @@
     },
     {
       "id": "reader-task-organization",
-      "instruction": "Lock source-backed required answers before prose. State specific findings, not generic usefulness; never invent numbers, contrasts or actions."
+      "instruction": "Lock required answers; keep decisive caveats nearby, defer lookup detail, omit boilerplate. Keep useful examples/transitions; invent no facts, contrasts or actions."
     },
     {
       "id": "evidence-calibration",
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Before review scan for empty abstraction, template structure, purposeless repetition, overstatement, audience mismatch and empty visual packaging. Judge impact, not AI authorship."
+      "instruction": "Scan abstraction, templates, repetition, overstatement and empty visuals by reader impact. Reviews require anchored reader_value; missing, stale or unresolved evidence blocks delivery."
     },
     {
       "id": "external-action-authorization",

@@ -83,7 +83,11 @@ The mandatory work-order and retry policy is in
 9. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
    to run exactly four fresh, mutually isolated reviewers concurrently:
    no-context (extracted surface only), readability, source-reliability, and structure-visual. The source reviewer then matches the frozen raw replay to every required answer. All four
-   must pass for the exact artifact hash. The normal path starts one complete
+   must pass for the exact artifact hash. Complete the prepared `reader_value`
+   fields in the same reviews: anchored expression, content necessity, source
+   meaning and actual reading layout. Missing or unresolved fields block both
+   aggregation and final verification; do not add reviewers or visible checklists.
+   The normal path starts one complete
    batch only after the candidate and packets are stable. If it fails, wait for
    all results, merge every blocker, revise once, restabilize, then rerun all
    four for the new hash; never spend a round on a known-incomplete candidate.

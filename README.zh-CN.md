@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.24.1-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.25.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -74,7 +74,9 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
 
-### 升级至 0.24.0
+### 升级至 0.25.0
+
+审阅需要指出具体文字，说明表达、内容取舍和排版是否帮助读者理解。缺少记录、记录过期或问题尚未解决时，不能通过交付检查。升级后请重新生成受影响的审阅记录；已经清楚的原文和必要条件仍应保留。
 
 0.24.1 新增结合上下文的表达审查：指出原句、读者影响和最小修改办法。保留清楚的专业表达，不因审查者个人偏好反复重写，复用已有审查角色和轮次上限。
 

@@ -9,6 +9,7 @@ import hashlib
 import json
 import sys
 from pathlib import Path
+import reader_value
 
 
 DIMENSIONS = (
@@ -57,6 +58,15 @@ REQUIRED_CHECKS = {
 }
 SEVERITIES = {"blocker", "major", "minor"}
 REVIEW_STATUSES = {"pass", "fail", "blocked"}
+
+
+def editorial_axes(dimension, renders):
+    return {
+        "no-context": (),
+        "readability": ("expression", "selection"),
+        "source-reliability": ("meaning",),
+        "structure-visual": ("presentation",) if renders else ("selection",),
+    }[dimension]
 
 
 class ReaderReviewError(ValueError):
@@ -227,6 +237,13 @@ def command_prepare(args: argparse.Namespace) -> None:
         if dimension == "source-reliability":
             packet["answer_manifest"] = str(output_dir / "answers" / "surface-manifest.json")
             packet["reading_guidance"] += " After the no-context response is frozen, independently evaluate it against the locked answer plan. Include answer_evaluation using reader_answers.py contract; do not alter or coach the raw response."
+        axes = editorial_axes(dimension, packet["render_evidence"])
+        if axes:
+            editorial_text = args.content_snapshot.resolve() if args.content_snapshot else artifact
+            packet["editorial_text"] = {"path": str(editorial_text), "sha256": file_hash(editorial_text)}
+            packet["reader_value_template"] = reader_value.template(axes, artifact_sha256)
+            packet["reader_value_guidance"] = {axis: reader_value.GUIDANCE[axis] for axis in axes}
+            packet["reading_guidance"] += " Complete reader_value_template as reader_value in the same response. Quote the final artifact, explain reader impact and protected meaning. Every requested addition must name a concrete misunderstanding it prevents; completeness or style preference alone does not justify it. Never expose this audit in the document."
         packet["packet_sha256"] = object_hash(packet)
         packet_path = output_dir / f"{dimension}-packet.json"
         write_json(packet_path, packet)
@@ -341,6 +358,22 @@ def validate_result(result: dict, manifest: dict, packet: dict) -> list[str]:
             item.get("status") != "pass" for item in checks.values() if isinstance(item, dict)
         ):
             failures.append(f"{dimension} non-pass result has no material issue or failed check")
+
+    axes = editorial_axes(dimension, packet.get("render_evidence", []))
+    if axes:
+        try:
+            source_entry = packet.get("source_bundle") or {}
+            source_text = reader_value.read_text(source_entry["path"]) if source_entry else ""
+            text_entry = packet.get("editorial_text", packet["artifact"])
+            if file_hash(Path(text_entry["path"])) != text_entry["sha256"]:
+                failures.append(f"{dimension} editorial text snapshot changed")
+            failures.extend(reader_value.validate(
+                result.get("reader_value"), axes, packet["artifact"]["sha256"],
+                reader_value.read_text(text_entry["path"]), source=source_text,
+                renders=[entry["path"] for entry in packet.get("render_evidence", [])],
+            ))
+        except (OSError, ValueError, KeyError) as exc:
+            failures.append(f"{dimension} reader_value evidence unavailable: {exc}")
 
     if dimension == "no-context":
         understanding = result.get("reader_understanding")

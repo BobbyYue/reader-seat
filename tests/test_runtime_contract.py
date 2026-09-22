@@ -16,9 +16,30 @@ SCAFFOLD = ROOT / "scripts" / "new-html-report.sh"
 HTML_VALIDATOR = ROOT / "scripts" / "validate_html_output.py"
 sys.path.insert(0, str(ROOT / "scripts"))
 import reader_answers
+import reader_value
+from editorial_fixture import structural_review
 
 
 class RuntimeContractTests(unittest.TestCase):
+    def test_editorial_checks_cannot_be_removed_from_finished_review(self):
+        self.init_contract()
+        artifact = self.base / "report.html"
+        artifact.write_text("<html><body>Observed changes in the pilot only.</body></html>")
+        aggregate_path = self.complete_reader_review(artifact)
+        import reader_review
+        aggregate = json.loads(aggregate_path.read_text())
+        manifest = json.loads(Path(aggregate["manifest_path"]).read_text())
+        entry = next(e for e in manifest["packets"] if e["dimension"] == "readability")
+        packet = json.loads(Path(entry["path"]).read_text())
+        record = next(e for e in aggregate["reviews"] if e["dimension"] == "readability")
+        result_path = Path(record["result_path"])
+        result = json.loads(result_path.read_text())
+        del result["reader_value"]
+        self.assertTrue(reader_review.validate_result(result, manifest, packet))
+        result_path.write_text(json.dumps(result))
+        errors, _ = reader_review.validate_aggregate_for_artifact(aggregate_path, json.loads(self.contract.read_text()), artifact)
+        self.assertTrue(errors)
+
     def test_relation_guidance_reaches_isolated_review_packets(self) -> None:
         self.init_contract()
         artifact = self.base / "report.html"
@@ -189,6 +210,11 @@ class RuntimeContractTests(unittest.TestCase):
                 "checks": checks,
                 "issues": issues,
             }
+            if "reader_value_template" in packet:
+                result["reader_value"] = structural_review(
+                    tuple(packet["reader_value_template"]["checks"]), packet["artifact"]["sha256"],
+                    reader_value.read_text(artifact), reader_value.read_text(self.source_bundle), render,
+                )
             if dimension == "no-context":
                 result["answer_responses"] = responses
                 result["reader_understanding"] = {

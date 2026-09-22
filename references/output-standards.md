@@ -81,6 +81,11 @@ For example, `A方案上线更快，B方案后续维护工作更少，尚未确�
 
 ## 7. Useful Structure And Concision
 
+- Before drafting, use the existing reader-answer plan to separate required answers from lookup-only detail. Record only disputed placement decisions, not every sentence. Keep decisive uncertainty beside its claim; move optional detail out of the main path and omit generic disclaimers.
+- Useful transitions and examples may earn their place without adding new facts. A requested addition must identify the reader misunderstanding it prevents; "more complete" alone is insufficient.
+- Complete the artifact-bound `reader_value` fields prepared by `reader_review.py` in the existing review responses. Aggregation and final verification reject missing, stale, unanchored or unresolved evidence. Keep these fields out of the document; do not add reviewers or rounds.
+- When CSS controls visibility, capture visible text during the existing browser-render check and pass it as `--content-snapshot` to reader-review preparation. Do not use hidden HTML text as an anchor; the snapshot and artifact are both hash-bound. This also preserves the existing binary/native content-snapshot route.
+
 - Use headings, lists, tables, and visuals only when they improve scanning, comparison, or execution.
 - Make each paragraph contribute a necessary fact, reasoning step, decision, or action.
 - Remove throat-clearing, request restatement, duplicated conclusions, repeated evidence, and details that do not change understanding or action.

@@ -133,7 +133,10 @@ class NativeTextPatchTests(unittest.TestCase):
         return receipt
 
     def write_inspection(self):
+        import reader_value
+        from editorial_fixture import structural_review
         self.write(self.inspection, {
+            "reader_value": structural_review(("expression", "selection", "meaning", "presentation"), patch.digest(self.readback), reader_value.read_text(self.readback), reader_value.read_text(self.paths["baseline"]), self.render),
             "readback_sha256": patch.digest(self.readback), "render_sha256": patch.digest(self.render),
             "inspector": {"id": "invented-STRUCTURAL-FIXTURE-inspector", "method": "native-render-inspection"},
             "verdict": "pass", "checks": {
@@ -143,6 +146,14 @@ class NativeTextPatchTests(unittest.TestCase):
 
     def verify(self):
         return patch.verify(self.prewrite, self.readback, self.render, self.inspection)
+
+    def test_editorial_review_must_quote_body_not_metadata(self):
+        self.ready_for_verify()
+        inspection = patch.load(self.inspection)
+        inspection["reader_value"]["checks"]["expression"]["quote"] = self.baseline["document_id"]
+        self.write(self.inspection, inspection)
+        with self.assertRaisesRegex(ValueError, "quote not found"):
+            self.verify()
 
     def run_cli(self, command, arguments, output, expected=0):
         args = [sys.executable, "-B", str(ROOT / "scripts" / "native_text_patch.py"), command]
