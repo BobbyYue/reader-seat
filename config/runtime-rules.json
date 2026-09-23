@@ -47,7 +47,7 @@
     },
     {
       "id": "reader-task-organization",
-      "instruction": "Lock required answers; keep decisive caveats nearby, defer lookup detail, omit boilerplate. Keep useful examples/transitions; invent no facts, contrasts or actions."
+      "instruction": "Default substantive summaries to explanation: lock depth and needed reasons/evidence, not labels. Preserve brief requests, useful bridges and source limits."
     },
     {
       "id": "evidence-calibration",

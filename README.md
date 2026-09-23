@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.26.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.27.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -68,13 +68,18 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 - **Reader effort:** task-critical information must be accessible, findable, understandable, and usable; titles, structure, and visuals support that path instead of adding decoration.
 - **Concrete expression:** value-bearing titles, headings, and leads name the actual object and supported result instead of hiding value behind method labels or generic claims.
 - **Complete opening:** defines what this reader must know, then checks whether a reader given only the selected opening or headings can recover those answers. Known omissions require repair; facts absent from the source remain unknown.
+- **Enough explanation:** a summary retains the reasons, evidence, and connections needed to understand the main views. A list of accurate headings is not a substitute; explicitly requested outlines stay brief.
 - **Independent review:** finished documents must pass four isolated checks for missing context, readability, source reliability, and structural or visual barriers.
 - **Output fit:** the default is self-contained HTML in the source material's dominant language, unless another format or language is requested.
 - **Delivery boundary:** language, format, and publication permission are locked before drafting; failed or missing verification blocks delivery.
 
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents rather than short-message polishing or unsupported content expansion.
 
-### Upgrading to 0.26.0
+### Upgrading to 0.27.0
+
+Summaries now distinguish scanning the topics from understanding the argument. Before drafting, the reader-answer plan records the needed depth; source review then checks what an independent reader actually understood. There is no minimum word count, compulsory example quota, or extra review round. See the [overcompression example](references/badcases/overcompressed-summary.md).
+
+Regenerate artifact plans with `depth` and answer `kind` fields, and reviews with source-anchored `depth_fit` evidence. Existing standalone answer locks remain readable; they do not replace the updated artifact workflow.
 
 Reviews now check whether details are supported, passages advance understanding, and sentences are easy to follow without changing the writer's voice. Existing reviewers record specific passages; no extra review round or banned-phrase list is added. Regenerate older reviews for the version 2 evidence format. Clear originals, useful examples and decisive caveats stay intact. See the [writing examples](references/writing-craft.md).
 

@@ -86,8 +86,9 @@ class RuntimeContractTests(unittest.TestCase):
         reader_answers.save(self.answer_plan, {
             "version": reader_answers.CONTRACT_VERSION,
             "reader": {"profile": "Test reader", "known_context": "No project history", "decision": "Inspect the specified fixture"},
+            "depth": {"mode": "orientation", "reason": "This structural fixture asks only what the supplied statement says"},
             "surfaces": [{"id": "fixture", "mode": "full", "reason": "Full-document structural fixture; semantic extraction has separate tests"}],
-            "answers": [{"id": "A1", "question": "What does this fixture state?", "expected_information": "Fixture content only", "source_location": "Test source bundle", "source_status": "supported", "required_on": ["fixture"]}]
+            "answers": [{"id": "A1", "kind": "takeaway", "question": "What does this fixture state?", "expected_information": "Fixture content only", "source_location": "Test source bundle", "source_status": "supported", "required_on": ["fixture"]}]
         })
 
     def tearDown(self) -> None:
@@ -231,6 +232,8 @@ class RuntimeContractTests(unittest.TestCase):
                     "reviewer_id": result["reviewer"]["agent_id"],
                     "plan_source_coverage": "pass", "source_coverage_evidence": "Structural fixture only",
                     "source_fidelity": "pass", "questions": [],
+                    "depth_fit": {"mode": "orientation", "status": "pass", "reason": "STRUCTURAL FIXTURE: the limited task only requests the supplied statement.",
+                                  "reader_quote": responses[0]["findings"][0], "source_quote": self.source_bundle.read_text()[:70]},
                     "answers": [{"answer_id": "A1", "surface_id": surface["id"], "status": "pass",
                                  "reader_quote": responses[0]["findings"][0], "rationale": "Structural fixture only"}]
                 }

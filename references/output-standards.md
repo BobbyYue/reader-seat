@@ -21,6 +21,7 @@ Apply all eight standards after selecting the scenario profile. These are qualit
 ## 3. Progressive Disclosure
 
 - Put task-critical information first, essential support second, and full detail last.
+- Select depth from the reader task. A summary of substantive views normally needs their important reasons or relationships; an opening overview cannot silently replace that explanation. Preserve explicit short-form requests and source limits.
 - Make a mixed-audience opening understandable to a non-specialist; place specialist reasoning afterward.
 - Answer a simple need briefly. Do not inflate it into a report.
 - Treat “quick to judge” and “easy to visualize” as reader outcomes, not mandatory chapter names or components.

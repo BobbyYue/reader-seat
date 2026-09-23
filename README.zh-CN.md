@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.26.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.27.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -68,13 +68,18 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 - **降低阅读成本：**关键信息必须可获取、可找到、可理解、可使用；标题、结构和视觉元素服务于这条阅读路径，而不是装饰。
 - **表达具体：**需要说明价值的标题、章节名和开场句直接写清对象和有依据的结果，不用方法名或空泛价值词代替。
 - **开头信息完整：**先明确这位读者必须知道什么，再检查只读标题或开头的人能否复述这些答案。原文已知但遗漏的信息需要补齐，原文没有的信息保持未知。
+- **解释足够：**总结要保留理解主要观点所需的理由、证据和关系，不能只剩一组准确的标题；用户明确只要提纲时，仍然简短输出。
 - **独立复核：**完整文档需分别通过无背景理解、文字可读性、来源可靠性以及结构与视觉障碍四项隔离校验。
 - **输出符合场景：**默认使用原材料的主要语言生成自包含 HTML；用户指定时可以改为飞书、Word、Markdown 等格式。
 - **交付边界明确：**生成前锁定语言、格式和发布权限；校验未通过或缺少回执时不交付。
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
 
-### 升级至 0.26.0
+### 升级至 0.27.0
+
+总结前先区分：读者只需知道有哪些主题，还是需要理解观点及其理由。写完后，通过独立读者的实际复述检查解释是否足够。不设最低字数、不强制凑例子，也不增加审阅轮次。见[过度压缩反例](references/badcases/overcompressed-summary.md)。
+
+旧的文档生成计划需补充 `depth` 和各项答案的 `kind`，审阅记录需重新生成有原文和读者复述依据的 `depth_fit`。旧版独立答案检查仍可读取，但不能替代新版完整文档流程。
 
 在已有审阅中检查：细节是否有依据，段落是否推进理解，句子是否读得顺，作者的语气是否保留。检查需引用具体文字，不增加审阅轮次或禁用词表。审阅记录升级为第 2 版，旧记录需重新生成；清楚的原文、有用的例子和影响判断的条件仍应保留。见[写法对照案例](references/writing-craft.md)。
 

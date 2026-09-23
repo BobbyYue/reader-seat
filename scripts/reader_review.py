@@ -195,6 +195,7 @@ def command_prepare(args: argparse.Namespace) -> None:
         write_json(lock_path, answer_lock)
         answer_manifest = reader_answers.prepare(lock_path, artifact, output_dir / "answers", args.content_snapshot)
         primary_surface = answer_manifest["surfaces"][0]
+        _, answer_plan = reader_answers.open_lock(lock_path)
     except (ValueError, OSError) as exc:
         fail(str(exc))
 
@@ -234,9 +235,15 @@ def command_prepare(args: argparse.Namespace) -> None:
         if dimension == "no-context":
             packet["answer_packet"] = reader_answers.load(primary_surface["packet_path"])
             packet["reading_guidance"] += " Read only this extracted surface; never open the full artifact. Include answer_responses as a one-item array using answer_packet.response_fields. Do not score against unseen expected answers."
+            packet["reading_guidance"] += " Restate any reasons or relationships you actually understand; do not fill missing explanations from your own knowledge."
+        elif answer_plan.get("depth"):
+            packet["depth_requirement"] = answer_plan["depth"]
+            packet["reading_guidance"] += " Check the planned understanding depth against the reader task. A list of accurate labels may still omit the reasons, evidence or relationships needed to understand it; preserve concise orientation when that is the actual task."
         if dimension == "source-reliability":
             packet["answer_manifest"] = str(output_dir / "answers" / "surface-manifest.json")
             packet["reading_guidance"] += " After the no-context response is frozen, independently evaluate it against the locked answer plan. Include answer_evaluation using reader_answers.py contract; do not alter or coach the raw response."
+            if answer_plan.get("depth"):
+                packet["reading_guidance"] += " Complete answer_evaluation.depth_fit with mode, pass/fail, task-specific reason, an exact source_quote and an exact reader_quote. Reject a shallow answer plan as well as a shallow draft; keyword coverage is not understanding. Source limitations must remain explicit, never filled with invention."
         axes = editorial_axes(dimension, packet["render_evidence"])
         if axes:
             editorial_text = args.content_snapshot.resolve() if args.content_snapshot else artifact

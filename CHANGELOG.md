@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.27.0 - 2026-09-23
+
+- Plan for the requested understanding depth before drafting. Explanatory summaries retain source-backed reasons, mechanisms, or evidence instead of checking topic labels alone.
+- Require source-anchored depth evaluation against actual blind-reader findings in the existing review. Missing, mismatched, failed, or unanchored depth evidence blocks verified delivery.
+- Add an independently fictional source/bad/better example, three frozen behavioral cases, and 14 regression tests. The original triggering draft stays local and is excluded from this public package.
+- Preserve explicitly requested outlines, short factual answers, unknown source information, output formats, and existing reviewer and retry limits. No minimum word count or mandatory example count is introduced.
+- Upgrade: artifact initialization requires `depth` and answer `kind` fields in the reader-answer plan; regenerate affected plans and reviews. Legacy standalone answer locks remain compatible. These checks enforce evidence completeness, not guaranteed semantic quality on every model.
+
 ## 0.26.0 - 2026-09-22
 
 - Use source-grounded details, purposeful progression and natural reading flow within existing document reviews.

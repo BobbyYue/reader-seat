@@ -2,6 +2,119 @@
   "schema_version": 1,
   "cases": [
     {
+      "id": "xagent-depth-substantive-summary",
+      "scenario": "product",
+      "operation": "create",
+      "artifact": false,
+      "risk": "standard",
+      "title": true,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "请总结这篇交流稿的主要观点，给没参与讨论的同事阅读。仅在对话中输出。",
+      "source_material": "# Fictional Source: Internal Support Assistant Pilot\n\n本材料为独立编写的测试场景，不描述真实公司或业务。\n\n团队在讨论一个帮助员工查找内部制度的助手。大家选择先服务内部支持人员，而不直接面向全体员工：支持人员熟悉政策，能发现错误；如果未经核对的答案直接影响员工办事，返工成本会更高。目前只有试用方案，没有效果数据。\n\n每个回答都应附上所依据的制度段落。制度名称相同，版本却可能不同；只给一个肯定的结论，使用者无法判断它是否仍然有效。因此回答还要显示文档版本，版本不明时明确提示，不能猜一个日期。找到来源不等于来源一定适用。\n\n助手可以解释已明确写出的办理步骤，但不能自行批准退款或判断特殊申请一定能通过。权限判断和例外情形交给有权限的人工处理。遇到这些问题时，助手先整理已知信息，告诉使用者还缺什么，再交接，不让对方从头重复。\n\n试用中要记录没有解决的问题及其原因。只统计回答了多少次，会掩盖答错、答非所问和需要人工接手的情况。团队打算比较人工查找时间、答案正确性和交接是否顺畅，再决定是否扩大试用；比较还没有开始。\n\n暂不增加销售或客户服务功能。当前人手需要先维护制度来源与处理试用中的错误，扩大范围会同时增加来源和权限边界，难以判断出问题的原因。先解决现有场景，再依据试用证据决定扩展到哪里。",
+      "immutable_facts": [
+        "先内部试用",
+        "熟悉制度者先发现错误",
+        "制度段落和版本",
+        "助手不能批准退款或保证特殊申请通过",
+        "交接已知信息和缺口",
+        "比较尚未开始",
+        "维护来源和修复错误优先"
+      ],
+      "required_behaviors": [
+        "解释关键选择的理由和它们的联系",
+        "保留未验证状态",
+        "正文不是仅有话题标签的目录"
+      ],
+      "forbidden_behaviors": [
+        "把试用计划写成效果证明",
+        "虚构用户经历或效率数据",
+        "用标题清单代替解释"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "试用",
+          "版本",
+          "人工"
+        ],
+        "must_not_contain": [
+          "已经证明效率"
+        ],
+        "min_chars": 1
+      }
+    },
+    {
+      "id": "xagent-depth-explicit-outline",
+      "scenario": "product",
+      "operation": "create",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "只列三个主题词，供我做目录，不解释。仅在对话中输出。",
+      "source_material": "独立虚构材料：讨论了内部试用、制度来源与版本、人工交接三个主题，没有其他内容。",
+      "immutable_facts": [
+        "内部试用",
+        "制度来源与版本",
+        "人工交接"
+      ],
+      "required_behaviors": [
+        "遵循只列主题的请求",
+        "不为了理解深度扩写"
+      ],
+      "forbidden_behaviors": [
+        "增加理由或建议",
+        "补充未提供的效果"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "试用",
+          "版本",
+          "交接"
+        ],
+        "must_not_contain": [
+          "建议",
+          "因为"
+        ],
+        "min_chars": 1
+      }
+    },
+    {
+      "id": "xagent-depth-source-unknown",
+      "scenario": "news",
+      "operation": "create",
+      "artifact": false,
+      "risk": "standard",
+      "title": false,
+      "visual": "none",
+      "output_language": "zh",
+      "request": "总结这条消息，并说明为什么调整。仅在对话中输出。",
+      "source_material": "独立虚构材料：试用范围从全体员工改为内部支持人员，通知没有说明调整原因。",
+      "immutable_facts": [
+        "全体员工改为内部支持人员",
+        "原因未说明"
+      ],
+      "required_behaviors": [
+        "给出已知变化并保留原因未知",
+        "不把另一个案例的原因移植进来"
+      ],
+      "forbidden_behaviors": [
+        "自行推断降低风险是官方原因",
+        "编造预算、事故或审批理由"
+      ],
+      "hard_checks": {
+        "must_contain": [
+          "支持",
+          "原因"
+        ],
+        "must_not_contain": [
+          "由于预算"
+        ],
+        "min_chars": 1
+      }
+    },
+    {
       "id": "xagent-craft-detail-and-flow",
       "scenario": "product",
       "operation": "rewrite",

@@ -53,7 +53,7 @@ The mandatory work-order and retry policy is in
    otherwise use the primary source's dominant language, not the prompt
    language. Explicit format wins, then an existing artifact, then chat-only;
    otherwise a finished document defaults to self-contained HTML.
-3. Save the source and a pre-draft [required-answer plan](references/required-reader-answers.md); pass `--reader-answer-plan` to `runtime_contract.py init`. It locks the
+3. Save the source and a pre-draft [required-answer plan](references/required-reader-answers.md) with task-specific `depth`; pass `--reader-answer-plan` to `runtime_contract.py init`. It locks the
    decisions and generates `resolved-task-contract.md`,
    `module-manifest.json`, and the semantic review.
 4. Continue only when `status=locked`. Read the generated task contract as the

@@ -3,7 +3,8 @@
 
 This module validates evidence bindings and completeness, not semantic truth.
 Reader responses remain blind; a separate source reviewer evaluates them.
-The same version is vendored in Reader's Seat and 3080 Brief for portability.
+The base format remains compatible with 3080 Brief. Reader's Seat artifacts
+also lock a task-specific understanding depth; legacy standalone locks remain valid.
 """
 from __future__ import annotations
 
@@ -36,7 +37,34 @@ def save(path, data):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def plan_errors(plan):
+def depth_errors(plan, required=False):
+    depth = plan.get("depth")
+    if depth is None and not required:
+        return []
+    if not isinstance(depth, dict):
+        return ["reader plan requires depth.mode and a task-specific depth.reason"]
+    mode = depth.get("mode")
+    if not isinstance(mode, str) or mode not in {"orientation", "explanation", "execution"}:
+        return ["depth.mode must be orientation, explanation or execution"]
+    reason = depth.get("reason")
+    if not isinstance(reason, str) or not reason.strip() or reason.strip().casefold() in {"pass", "ok", "checked", "n/a", "通过"}:
+        return ["depth.reason must justify the reader task, not a length target"]
+    roles = {"takeaway", "reason", "mechanism", "evidence", "condition", "action"}
+    answers = plan.get("answers", [])
+    errors = []
+    for answer in answers:
+        if not isinstance(answer.get("kind"), str) or answer["kind"] not in roles:
+            errors.append(f"{answer['id']}: depth-aware answer requires a valid kind")
+    if errors:
+        return errors
+    needed = {"reason", "mechanism", "evidence"} if mode == "explanation" else {"action"} if mode == "execution" else set()
+    supporting = [answer for answer in answers if answer.get("kind") in needed]
+    if needed and not supporting:
+        errors.append(f"{mode} depth cannot be satisfied by takeaway labels alone")
+    return errors
+
+
+def plan_errors(plan, *, require_depth=False):
     errors = []
     if not isinstance(plan, dict):
         return ["reader plan must be an object"]
@@ -105,6 +133,8 @@ def plan_errors(plan):
     for sid in ids:
         if not any(sid in a.get("required_on", []) for a in answers):
             errors.append(f"{sid}: surface has no reader-required answers")
+    if not errors:
+        errors.extend(depth_errors(plan, required=require_depth))
     return errors
 
 
@@ -194,12 +224,12 @@ def extract_surface(text, surface):
     return result.strip() + "\n"
 
 
-def lock_plan(plan_path, source_path):
+def lock_plan(plan_path, source_path, *, require_depth=False):
     plan = load(plan_path)
-    errors = plan_errors(plan)
+    errors = plan_errors(plan, require_depth=require_depth)
     if errors:
         raise ValueError("; ".join(errors))
-    return {"version": CONTRACT_VERSION, "plan": {"path": str(Path(plan_path).resolve()),
+    return {"version": CONTRACT_VERSION, "requires_depth": require_depth, "plan": {"path": str(Path(plan_path).resolve()),
             "sha256": digest(plan_path)}, "source": {"path": str(Path(source_path).resolve()),
             "sha256": digest(source_path)}}
 
@@ -213,7 +243,7 @@ def open_lock(lock_path):
         if digest(item["path"]) != item["sha256"]:
             raise ValueError(f"locked {name} changed; relock and rerun affected checks")
     plan = load(lock["plan"]["path"])
-    errors = plan_errors(plan)
+    errors = plan_errors(plan, require_depth=lock.get("requires_depth", False))
     if errors:
         raise ValueError("; ".join(errors))
     return lock, plan
@@ -339,6 +369,23 @@ def validate_answers(manifest, responses, evaluation):
             errors.append(f"{sid}: missing remaining questions")
     if errors:
         return errors
+    if plan.get("depth") is not None:
+        check = evaluation.get("depth_fit")
+        if not isinstance(check, dict):
+            return ["source evaluation requires depth_fit against the requested understanding depth"]
+        if check.get("mode") != plan["depth"]["mode"] or check.get("status") != "pass":
+            errors.append("reading depth is missing, mismatched or insufficient for the reader task")
+        if not present_text(check.get("reason")) or check.get("reason", "").strip().casefold() in {"pass", "ok", "checked", "通过"}:
+            errors.append("depth_fit requires a task-specific explanation, not a blanket pass")
+        raw_findings = "\n".join(finding for response in responses for finding in response["findings"])
+        quote = check.get("reader_quote")
+        if not present_text(quote) or quote not in raw_findings:
+            errors.append("depth_fit must quote the actual blind understanding")
+        lock = load(manifest["lock_path"])
+        source_text = Path(lock["source"]["path"]).read_text(encoding="utf-8")
+        quote = check.get("source_quote")
+        if not present_text(quote) or quote not in source_text:
+            errors.append("depth_fit must anchor the required depth to available source information")
     if not judge:
         errors.append("answer evaluator identity is required")
     if set(by_surface) != {s["id"] for s in manifest["surfaces"]}:
@@ -383,6 +430,7 @@ def main():
     lock.add_argument("--plan", required=True)
     lock.add_argument("--source", required=True)
     lock.add_argument("--output", required=True)
+    lock.add_argument("--require-depth", action="store_true")
     prepare_p = sub.add_parser("prepare")
     prepare_p.add_argument("--lock", required=True)
     prepare_p.add_argument("--artifact", required=True)
@@ -398,7 +446,7 @@ def main():
         if args.command == "lock":
             if Path(args.output).exists():
                 raise ValueError("plan lock already exists; do not overwrite evidence")
-            save(args.output, lock_plan(args.plan, args.source))
+            save(args.output, lock_plan(args.plan, args.source, require_depth=args.require_depth))
         elif args.command == "prepare":
             prepare(args.lock, args.artifact, args.output_dir, args.content_snapshot)
         else:

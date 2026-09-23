@@ -6,6 +6,21 @@ not whether a sentence contains a universal set of slots.
 
 ## Plan Before Prose
 
+Choose the reader's understanding depth before choosing the reading surface.
+Ordinary summaries of substantive discussions should explain the main views
+and their important reasons or relationships. Use orientation for an explicitly
+brief overview, a lookup task or genuinely thin source; use execution when the
+reader needs usable steps. Record `depth.mode` and a task-specific `depth.reason`.
+Do not treat an unspecified "summarize" request as permission to deliver only
+topic labels. See [the overcompression bad case](badcases/overcompressed-summary.md).
+
+Classify each answer's `kind` as takeaway, reason, mechanism, evidence, condition
+or action. Explanation depth needs source-backed explanatory support among the
+answers, not just more takeaways; execution needs actionable information.
+Keep a missing source explanation explicitly unknown rather than inventing it.
+This is a coverage decision, not a word minimum or a quota per section. Do not
+require extra prose when a short answer or heading already meets the real task.
+
 Record the actual reader, their known context, the judgment they need to make,
 and the surface they are expected to read. A job title alone is insufficient.
 Choose the smallest surface that supports that task: headings, an opening,
@@ -46,9 +61,11 @@ Save a plan with this structure (replace all example content with actual facts):
     "known_context": "Know common product metrics, not this pilot",
     "decision": "Judge the observed benefit and the remaining decision"
   },
+  "depth": {"mode": "explanation", "reason": "The reader must understand why the reported benefit remains bounded"},
   "surfaces": [{"id": "opening", "mode": "between", "start": "## Summary", "end": "## Details"}],
   "answers": [{
     "id": "A1",
+    "kind": "evidence",
     "question": "What changed in the pilot?",
     "expected_information": "Use the exact supported pilot finding here",
     "source_location": "Source section and evidence reference",
@@ -100,6 +117,12 @@ produces:
   "plan_source_coverage": "pass",
   "source_coverage_evidence": "Why all decision-critical source information is represented",
   "source_fidelity": "pass",
+  "depth_fit": {
+    "mode": "explanation", "status": "pass",
+    "reason": "Explain why this raw replay reaches the requested depth, including any essential reasons or limitations",
+    "source_quote": "An exact source passage establishing the needed explanation",
+    "reader_quote": "An exact excerpt of the raw reader's understanding"
+  },
   "answers": [{
     "answer_id": "A1", "surface_id": "opening", "status": "pass",
     "reader_quote": "An exact excerpt of the raw finding",

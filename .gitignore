@@ -4,5 +4,6 @@ __pycache__/
 .idea/
 .vscode/
 eval-results/
+evals/local-only/
 .reader-seat/
 *.log

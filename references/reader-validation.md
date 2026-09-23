@@ -94,6 +94,14 @@ failures. Preserve precise specialist language when the target reader needs it.
 Check whether compression hides necessary context; do not request a slogan,
 parallel clauses, fewer words, or another round when the prose is already clear.
 
+For the locked understanding depth, check whether the reader can explain
+important reasons, evidence or relationships rather than repeat topic names.
+Do not accept a shallow answer plan merely because every planned label appears.
+The source evaluator records `answer_evaluation.depth_fit` with an actual source
+quote and raw reader quote. A missing or failed depth check blocks aggregation.
+Orientation and lookup tasks may be short; length and heading counts are not
+failure criteria. Missing source explanations remain unknown.
+
 ### Source Reliability
 
 Inspect the source bundle directly. Every material claim must be traceable and
