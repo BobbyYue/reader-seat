@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.28.0 - 2026-09-30
+
+- Select reader-required answers, evidence, material limits and unknowns before drafting; organize explanation around the reader's needs while preserving requested depth.
+- Require existing review reasons to identify a concrete misunderstanding, search burden or explicit style mismatch removed by an edit, or explain why the original should stay.
+- Add conditionally loaded writing-method cases and complete fictional passage examples. Preserve useful repetition, transitions, emotion, author voice and source boundaries; examples do not supply facts for the target document.
+- Add fix, keep and meaning-preservation regression cases. Retain version 2 review fields, the four reviewers, existing retry limits and context budgets; no style-only round or new scoring system.
+- Verification covers offline contracts and bounded writing cases, not guaranteed literary quality, repeated cross-host stability or live publishing. The current entrypoint size is unchanged.
+
 ## 0.27.0 - 2026-09-23
 
 - Plan for the requested understanding depth before drafting. Explanatory summaries retain source-backed reasons, mechanisms, or evidence instead of checking topic labels alone.

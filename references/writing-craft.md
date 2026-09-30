@@ -1,69 +1,52 @@
 # Source-Grounded Writing Craft
 
-Use within the existing draft and reader-value review, not as a new generation
-pipeline. Examples below are fictional teaching material, not user history.
+Use inside the existing draft and reader-value review, not a new pass, reviewer,
+score, receipt field or retry loop. Fluent does not necessarily mean faithful
+or useful. Keeping the original is a valid outcome.
 
-## Three Decisions
+## Existing Checks, Sharper Questions
 
-- **Choose useful details.** Prefer a supported operation, event, comparison or
-  observed consequence to generic praise. Ask what the reader learns from the
-  detail. Thin evidence calls for less detail, never invented numbers, personal
-  memories, scenes or emotional reactions.
-- **Advance understanding.** Give a passage a reader job: introduce the question,
-  explain a relationship, supply evidence, make a distinction, or enable action.
-  A transition, example, necessary caveat or acknowledgement can earn its place
-  without adding a new fact. Remove praise and conclusions that merely repeat.
-- **Keep the reading flow natural.** Inspect overloaded clauses, shifting
-  subjects, detached conditions and buried emphasis. Split or reorder only when
-  it helps this reader; recheck condition/negation scope afterward. Retain the
-  user's register. No length ratio, fixed punctuation recipe or compulsory
-  colloquial voice.
+| Existing record | Inspect in context | Methods and conditional cases |
+| --- | --- | --- |
+| `expression.craft_checks.concrete_detail` | Does a supported action, finding or detail help the reader? Thin evidence needs no invented scene, motive, number or reaction. | T06 action, T09 detail selection: W01, W06, W08 |
+| `expression.craft_checks.progression` | What job does the passage do? Preserve purposeful repetition, bridges, caveats and acknowledgements. Check earlier and later dependencies before deleting or moving information. | T04 repetition, T05 contextual omission, T07 paragraph focus: W02, W03, W06 |
+| `expression.craft_checks.reading_flow` | Are subject, conditions, negation, emphasis and tone clear? Compare the edit in its paragraph; tiny words can alter expectation or blame. | T01 precision, T02 relationships, T03 rhythm, T08 tone: W01, W03, W04, W07 |
+| `meaning.detail_support` | Are added details supported? Preserve quantity, range, frequency, attribution, logic, uncertainty and intent. | T10 compare and restore, across all methods: W03-W08 |
 
-Open with useful content rather than manufactured suspense. Do not force
-stories, dialogue, emotional flourishes or a named author's style. In workplace
-writing, state the supported judgment instead of leaving readers to decode it.
+Read the whole candidate; record exact quotes in existing v2 fields. In
+`progression.reason`, connect the passage to the reader's question and adjacent
+parts. In `reading_flow.reason` / `reader_effect`, name the misunderstanding,
+search/reply burden or explicit style mismatch removed, or why the original
+works. "Smoother/shorter" alone is insufficient. A short message can reuse one
+span. The validator enforces evidence integrity, not taste or semantic truth.
 
-## Evidence In The Existing Review
+**Conditional lookup:** compact reviewer guidance suffices for ordinary work.
+Only when a specific wording decision remains unclear, read the matching W
+section in [writing-craft-cases.md](writing-craft-cases.md). Do not preload the
+bank, fetch its videos or copy it into the output. Literary cases are not
+universally better versions; workplace illustrations are explicitly fictional.
+For unresolved material selection or whole-piece order, read only the relevant
+genre in [writing-composition-examples.md](writing-composition-examples.md).
+Use supplied/available complete exemplars to study information choice, emphasis
+and transitions, not imitate an author. No default search or reference loading;
+style examples never supply facts, private material or mandatory structures.
 
-Review the whole candidate, then record the highest-risk or representative
-passages in expression.craft_checks: concrete_detail, progression, reading_flow.
-Each needs an exact quote, pass/fail and a specific reason. A clear short
-message can use one quote for all three; do not lengthen it to satisfy the form.
-The source reviewer completes meaning.detail_support against source_quote:
-explain support for specificity and any permitted illustrative example.
+## Revision And Stop Rule
 
-Version 2 receipts require these records. Missing, stale, unanchored or failed
-records block the existing validator. This enforces review execution and
-evidence integrity, not automatic literary taste or truth detection. Use the
-existing reviewer and retry limits; no style-only extra round. Already-clear
-text, useful contrasts and decisive qualifiers should remain unchanged.
-
-## Paired Example
-
-Fictional source: a tool combines three exported tables by user ID. It has been
-tried in one project; time savings have not been measured.
-
-Weak: "A transformative upgrade that dramatically improves efficiency."
-Better: "The tool combines three tables by user ID, removing manual alignment.
-It has been tried in one project; time savings have not been measured."
-
-The improvement uses supplied operations and scope; the example does not prove
-quality by containing more detail. With only "time savings are unmeasured", say
-that plainly rather than inventing a workflow to make it vivid.
-
-Counterexample: "A is faster to deploy, but B is easier to maintain; priorities
-are not yet agreed." Keep the contrast and uncertainty when they match the
-source. Removing "but" or declaring a winner would reduce accuracy.
+Confirm reader harm before editing; combine actual issues into the current
+revision. Recheck changed wording against the source and needed adjacent text.
+Keep or restore the original when the benefit is unclear. Preserve useful
+repetition, shared technical terms and necessary explanations. No word blacklist,
+sentence/parallelism quota, suspense, author imitation or literary embellishment.
+Do not change facts or stance for rhythm. Use existing review/retry limits;
+never add a style-only round or visible form.
 
 ## Document Fit
 
-During planning, use the existing required-answer plan to decide which details
-help the target reader. During drafting, connect paragraphs through those
-questions, without imposing a fixed sequence on every scenario. Readability
-review owns the three craft checks; source review owns detail support. Existing
-no-context replay tests the delivered text without the author's explanation.
-
-Explanatory examples may be explicitly illustrative when the scenario permits;
-they are never evidence for actual outcomes. Preserve author voice without
-copying a persona. A precise SOP or a concise status paragraph need not become
-more conversational or more literary.
+Use the existing required-answer plan to select reader-useful details and
+explanations; do not compress away reasons a first-time reader needs.
+Paragraphs may explain, compare, support or enable action without a fixed order.
+Readability owns craft checks; source review owns detail support. Existing
+no-context replay tests the text without the author's explanation. Permitted
+illustrations must be labeled, not outcome evidence. A precise SOP or formal
+notice need not become conversational or literary.

@@ -14,19 +14,19 @@ from pathlib import Path
 VERSION = 2
 EMPTY_ATTESTATIONS = {"pass", "passed", "ok", "yes", "checked", "none", "n/a", "true", "false", "通过", "正常", "无", "已检查"}
 CRAFT_GUIDANCE = {
-    "concrete_detail": "Quote the highest-risk or representative passage. Restate the actual event, operation, finding or question the reader learns; do not require invented details, stories or numbers when evidence is thin.",
-    "progression": "Quote a passage with its transition where needed. Explain how it advances or supports understanding, rather than restating praise. A necessary example, bridge, emotion or short acknowledgement can suffice without a new fact; no fixed paragraph template.",
-    "reading_flow": "Quote a sentence in context. Explain whether subject, conditions and emphasis can be followed without rereading; retain the writer's register. Change only an actual obstacle or explicit style mismatch, never a sentence-length ratio, punctuation quota or forced casual voice.",
+    "concrete_detail": "Quote the passage; identify the supported action, finding or question it conveys. Keep reader-useful detail, not ornamental specificity; thin evidence needs no invented scene, motive, number or reaction.",
+    "progression": "Read the whole piece; quote how this passage advances the reader's question and connects to adjacent parts. Keep useful repetition, bridges, caveats, emotion and acknowledgements; don't optimize isolated sentences or force a template.",
+    "reading_flow": "Check subject, conditions/negation, emphasis and voice in context. Small words alter degree or blame. In reason, name a concrete misunderstanding, search/reply burden or explicit style mismatch removed by the edit, or why the original works. Smoother/shorter alone isn't a benefit; restore without gain. No quotas.",
 }
 GUIDANCE = {
     "expression": "Identify a concrete proposition or real contrast. Keep useful contrasts; revise empty framing only when it delays or distorts understanding. No banned phrase list.",
-    "selection": "Explain what misunderstanding would result from removing the quoted passage. Keep decisive caveats and helpful transitions/examples; remove boilerplate, defer lookup detail. Do not request additions merely for completeness.",
+    "selection": "Use the reader's required answers to judge material choice: what would be misunderstood if this passage were removed? Preserve decisive evidence, limits and useful bridges; defer lookup detail. Missing facts stay unknown; don't demand richness or completeness.",
     "presentation": "Inspect the supplied rendering. Locate the main point, reading order and dense region; explain whether layout exposes a relationship or merely repackages prose. Do not prescribe a diagram or identical section template.",
     "meaning": "Compare the source and final text: facts, request/refusal, urgency, ownership, numbers and uncertainty must survive. Natural wording must not weaken or invent a request.",
     "unit_roles": "Explain the different reader jobs of the takeaway, picture and question table. Useful repetition is allowed; copying the same explanation three times is not. Preserve P0 and weighted coverage, never hide claims to lower the denominator.",
 }
-GUIDANCE["expression"] += " Complete all craft_checks with an anchored quote, pass/fail and concrete reason. Review the whole candidate, record representative or problematic spans; a clear short message may reuse one span. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
-GUIDANCE["meaning"] += " Explain detail_support: match vivid or specific details to the supplied source; retain unknowns and label permitted illustrative examples. Never trade a factual boundary for a story or hide the conclusion as literary suspense."
+GUIDANCE["expression"] += " Review the whole candidate; record craft_checks with quote, pass/fail and reason. Clear messages may reuse one span. For unresolved wording only, consult the matching references/writing-craft-cases.md case; no extra round. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
+GUIDANCE["meaning"] += " In detail_support, compare source and edits: preserve quantity, range, frequency, attribution, logic, uncertainty and intent. No invention for rhythm; label permitted illustrative examples."
 
 
 class VisibleText(HTMLParser):

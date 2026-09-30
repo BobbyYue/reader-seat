@@ -47,7 +47,7 @@
     },
     {
       "id": "reader-task-organization",
-      "instruction": "Default substantive summaries to explanation: lock depth and needed reasons/evidence, not labels. Preserve brief requests, useful bridges and source limits."
+      "instruction": "Plan answers, evidence, limits and unknowns before prose. Default substantive summaries to explanation; preserve reader needs and requested depth."
     },
     {
       "id": "evidence-calibration",
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Check empty framing. Require reader_value v2 craft_checks and detail_support; missing/stale/unresolved evidence blocks delivery. Apply references/writing-craft.md; no extra rounds."
+      "instruction": "Require reader_value v2 craft_checks and detail_support. Apply references/writing-craft.md: actual reader gain or justified keep. Missing/stale/unresolved evidence blocks delivery; no extra rounds."
     },
     {
       "id": "external-action-authorization",

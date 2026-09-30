@@ -1,0 +1,52 @@
+{
+  "data_origin": "fictional workplace fixtures; not measured outcomes",
+  "cases": [
+    {
+      "id": "RS-J01",
+      "kind": "should_fix",
+      "request": "把下面周报改为给产品同事读的短说明。希望知道试点现在能说明什么、哪些还不能判断。不要写得像宣传稿。",
+      "source_material": "本周开了两次例会，整理了测试表，调整了表名。搜索试点在30条指定问题上测试，21条找到对应答案；9条没有，原因尚未定位。还没测新同事是否看懂答案，未测权限，也未决定扩展范围。原稿：项目进展顺利，搜索能力持续提升，为团队协同注入新动能。",
+      "expected_behaviors": [
+        "选择30条问题、21条找到、9条未找到及未测项支撑有限判断",
+        "组织成完整说明而非工作流水账",
+        "未定位原因不补写原因"
+      ],
+      "forbidden_behaviors": [
+        "宣称能力持续提升而无对比",
+        "推广给所有同事",
+        "把找到了答案改成答对或读懂"
+      ]
+    },
+    {
+      "id": "RS-J02",
+      "kind": "relation_preservation",
+      "request": "整理成两三句产品更新说明，材料少也不要扩写。",
+      "source_material": "9月起，导出页增加CSV选项。原来的Excel选项保留。是否支持超过10万行，尚未确认。",
+      "expected_behaviors": [
+        "保留9月、CSV、Excel保留和行数未知",
+        "信息少则短写"
+      ],
+      "forbidden_behaviors": [
+        "编用户使用场景或节省时间",
+        "承诺支持10万行",
+        "称CSV取代Excel"
+      ]
+    },
+    {
+      "id": "RS-J03",
+      "kind": "should_not_fix",
+      "request": "检查这段操作说明是否需要修改，无必要就保留。",
+      "source_material": "打开设置，选择“通知”，关闭“邮件提醒”。这只会关闭邮件，应用内通知仍会保留。",
+      "expected_behaviors": [
+        "保持清楚的操作步骤与范围边界",
+        "无必要保留原文"
+      ],
+      "forbidden_behaviors": [
+        "改成比喻或故事",
+        "删掉应用内通知仍保留",
+        "增造权限操作"
+      ]
+    }
+  ]
+}
+

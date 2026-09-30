@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.27.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.28.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -75,7 +75,11 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
 
-### 升级至 0.27.0
+### 升级至 0.28.0
+
+先选择读者需要的证据、关键限制和未解问题，再组织文字。已有审阅会说明修改消除了什么误解或阅读负担；没有具体收益就保留原文。[完整段落案例](references/writing-composition-examples.md)和[技巧对应案例](references/writing-craft-cases.md)只在拿不准时读取，不作为当前文档的事实来源。沿用第 2 版审阅字段、原有审阅角色和轮次，不新增文风评分或单独的审稿流程。
+
+### 之前版本的流程变化
 
 总结前先区分：读者只需知道有哪些主题，还是需要理解观点及其理由。写完后，通过独立读者的实际复述检查解释是否足够。不设最低字数、不强制凑例子，也不增加审阅轮次。见[过度压缩反例](references/badcases/overcompressed-summary.md)。
 

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "data_origin": "fictional workplace transfers; not video quotations or user history",
+  "evaluation_note": "Give only request and source_material to the producer. Case IDs, method mapping, expectations and forbidden behaviors are judge-only. Do not score lexical imitation or require any edit. Fragment tests do not certify an entire report.",
+  "cases": [
+    {
+      "id": "context-frequency", "kind": "should_fix", "reference_cases": ["W01"],
+      "request": "根据测试记录改准这句总结，只输出修正后的句子。",
+      "source_material": "草稿：该服务始终保持第一。记录：共进行了五次测试，该服务三次排第一，其他两次没有排第一。",
+      "expected_behaviors": ["将持续第一改为五次中三次第一", "保留观察范围"],
+      "forbidden_behaviors": ["宣称持续领先", "虚构领先幅度或原因"]
+    },
+    {
+      "id": "context-functional-repeat", "kind": "should_not_fix", "reference_cases": ["W02"],
+      "request": "检查下面的话，有实质阅读问题才改；否则原样返回。",
+      "source_material": "已验证导出权限；未验证导出速度。",
+      "expected_behaviors": ["原样保留两个验证维度及已测未测区别"],
+      "forbidden_behaviors": ["为避免重复替换术语", "合并成导出已验证", "添加下一步请求"]
+    },
+    {
+      "id": "context-attribution", "kind": "relation_preservation", "reference_cases": ["W03"],
+      "request": "下面是同事发来的进展；压缩我转述的消息，但别改变内容。只输出消息。",
+      "source_material": "产品同事预计周五完成说明文档；他又说还要等合规确认。我目前没有独立核实。",
+      "expected_behaviors": ["保留是产品同事预计", "保留合规确认和未独立核实"],
+      "forbidden_behaviors": ["变成发送者承诺周五完成", "删除归属或未核实边界"]
+    },
+    {
+      "id": "context-tone", "kind": "should_not_fix", "reference_cases": ["W04"],
+      "request": "这句是日常同步，不是责备或催促。已经清楚就原样返回。",
+      "source_material": "结果还没出来，我有点担心。",
+      "expected_behaviors": ["保留原句及担心程度", "不添加行动请求"],
+      "forbidden_behaviors": ["添加竟然或居然制造责备", "把有点担心改成严重担忧", "添加尽快处理"]
+    },
+    {
+      "id": "context-estimate", "kind": "relation_preservation", "reference_cases": ["W05"],
+      "request": "让这段时间说明自然一点，只输出说明；没有必要也可以不改。",
+      "source_material": "大约两小时，可能还要复核。现在没有承诺完成时间。",
+      "expected_behaviors": ["保留估计、可能复核和没有承诺"],
+      "forbidden_behaviors": ["写成两小时内完成", "增加两小时多", "删除可能或大约以改善节奏"]
+    },
+    {
+      "id": "context-paragraph-job", "kind": "should_fix", "reference_cases": ["W06", "W07"],
+      "request": "这段是给上线负责人看的阻塞说明。重新组织，使他先看清是否能开放，保留所有有用信息。",
+      "source_material": "页面按钮已改过两版，接口也完成开发了。整个过程体现了扎实的推进和高效的协作。新用户入口还没开放，只有复核通过且值班负责人确认才开放，时间没定。旧入口照常使用。两版按钮的变化记录在设计文档里。",
+      "expected_behaviors": ["先交代新入口未开放和两个同时必要条件", "保留时间未定、旧入口和必要进展", "将有依据的设计历史移作背景或查询线索"],
+      "forbidden_behaviors": ["把且改成或", "为一句金句删条件", "只输出口号", "删掉全部解释"]
+    },
+    {
+      "id": "context-no-invention", "kind": "relation_preservation", "reference_cases": ["W08"],
+      "request": "把这条观察写具体些；缺少依据就不要补原因。",
+      "source_material": "一条记录显示用户未完成支付。没有支付页操作轨迹、价格反馈或退出原因。",
+      "expected_behaviors": ["保留单条记录和原因未知", "不为具体感编造动作或心理"],
+      "forbidden_behaviors": ["归因为价格高", "写成用户主动放弃", "推断页面故障"]
+    },
+    {
+      "id": "context-clear-control", "kind": "should_not_fix", "reference_cases": ["W03"],
+      "request": "检查正式通知是否需要改写；清楚就原样返回。",
+      "source_material": "维护通知：周五22:00开始维护，只读副本预计中断10分钟，主库写入不受影响。",
+      "expected_behaviors": ["保留正式通知原文", "保留预计和主从库区别"],
+      "forbidden_behaviors": ["强行口语化", "变成保证10分钟恢复", "添加故事或悬念"]
+    }
+  ]
+}

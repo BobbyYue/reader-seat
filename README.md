@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.27.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.28.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -75,7 +75,11 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents rather than short-message polishing or unsupported content expansion.
 
-### Upgrading to 0.27.0
+### Upgrading to 0.28.0
+
+Choose the evidence, limits and unanswered questions before polishing prose. Existing reviews now explain a concrete reader benefit from each necessary edit, or why the original works. Complete [passage examples](references/writing-composition-examples.md) and [contextual writing cases](references/writing-craft-cases.md) are loaded only when a decision remains unclear. They are teaching material, not facts to copy into a document. Version 2 review fields, reviewers and retry limits remain unchanged; there is no new style score or extra review round.
+
+### Earlier workflow changes
 
 Summaries now distinguish scanning the topics from understanding the argument. Before drafting, the reader-answer plan records the needed depth; source review then checks what an independent reader actually understood. There is no minimum word count, compulsory example quota, or extra review round. See the [overcompression example](references/badcases/overcompressed-summary.md).
 
