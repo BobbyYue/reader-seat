@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.30.0 - 2026-10-10
+
+- Strengthen reader relevance, direct syntax, decision-changing caveats and purposeful whole-document progression. Keep useful repetition, author voice and source uncertainty; load additional fictional examples only when needed.
+- Add `scripts/deliver.py` to call the existing runtime verifier and return the exact checked local artifact. Prepared, missing, stale, failed and mismatched results cannot authorize the checked path.
+- Preserve the third-round incomplete-draft route, unresolved issues and no-publication boundary. Add private exclusive output envelopes so document bytes need not enter model context.
+- Add workflow regressions for skipped checks, changed candidates, mismatched results, incomplete drafts and input changes during verification. Preserve four reviewers, retry limits and context budgets.
+- Upgrade: use the checked-delivery wrapper for ordinary final delivery and regenerate affected task bundles. Native text patches retain their existing prewrite/readback path. Installing the skill does not install host enforcement or prove semantic-review quality; no new live application integration is claimed.
+
 ## 0.28.0 - 2026-09-30
 
 - Select reader-required answers, evidence, material limits and unknowns before drafting; organize explanation around the reader's needs while preserving requested depth.

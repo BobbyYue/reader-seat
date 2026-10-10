@@ -3,7 +3,7 @@
   "execution_gates": [
     {
       "id": "G1-task",
-      "required_record": "Record scenario, reader/context/decision, reading surface, source-backed required answers/unknowns, channel, language/format, risk and access-find-understand-use path.",
+      "required_record": "Record scenario, reader/context/decision, reading mode/surface, source-backed answers/unknowns, channel, language/format, risk and access-find-understand-use path.",
       "exit_condition": "Reader outcome, language, format, scope, risk, and that path are testable without visible framework labels."
     },
     {
@@ -47,7 +47,7 @@
     },
     {
       "id": "reader-task-organization",
-      "instruction": "Plan answers, evidence, limits and unknowns before prose. Default substantive summaries to explanation; preserve reader needs and requested depth."
+      "instruction": "Plan supported answers, evidence, limits and unknowns before prose; preserve requested depth. Substantive summaries default to explanation."
     },
     {
       "id": "evidence-calibration",
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Require reader_value v2 craft_checks and detail_support. Apply references/writing-craft.md: actual reader gain or justified keep. Missing/stale/unresolved evidence blocks delivery; no extra rounds."
+      "instruction": "Require anchored reader_value v2 craft_checks/detail_support via references/writing-craft.md. Missing/stale/unresolved evidence blocks delivery; reuse current rounds."
     },
     {
       "id": "external-action-authorization",
@@ -106,7 +106,7 @@
       },
       {
         "id": "runtime-final-verification",
-        "instruction": "Run verify against the actual artifact and unchanged task contract; a failed, stale, or missing task bundle, module manifest, review, or receipt blocks finished delivery."
+        "instruction": "Use deliver.py verify to recheck the exact artifact, contract, bundle, manifest and reviews; consume only its checked payload. Native patches retain live verification."
       },
       {
         "id": "runtime-third-round-draft",
@@ -158,11 +158,11 @@
     "output-standards": [
       {
         "id": "practical-information-first",
-        "instruction": "Lead with the takeaway, strongest support, consequence, and action when relevant; background and method follow."
+        "instruction": "Lead with the supported result/problem/tradeoff for this reader, then evidence and needed action. No invented stakes."
       },
       {
         "id": "reader-perspective",
-        "instruction": "Make critical information accessible, findable, understandable and usable without hidden history or specialist inference."
+        "instruction": "Use supplied context, task and reading mode; keep critical answers accessible, findable, understandable and usable without hidden history."
       },
       {
         "id": "progressive-disclosure",
@@ -170,11 +170,11 @@
       },
       {
         "id": "natural-audience-fit-language",
-        "instruction": "Match the reader's language; keep familiar terms, explain niche terms at first use, and avoid bureaucratic, promotional, or AI-sounding prose."
+        "instruction": "Keep familiar terms; explain needed jargon. Prefer direct verbs to noun stacks; retain language/register and voice. No invented labels or actors."
       },
       {
         "id": "evidence-and-calibrated-certainty",
-        "instruction": "Place support near material claims; qualify incomplete, conflicting, indirect, or non-causal evidence."
+        "instruction": "Keep evidence and decisive limits beside claims, execution cautions at the step; omit generic warnings. Preserve uncertainty and causal limits."
       },
       {
         "id": "scope-and-assumption-fidelity",
@@ -182,7 +182,7 @@
       },
       {
         "id": "useful-structure-and-concision",
-        "instruction": "Keep only structure and prose that improve understanding or action; headings must carry content or navigation and expose the document path on readback."
+        "instruction": "Keep distinct section jobs and re-entry headings; merge cross-section repeats without a new purpose. Preserve bridges; fix remote references/concept overload in context."
       },
       {
         "id": "action-proportional-to-evidence",
@@ -190,7 +190,7 @@
       },
       {
         "id": "concrete-value-expression",
-        "instruction": "Use the existing expression map for the supported fact or key relationship. Keep decisive qualifiers beside it. Parallel clauses need a real same-dimension comparison; retain clear single facts. Verify accurate restatement in existing reviews; stop when clear."
+        "instruction": "Use the expression map for supported facts/relations with adjacent qualifiers. Parallel clauses need a real same-dimension comparison. Keep clear facts; verify source-matched restatement in existing reviews, then stop."
       }
     ],
     "signal-processing": [

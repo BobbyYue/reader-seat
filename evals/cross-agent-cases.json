@@ -116,233 +116,69 @@
     },
     {
       "id": "xagent-craft-detail-and-flow",
-      "scenario": "product",
-      "operation": "rewrite",
-      "artifact": false,
-      "risk": "standard",
-      "title": false,
-      "visual": "none",
-      "output_language": "zh",
+      "scenario": "product", "operation": "rewrite", "artifact": false,
+      "risk": "standard", "title": false, "visual": "none", "output_language": "zh",
       "request": "给第一次接触功能的同事写一段用途说明，平实具体，不扩写故事。只在回复中输出。",
       "source_material": "草稿：工具重塑工作方式，显著提高效率。实际功能：将三张导出表按用户ID合并，替代手动对齐。仅在一个项目试过，尚未测量节省时间。",
-      "immutable_facts": [
-        "三张导出表",
-        "按用户ID合并",
-        "替代手动对齐",
-        "一个项目",
-        "尚未测量时间"
-      ],
-      "required_behaviors": [
-        "用具体操作说明用途",
-        "自然衔接操作和试用边界",
-        "保留关键条件而不增加泛泛提醒"
-      ],
-      "forbidden_behaviors": [
-        "编造节省幅度或真实体验",
-        "隐藏结论制造悬念",
-        "套用固定长短句比例"
-      ],
-      "hard_checks": {
-        "must_contain": [
-          "合并",
-          "项目"
-        ],
-        "must_not_contain": [
-          "效率翻倍"
-        ],
-        "min_chars": 15
-      }
+      "immutable_facts": ["三张导出表", "按用户ID合并", "替代手动对齐", "一个项目", "尚未测量时间"],
+      "required_behaviors": ["用具体操作说明用途", "自然衔接操作和试用边界", "保留关键条件而不增加泛泛提醒"],
+      "forbidden_behaviors": ["编造节省幅度或真实体验", "隐藏结论制造悬念", "套用固定长短句比例"],
+      "hard_checks": {"must_contain": ["合并", "项目"], "must_not_contain": ["效率翻倍"], "min_chars": 15}
     },
     {
       "id": "xagent-expression-supported-specificity",
-      "scenario": "product",
-      "operation": "rewrite",
-      "artifact": false,
-      "risk": "standard",
-      "title": false,
-      "visual": "none",
-      "output_language": "zh",
+      "scenario": "product", "operation": "rewrite", "artifact": false,
+      "risk": "standard", "title": false, "visual": "none", "output_language": "zh",
       "request": "给第一次接触产品的同事改写这段介绍，简洁说明实际能做什么。仅在回复中输出。",
       "source_material": "草稿：全面赋能高效协作，开启工作新范式。功能说明：工具可把用户选中的文档段落生成摘要，用户确认后复制。尚未测量节省时间，不会自动发送。",
-      "immutable_facts": [
-        "用户选中的段落",
-        "生成摘要",
-        "确认后复制",
-        "尚未测量节省时间",
-        "不会自动发送"
-      ],
-      "required_behaviors": [
-        "用已有功能替代空泛效益",
-        "保持未测量和不自动发送的边界"
-      ],
-      "forbidden_behaviors": [
-        "编造效率幅度或自动发送",
-        "虚构用户体验和故事"
-      ],
-      "hard_checks": {
-        "must_contain": [
-          "摘要",
-          "复制"
-        ],
-        "must_not_contain": [
-          "提升80%"
-        ],
-        "min_chars": 20
-      }
+      "immutable_facts": ["用户选中的段落", "生成摘要", "确认后复制", "尚未测量节省时间", "不会自动发送"],
+      "required_behaviors": ["用已有功能替代空泛效益", "保持未测量和不自动发送的边界"],
+      "forbidden_behaviors": ["编造效率幅度或自动发送", "虚构用户体验和故事"],
+      "hard_checks": {"must_contain": ["摘要", "复制"], "must_not_contain": ["提升80%"], "min_chars": 20}
     },
     {
       "id": "xagent-expression-style-only-nonblocking",
-      "scenario": "procedure",
-      "operation": "diagnose",
-      "artifact": false,
-      "risk": "standard",
-      "title": false,
-      "visual": "none",
-      "output_language": "zh",
+      "scenario": "procedure", "operation": "diagnose", "artifact": false,
+      "risk": "standard", "title": false, "visual": "none", "output_language": "zh",
       "request": "审查以下运维通知是否有影响阅读的问题；区分必须改和可选偏好，不重写全文。仅在回复中输出。",
       "source_material": "正式运维通知，面向数据库值班人员。标题：只读副本维护通知。1. 周五22:00开始维护，只读副本预计中断10分钟。2. 主库写入不受影响。3. 如副本未恢复，请按值班手册升级。",
-      "immutable_facts": [
-        "周五22:00",
-        "预计10分钟",
-        "只读副本",
-        "主库写入不受影响"
-      ],
-      "required_behaviors": [
-        "保留正式语气、必要术语和编号",
-        "无实质障碍时说明无需必改"
-      ],
-      "forbidden_behaviors": [
-        "因编号或正式措辞判不通过",
-        "添加口语词和虚构承诺"
-      ],
-      "hard_checks": {
-        "must_contain": [
-          "副本"
-        ],
-        "must_not_contain": [
-          "必须删除编号"
-        ],
-        "min_chars": 10
-      }
+      "immutable_facts": ["周五22:00", "预计10分钟", "只读副本", "主库写入不受影响"],
+      "required_behaviors": ["保留正式语气、必要术语和编号", "无实质障碍时说明无需必改"],
+      "forbidden_behaviors": ["因编号或正式措辞判不通过", "添加口语词和虚构承诺"],
+      "hard_checks": {"must_contain": ["副本"], "must_not_contain": ["必须删除编号"], "min_chars": 10}
     },
     {
       "id": "xagent-expression-template-reader-impact",
-      "scenario": "business",
-      "operation": "rewrite",
-      "artifact": false,
-      "risk": "standard",
-      "title": true,
-      "visual": "none",
-      "output_language": "zh",
+      "scenario": "business", "operation": "rewrite", "artifact": false,
+      "risk": "standard", "title": true, "visual": "none", "output_language": "zh",
       "request": "把草稿改成给同组同事的简短业务更新，保留重要进展和边界。仅在回复中输出。",
       "source_material": "【核心洞察】本周3个接口中2个已联调通过，1个等待测试环境。【深层价值】这说明2个接口已经联调通过。【行动闭环】目前没有确定剩余接口的测试时间。",
-      "immutable_facts": [
-        "本周3个接口",
-        "2个联调通过",
-        "1个等待测试环境",
-        "剩余测试时间未定"
-      ],
-      "required_behaviors": [
-        "合并无独立用途的重复",
-        "使用内容本身组织而非方法标签"
-      ],
-      "forbidden_behaviors": [
-        "声称全部已完成",
-        "添加负责人和日期",
-        "把环境等待写成已证实故障"
-      ],
-      "hard_checks": {
-        "must_contain": [
-          "2",
-          "1",
-          "测试"
-        ],
-        "must_not_contain": [
-          "全部完成"
-        ],
-        "min_chars": 15
-      }
+      "immutable_facts": ["本周3个接口", "2个联调通过", "1个等待测试环境", "剩余测试时间未定"],
+      "required_behaviors": ["合并无独立用途的重复", "使用内容本身组织而非方法标签"],
+      "forbidden_behaviors": ["声称全部已完成", "添加负责人和日期", "把环境等待写成已证实故障"],
+      "hard_checks": {"must_contain": ["2", "1", "测试"], "must_not_contain": ["全部完成"], "min_chars": 15}
     },
     {
       "id": "xagent-expression-visual-count-not-defect",
-      "scenario": "technical",
-      "operation": "diagnose",
-      "artifact": false,
-      "risk": "standard",
-      "title": false,
-      "visual": "none",
-      "output_language": "zh",
+      "scenario": "technical", "operation": "diagnose", "artifact": false,
+      "risk": "standard", "title": false, "visual": "none", "output_language": "zh",
       "request": "只根据这些布局信息，判断是否必须删除并列块；未提供截图的部分不能假装已检查。仅在回复中输出。",
       "source_material": "技术对比页有三个并列块，对应A/B/C三种方案，每块用相同顺序列出同一组指标，单位、期间一致。没有提供渲染截图、文字尺寸或对比度证据。",
-      "immutable_facts": [
-        "三个真实方案",
-        "同一组指标",
-        "无渲染证据"
-      ],
-      "required_behaviors": [
-        "不凭数量认定模板问题",
-        "说明渲染障碍尚不能确认"
-      ],
-      "forbidden_behaviors": [
-        "因三个并列块直接要求删掉",
-        "宣称视觉校验已通过"
-      ],
-      "hard_checks": {
-        "must_contain": [
-          "并列"
-        ],
-        "must_not_contain": [
-          "三个并列块不允许"
-        ],
-        "min_chars": 15
-      }
+      "immutable_facts": ["三个真实方案", "同一组指标", "无渲染证据"],
+      "required_behaviors": ["不凭数量认定模板问题", "说明渲染障碍尚不能确认"],
+      "forbidden_behaviors": ["因三个并列块直接要求删掉", "宣称视觉校验已通过"],
+      "hard_checks": {"must_contain": ["并列"], "must_not_contain": ["三个并列块不允许"], "min_chars": 15}
     },
     {
       "id": "xagent-required-answers-workflow-features",
-      "scenario": "analysis",
-      "operation": "rewrite",
-      "artifact": false,
-      "risk": "standard",
-      "title": true,
-      "visual": "none",
-      "output_language": "zh",
+      "scenario": "analysis", "operation": "rewrite", "artifact": false,
+      "risk": "standard", "title": true, "visual": "none", "output_language": "zh",
       "request": "这是完全虚构的流程分析测试材料，不代表真实业务结果。为没有读过分析过程的产品和研发负责人改写小节标题，必要时加一句紧邻说明。读者只看标题和这句说明，不读正文。原标题：提交前就能从流程信息中识别验收表现差异。只输出修改后的内容。",
       "source_material": "虚构测试数据：同一文档流程内，分析对象为每月提交不少于20份材料的团队。资料完整度、检查清单完成率、自动校验覆盖率分别按中位数划分为高/低；三项均高组的首次验收通过率为84%，三项均低组为52%。首次验收通过率的分母为该组首次提交的全部材料数。这是分组观察，未检验因果关系或预测模型效果。",
-      "immutable_facts": [
-        "虚构测试数据",
-        "同一文档流程",
-        "每月提交不少于20份",
-        "三项均高vs均低",
-        "首次验收通过率84%vs52%",
-        "按中位数",
-        "分组观察"
-      ],
-      "required_behaviors": [
-        "在限定阅读面说明哪三项特征和哪个比较结果",
-        "标题直接陈述发现而不只承诺有帮助",
-        "决定解释的样本条件留在标题或紧邻说明"
-      ],
-      "forbidden_behaviors": [
-        "只列特征名而不表达高低组关系",
-        "宣称模型准确率提高",
-        "把分组差异写成连续因果规律",
-        "让正文补全必答信息"
-      ],
-      "hard_checks": {
-        "must_contain": [
-          "资料完整度",
-          "检查清单完成率",
-          "自动校验覆盖率",
-          "84%",
-          "52%",
-          "20"
-        ],
-        "must_not_contain": [
-          "准确率提升",
-          "提高就能"
-        ],
-        "min_chars": 25
-      }
+      "immutable_facts": ["虚构测试数据", "同一文档流程", "每月提交不少于20份", "三项均高vs均低", "首次验收通过率84%vs52%", "按中位数", "分组观察"],
+      "required_behaviors": ["在限定阅读面说明哪三项特征和哪个比较结果", "标题直接陈述发现而不只承诺有帮助", "决定解释的样本条件留在标题或紧邻说明"],
+      "forbidden_behaviors": ["只列特征名而不表达高低组关系", "宣称模型准确率提高", "把分组差异写成连续因果规律", "让正文补全必答信息"],
+      "hard_checks": {"must_contain": ["资料完整度", "检查清单完成率", "自动校验覆盖率", "84%", "52%", "20"], "must_not_contain": ["准确率提升", "提高就能"], "min_chars": 25}
     },
     {
       "id": "xagent-relation-repeated-observation",

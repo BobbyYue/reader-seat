@@ -83,6 +83,54 @@ writer's concern and should not be removed merely to shorten the message.
 Keep exactly as supplied if these are the user's facts. Do not invent a fuller
 background, warmer ending, alternative version or extra ask.
 
+## C04 Relevance Comes From The Actual Problem
+
+**Source:** an export tool joins three tables by user ID; previously they were
+aligned manually. Only one project has tried it; time saved is unmeasured.
+**Reader:** the colleague who aligns those exports.
+
+**Weak:** “全面赋能数据协同，开启效率提升的新阶段。”
+**Useful:** “这个工具把三张导出表按用户 ID 合并，替代手动对齐。目前只在一个项目试过，还没测量节省了多少时间。”
+
+The work and the change establish a reason to read. Do not add a dramatic
+deadline, invented user frustration or a savings claim. For a plain update or
+acknowledgement, the fact itself may suffice; no compulsory hook or story.
+
+## C05 Direct Syntax Without Changing Ownership Or Register
+
+**Source/weak draft:** “针对当前方案的可行性评估工作尚未完成。”
+**Useful:** “还没评估完这个方案是否可行。”
+
+The verb makes the unfinished work clear. “我还没评估完” invents an owner.
+“这个方案不可行” invents a result. Keep an accurate formal term or passive
+sentence when it already serves the audience; do not enforce active voice,
+slang, first person or a ban on any particular word.
+
+## C06 Keep The Limitation That Changes The Judgment
+
+**Source:** tests covered Android only; iOS was not tested. A draft also adds
+“实际情况复杂，结论仅供参考，应结合多方面因素综合判断”.
+**Useful:** “本轮结果只覆盖安卓；iOS 尚未测试，不能据此判断其表现。”
+
+The platform boundary is concrete and necessary. The generic caution adds no
+separate decision information. Do not erase actual uncertainty, exceptions,
+required notices or operational safeguards just to make the answer decisive.
+An operational prerequisite belongs beside its step, not in a distant appendix.
+
+## C07 A Whole Piece Must Advance, Not Merely Change Headings
+
+**Draft:** opening says two of three interfaces passed integration; a “核心价值”
+section repeats that two passed; “总结” repeats it again. The remaining interface
+is waiting for a test environment and its completion date is unknown.
+
+**Useful:** “三个接口中两个已通过联调，另一个在等测试环境，完成时间还没确定。”
+
+In this short update, the repeated sections add no new job. A longer document
+may legitimately repeat a finding in its opening and then explain evidence in
+the body. A 3080 picture and question table still need distinct reader jobs and
+all required claims; a clear Hit Send acknowledgement does not need expansion.
+Never use a universal duplicate-count or section-count rule.
+
 ## Compare Within The Existing Review
 
 For the actual candidate, explain which reader question is now easier to answer,
@@ -91,4 +139,3 @@ avoided. Do not claim measured time saved or a real reader-test result without
 evidence. A plausible editorial judgment and an observed reader result differ.
 If the old version works as well, retain it. Literary flavor is not a release
 condition; use existing review limits and no additional style-only loop.
-

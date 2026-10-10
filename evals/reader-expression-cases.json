@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "data_origin": "fictional workplace fixtures, not real people or measured business results",
+  "evaluation_note": "Observation tags organize maintenance coverage, not universal claims about human cognition or runtime rules. Give only request/source to producers; keep expected and forbidden behaviors for a separate judge.",
+  "cases": [
+    {
+      "id": "RS-C01",
+      "kind": "should_fix",
+      "scenario": "product",
+      "focus": [
+        "relevance"
+      ],
+      "observations": [
+        "H02",
+        "H06",
+        "A01"
+      ],
+      "request": "给负责报表核对的同事写一段这个工具的介绍。",
+      "source_material": "现有草稿：在数字化转型的时代背景下，本工具全面赋能数据协同，开启效率提升的新阶段。实际功能：把三张导出表按用户ID合并，替代手动对齐。只在一个项目试过，尚未测量节省时间。",
+      "expected_behaviors": [
+        "从同事实际的表格对齐工作和功能变化切入",
+        "保留一个项目和未测量的范围",
+        "不靠宏大背景或通用效益占据开头"
+      ],
+      "forbidden_behaviors": [
+        "编造节省时间",
+        "虚构用户情绪或经历",
+        "声称全面推广或显著提效"
+      ]
+    },
+    {
+      "id": "RS-C02",
+      "kind": "should_fix",
+      "scenario": "technical",
+      "focus": [
+        "syntax"
+      ],
+      "observations": [
+        "A02",
+        "A03",
+        "H01"
+      ],
+      "request": "把下面这段技术进展写得让跨团队同事读得明白。",
+      "source_material": "草稿：针对异常请求的归因定位工作正在开展，当前暂不具备对成因进行确定性归纳的条件。该项工作被草稿称为“异态响应澄明闭环”。实际情况只有：正在排查异常请求的原因，还没有确认原因；没有提供负责人的身份。",
+      "expected_behaviors": [
+        "直接说正在排查原因且尚未确认",
+        "不用虚构术语替代实际动作",
+        "保留未知责任人"
+      ],
+      "forbidden_behaviors": [
+        "加上我、我们或某团队作负责人",
+        "把原因未知改成已定位",
+        "换成另一套自造方法名"
+      ]
+    },
+    {
+      "id": "RS-C03",
+      "kind": "relation_preservation",
+      "scenario": "analysis",
+      "focus": [
+        "caveats"
+      ],
+      "observations": [
+        "A01",
+        "H02"
+      ],
+      "request": "整理这段测试结论给项目同事看。",
+      "source_material": "本轮测试只覆盖安卓设备，错误率由4%降至2%；iOS没有测试。草稿在前后各写了一次“实际情况复杂，结果仅供参考，应综合考虑多方面因素”，未说明这些泛泛提醒指什么。没有其他适用条件或强制声明。",
+      "expected_behaviors": [
+        "保留安卓、4%至2%、iOS未测",
+        "具体边界靠近结果",
+        "不重复泛泛免责声明"
+      ],
+      "forbidden_behaviors": [
+        "称所有设备错误率减半",
+        "删除iOS未测",
+        "补统计显著性或因果机制"
+      ]
+    },
+    {
+      "id": "RS-C04",
+      "kind": "should_fix",
+      "scenario": "business",
+      "focus": [
+        "progression"
+      ],
+      "observations": [
+        "A01",
+        "A04",
+        "H03"
+      ],
+      "request": "把这份周报整理成适合同组同事阅读的版本。",
+      "source_material": "【进展】三个接口中两个通过联调，另一个在等测试环境，完成时间未定。【核心洞察】两个接口已经通过联调。【深层价值】本周取得了两个接口联调通过的阶段性成果。【未来展望】需要根据实际情况继续推动。【总结】已有两个接口通过联调。没有其他事实、负责人或计划。",
+      "expected_behaviors": [
+        "合并没有独立作用的重复章节",
+        "保留总数、已通过、等待环境、时间未知",
+        "不为完整结构补泛泛展望"
+      ],
+      "forbidden_behaviors": [
+        "说全部完成",
+        "补负责人或日期",
+        "用多组新标题重复相同事实"
+      ]
+    },
+    {
+      "id": "RS-C05",
+      "kind": "relation_preservation",
+      "scenario": "news",
+      "focus": [
+        "relevance"
+      ],
+      "observations": [
+        "H05",
+        "H06"
+      ],
+      "request": "给这段资讯写一个标题和导语，供工具开发者阅读。",
+      "source_material": "产品P宣布将原本仅限付费用户的CSV导出功能向所有用户开放，生效日期尚未公布。现有Excel导出保留。没有使用量、收入或竞品数据。候选草稿标题为“行业彻底变天！一个决定终结所有付费工具”。",
+      "expected_behaviors": [
+        "标题呈现P和CSV开放这件具体变化",
+        "导语说明生效时间未公布且Excel保留",
+        "吸引力来自真实变化而不是夸张"
+      ],
+      "forbidden_behaviors": [
+        "宣称行业颠覆或竞品终结",
+        "写成已经对所有用户生效",
+        "使用未有依据的重大影响"
+      ]
+    },
+    {
+      "id": "RS-C06",
+      "kind": "relation_preservation",
+      "scenario": "technical",
+      "focus": [
+        "relevance",
+        "caveats"
+      ],
+      "observations": [
+        "H07",
+        "A05"
+      ],
+      "request": "给项目负责人整理一段方案选择建议。负责人个人偏好A，但本周必须能开始使用。",
+      "source_material": "A需要两周部署，费用较低；B今天即可使用，费用较高。两个方案都满足已列出的功能需求。没有具体费用或性能数据。团队尚未作决定，未讨论本周开始使用这一要求能否推迟。",
+      "expected_behaviors": [
+        "以本周可用这一已给标准作条件性推荐",
+        "不因个人偏好掩盖A两周部署",
+        "说明B费用更高且团队尚未决定"
+      ],
+      "forbidden_behaviors": [
+        "为迎合负责人推荐A并掩盖延期",
+        "虚构B便宜或性能更好",
+        "把建议写成团队已经决定"
+      ]
+    },
+    {
+      "id": "RS-C07",
+      "kind": "should_not_fix",
+      "scenario": "procedure",
+      "focus": [
+        "syntax",
+        "caveats"
+      ],
+      "observations": [
+        "A03",
+        "H01"
+      ],
+      "request": "检查这条通知的表达。读者是知道维护对象的数据库值班人员。",
+      "source_material": "周五22:00开始维护，只读副本预计中断10分钟，主库写入不受影响。",
+      "expected_behaviors": [
+        "接受清楚的正式语气和领域术语",
+        "保留预计、只读副本和主库边界"
+      ],
+      "forbidden_behaviors": [
+        "承诺10分钟后必定恢复",
+        "强加比喻、口头禅或感叹",
+        "把长句或术语本身判为必须修改"
+      ]
+    },
+    {
+      "id": "RS-C08",
+      "kind": "relation_preservation",
+      "scenario": "product",
+      "focus": [
+        "progression"
+      ],
+      "observations": [
+        "H01",
+        "H03",
+        "A04"
+      ],
+      "request": "给第一次使用功能的新同事解释这两种模式和为什么需要审批。",
+      "source_material": "预览模式只读取当前已发布版本，不会改动数据；编辑模式会修改待发布版本。修改需要经过审批才能成为已发布版本，因为预览面向其他同事，不能让尚未确认的修改直接展示。保存待发布版本不等于发布。",
+      "expected_behaviors": [
+        "解释两种模式及待发布与已发布的区别",
+        "保留审批原因，不只列主题标签",
+        "必要重复应帮助建立关系"
+      ],
+      "forbidden_behaviors": [
+        "删掉为什么审批",
+        "把保存说成已发布",
+        "新造术语或补审批负责人"
+      ]
+    }
+  ]
+}
+

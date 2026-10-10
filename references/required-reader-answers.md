@@ -23,6 +23,9 @@ require extra prose when a short answer or heading already meets the real task.
 
 Record the actual reader, their known context, the judgment they need to make,
 and the surface they are expected to read. A job title alone is insufficient.
+Use existing reader/context notes for supplied familiarity and reading mode:
+scanning, sustained reading or likely interruption. Do not invent the reader's
+knowledge or ask a routine questionnaire; clarify only a material ambiguity.
 Choose the smallest surface that supports that task: headings, an opening,
 explicit native blocks (including essential adjacent qualifiers), or a complete
 document only when the task genuinely requires full reading.
@@ -31,6 +34,13 @@ From the source, write the minimum questions that must be answered on that
 surface. Record the supported answer and source location, or an explicit
 source-unknown. Check the plan against all decision-critical source findings;
 do not quietly omit a difficult finding to make a draft pass.
+
+Use the existing reader task to choose a source-backed reason to read: a real
+problem, change, consequence or decision. Show it in the opening, not a generic
+importance claim; a factual update may already suffice. Do not invent urgency,
+conflict, emotion or a personal story to engage the reader. For a choice, keep
+facts separate from priorities: use supplied criteria and contrary evidence;
+do not mirror a reader's preference or force equally weighted opposing views.
 
 Examples of task-dependent required information:
 - An analytical finding may need the actual feature, compared groups, direction,
@@ -48,6 +58,14 @@ Replace generic usefulness with the supported relationship; don't merely list
 feature names or move the decisive comparison into distant body text.
 A short heading plus a visibly adjacent qualifier can be a complete unit.
 Keep prose natural; stop when the intended judgment is easy and accurate.
+
+While organizing that surface, keep interpretation-changing conditions and
+referents nearby; introduce unfamiliar concepts when they become necessary.
+Retain a bridge that explains a relationship even if it adds no new fact.
+For longer reading paths, headings should help a reader resume after a break.
+Review actual guessing or backtracking in the existing progression/reading-flow
+reasons; do not invent a memory-capacity limit, maximum paragraph length or
+measured reading-time saving. Skimmable does not mean explanation-free.
 
 ## Portable Plan And Commands
 

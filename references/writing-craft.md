@@ -8,17 +8,20 @@ or useful. Keeping the original is a valid outcome.
 
 | Existing record | Inspect in context | Methods and conditional cases |
 | --- | --- | --- |
-| `expression.craft_checks.concrete_detail` | Does a supported action, finding or detail help the reader? Thin evidence needs no invented scene, motive, number or reaction. | T06 action, T09 detail selection: W01, W06, W08 |
-| `expression.craft_checks.progression` | What job does the passage do? Preserve purposeful repetition, bridges, caveats and acknowledgements. Check earlier and later dependencies before deleting or moving information. | T04 repetition, T05 contextual omission, T07 paragraph focus: W02, W03, W06 |
-| `expression.craft_checks.reading_flow` | Are subject, conditions, negation, emphasis and tone clear? Compare the edit in its paragraph; tiny words can alter expectation or blame. | T01 precision, T02 relationships, T03 rhythm, T08 tone: W01, W03, W04, W07 |
+| `expression.craft_checks.concrete_detail` | Does a supported action, problem or change make the text relevant to this reader? No invented stakes, scene or benefit. | T06, T09: W01, W06, W08; C04 |
+| `expression.craft_checks.progression` | Across opening, sections, table/visual and ending, what distinct job does each occurrence serve? Merge purposeless repeats; keep bridges, dependencies and useful repetition. | T04, T05, T07: W02, W03, W06; C07 |
+| `expression.craft_checks.reading_flow` | Can familiar verbs expose an action hidden by noun stacks or stock lead-ins? Preserve subject, negation, register and voice; invent no actor or label. | T01, T02, T03, T08: W01, W03, W04, W07; C05 |
 | `meaning.detail_support` | Are added details supported? Preserve quantity, range, frequency, attribution, logic, uncertainty and intent. | T10 compare and restore, across all methods: W03-W08 |
 
-Read the whole candidate; record exact quotes in existing v2 fields. In
-`progression.reason`, connect the passage to the reader's question and adjacent
-parts. In `reading_flow.reason` / `reader_effect`, name the misunderstanding,
-search/reply burden or explicit style mismatch removed, or why the original
-works. "Smoother/shorter" alone is insufficient. A short message can reuse one
-span. The validator enforces evidence integrity, not taste or semantic truth.
+In existing `selection.removal_effect`, explain why a passage is needed.
+Keep interpretation-changing caveats beside claims and operational cautions at
+the relevant step; move lookup-only detail out of the main path. Omit generic
+warnings only if they change no judgment or action. Required disclosures,
+source uncertainty and meaningful emotional context remain. C06 shows the distinction.
+In existing reasons, quote the actual reader gain or justified keep. Check
+backtracking, missing bridges and premature concepts as before. Short messages
+may reuse one span; no measured time or human-comprehension claim without evidence.
+The validator checks integrity, not semantic truth; no new fields or review round.
 
 **Conditional lookup:** compact reviewer guidance suffices for ordinary work.
 Only when a specific wording decision remains unclear, read the matching W
@@ -27,6 +30,7 @@ bank, fetch its videos or copy it into the output. Literary cases are not
 universally better versions; workplace illustrations are explicitly fictional.
 For unresolved material selection or whole-piece order, read only the relevant
 genre in [writing-composition-examples.md](writing-composition-examples.md).
+C04-C07 there are fictional transfer cases, not video quotations.
 Use supplied/available complete exemplars to study information choice, emphasis
 and transitions, not imitate an author. No default search or reference loading;
 style examples never supply facts, private material or mandatory structures.

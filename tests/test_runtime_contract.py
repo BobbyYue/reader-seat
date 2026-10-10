@@ -53,6 +53,12 @@ class RuntimeContractTests(unittest.TestCase):
         for packet in packets:
             self.assertTrue(packet["reading_guidance"])
             self.assertTrue(packet["context_policy"]["parent_context_forbidden"])
+            if "reader_value_template" in packet:
+                axes = tuple(packet["reader_value_template"]["checks"])
+                self.assertEqual(packet["reader_value_guidance"],
+                                 {axis: reader_value.GUIDANCE[axis] for axis in axes})
+            else:
+                self.assertNotIn("reader_value_guidance", packet)
             if packet["dimension"] != "no-context":
                 self.assertEqual(packet["artifact"]["sha256"], hashlib.sha256(artifact.read_bytes()).hexdigest())
             if packet["dimension"] != "source-reliability":

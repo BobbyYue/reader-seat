@@ -14,16 +14,16 @@ from pathlib import Path
 VERSION = 2
 EMPTY_ATTESTATIONS = {"pass", "passed", "ok", "yes", "checked", "none", "n/a", "true", "false", "通过", "正常", "无", "已检查"}
 CRAFT_GUIDANCE = {
-    "concrete_detail": "Quote the passage; identify the supported action, finding or question it conveys. Keep reader-useful detail, not ornamental specificity; thin evidence needs no invented scene, motive, number or reaction.",
-    "progression": "Read the whole piece; quote how this passage advances the reader's question and connects to adjacent parts. Keep useful repetition, bridges, caveats, emotion and acknowledgements; don't optimize isolated sentences or force a template.",
-    "reading_flow": "Check subject, conditions/negation, emphasis and voice in context. Small words alter degree or blame. In reason, name a concrete misunderstanding, search/reply burden or explicit style mismatch removed by the edit, or why the original works. Smoother/shorter alone isn't a benefit; restore without gain. No quotas.",
+    "concrete_detail": "Quote the supported action/change/problem that makes this worth reading for the intended reader. Generic benefits are not evidence. Invent no stakes, scene, motive, number or reaction; a simple fact may suffice.",
+    "progression": "Trace opening, body, visuals/tables and ending: what distinct answer, reason, evidence or reminder does this passage add? Merge repeats without a new job. Keep bridges, useful repetition and explanations; fix backtracking for referents or concepts. No fixed template.",
+    "reading_flow": "Locate friction from noun stacks, stock lead-ins or distant conditions. Prefer familiar verbs/direct syntax without inventing actors or labels. Preserve subject, negation, uncertainty, emphasis, formal terms and voice. Explain reader gain or keep; no slang or length quota.",
 }
 GUIDANCE = {
     "expression": "Identify a concrete proposition or real contrast. Keep useful contrasts; revise empty framing only when it delays or distorts understanding. No banned phrase list.",
-    "selection": "Use the reader's required answers to judge material choice: what would be misunderstood if this passage were removed? Preserve decisive evidence, limits and useful bridges; defer lookup detail. Missing facts stay unknown; don't demand richness or completeness.",
-    "presentation": "Inspect the supplied rendering. Locate the main point, reading order and dense region; explain whether layout exposes a relationship or merely repackages prose. Do not prescribe a diagram or identical section template.",
+    "selection": "Explain removal's effect on required answers. Keep decisive limits by claims and execution cautions by steps; defer lookup detail, omit generic warnings/empty sections. Preserve real unknowns and required disclosures; never delete caution just to sound decisive.",
+    "presentation": "Inspect the rendering: does the main contrast stand out without hiding other claims or qualifiers? Check reading order, dense regions, re-entry and comparison effort. Explain actual benefit, not visual novelty. No decorative diagram or repeated-container quota.",
     "meaning": "Compare the source and final text: facts, request/refusal, urgency, ownership, numbers and uncertainty must survive. Natural wording must not weaken or invent a request.",
-    "unit_roles": "Explain the different reader jobs of the takeaway, picture and question table. Useful repetition is allowed; copying the same explanation three times is not. Preserve P0 and weighted coverage, never hide claims to lower the denominator.",
+    "unit_roles": "Explain how takeaway, picture and table serve the main judgment with distinct jobs. Expose relationships, not just prose boxes. Keep decisive limits nearby, useful repetition, every P0 and the coverage denominator; never force a winner.",
 }
 GUIDANCE["expression"] += " Review the whole candidate; record craft_checks with quote, pass/fail and reason. Clear messages may reuse one span. For unresolved wording only, consult the matching references/writing-craft-cases.md case; no extra round. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
 GUIDANCE["meaning"] += " In detail_support, compare source and edits: preserve quantity, range, frequency, attribution, logic, uncertainty and intent. No invention for rhythm; label permitted illustrative examples."

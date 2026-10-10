@@ -4,7 +4,7 @@
 
 [English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.28.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.30.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -75,9 +75,11 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
 
-### 升级至 0.28.0
+### 升级至 0.30.0
 
 先选择读者需要的证据、关键限制和未解问题，再组织文字。已有审阅会说明修改消除了什么误解或阅读负担；没有具体收益就保留原文。[完整段落案例](references/writing-composition-examples.md)和[技巧对应案例](references/writing-craft-cases.md)只在拿不准时读取，不作为当前文档的事实来源。沿用第 2 版审阅字段、原有审阅角色和轮次，不新增文风评分或单独的审稿流程。
+
+普通交付改用新的[检查后交付入口](references/checked-delivery.md)：重新调用已有验证，拦截缺失或过期的证据，直接返回被检查的内容。第三轮未通过仍以明确标注问题的草稿交付。使用 `--output` 可避免完整编码文档占用模型上下文。这个本地入口不会自动接入运行应用，也不替代原生局部修改和线上发布验证；程序测试通过不代表每次写作判断都正确。
 
 ### 之前版本的流程变化
 

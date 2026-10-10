@@ -40,7 +40,7 @@ Apply this priority when goals conflict:
 
 ## Runtime Sequence
 
-Use [scripts/runtime_contract.py](scripts/runtime_contract.py); narrow native text patches use the separate two-stage route below.
+Use [scripts/runtime_contract.py](scripts/runtime_contract.py); deliver through [scripts/deliver.py](scripts/deliver.py). Native text patches use the two-stage route below.
 Detailed commands and failure behavior remain in
 [references/runtime-enforcement.md](references/runtime-enforcement.md).
 The mandatory work-order and retry policy is in
@@ -139,5 +139,4 @@ For an authorized, standard-risk Feishu text-only replacement, use [native-text-
 - Use [references/skill-maintenance.md](references/skill-maintenance.md) only
   when changing, packaging, synchronizing, or regression-testing the skill.
 
-The host may enforce these commands externally. This skill never overrides a
-higher-priority host rule or expands authorization.
+See [checked-delivery.md](references/checked-delivery.md) for the exact-byte caller protocol and host limits. This skill cannot override host rules or expand authorization.

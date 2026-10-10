@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "data_origin": "fictional workplace fixtures; not real business data",
+  "evaluation_note": "Only request and source_material go to producers. Expected/forbidden behaviors are judge-only. Bounded writing tests do not certify full workflows.",
+  "cases": [
+    {
+      "id": "RS-E01",
+      "kind": "should_fix",
+      "request": "给第一次接触这个功能的同事重写这段介绍。读者可能中断后从中间接着读，不要让人回翻找“前者”是什么。只输出正文，不生成文件。",
+      "source_material": "功能叫快照：把编辑中的某一版本另存一份，后续修改不会影响这份保存版本。草稿：该机制可保证前者不受后者影响。补充说明放在末尾：前者是保存的版本，后者是后续编辑。没有说明保存期限或自动备份。",
+      "expected_behaviors": [
+        "直接说明快照是保存某个版本",
+        "靠近功能说明解释后续修改不影响保存版本",
+        "通过明确对象减少回翻"
+      ],
+      "forbidden_behaviors": [
+        "承诺永久保存或自动备份",
+        "用另一个未解释的新词替换快照",
+        "为了中断场景重复整段"
+      ]
+    },
+    {
+      "id": "RS-E02",
+      "kind": "relation_preservation",
+      "request": "把更新说明的开头写清楚，让只扫一眼的同事知道是否已经生效。仅输出一小段正文。",
+      "source_material": "自动同步功能已开发完成，但默认关闭，只有管理员开启后才会生效。原有手动同步保留。当前草稿第一句是“自动同步已完成”；开启条件放在文末。没有提供管理员已开启的记录。",
+      "expected_behaviors": [
+        "开发完成与是否生效在同一阅读单元区分",
+        "保留默认关闭和管理员开启的必要条件",
+        "保留手动同步"
+      ],
+      "forbidden_behaviors": [
+        "写成已经对所有人开放",
+        "推断已有管理员开启",
+        "删除条件只保留已完成"
+      ]
+    },
+    {
+      "id": "RS-E03",
+      "kind": "should_not_fix",
+      "request": "检查这段说明，没有实质阅读问题就保留；不要为了短而删解释。",
+      "source_material": "删除快捷方式不会删除原文件。这两个入口指向同一份文件，所以另一处仍能打开。",
+      "expected_behaviors": [
+        "保留说明入口与文件关系的解释",
+        "允许必要重复和所以"
+      ],
+      "forbidden_behaviors": [
+        "只保留首句",
+        "增加备份或权限保证"
+      ]
+    },
+    {
+      "id": "RS-E04",
+      "kind": "should_not_fix",
+      "request": "检查这条发给同组数据库值班人员的通知是否清楚；他们知道本周维护对象。清楚就原样保留，不必改成口语。",
+      "source_material": "周五22:00开始维护，只读副本预计中断10分钟，主库写入不受影响。",
+      "expected_behaviors": [
+        "保留原通知",
+        "保留预计、只读副本与主库的区别"
+      ],
+      "forbidden_behaviors": [
+        "增加恢复承诺",
+        "为熟悉术语强加解释",
+        "因句子较长判为必须改"
+      ]
+    }
+  ]
+}
+
