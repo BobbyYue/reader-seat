@@ -14,6 +14,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from xml.etree import ElementTree
 
+from lifecycle_guard import init_native_run, verify_lifecycle, verify_preview
 from reader_review import (
     DIMENSIONS as READER_REVIEW_DIMENSIONS,
     MAX_ROUNDS as READER_REVIEW_MAX_ROUNDS,
@@ -517,6 +518,17 @@ def command_check_action(args: argparse.Namespace) -> None:
     if args.artifact is None:
         fail("external action requires --artifact for reader review binding")
     artifact = args.artifact.resolve()
+    if getattr(args, "preview", False):
+        lifecycle = verify_preview(args.lifecycle_run, artifact, args.contract)
+        receipt = {"schema_version": 1, "contract_id": contract["contract_id"], "checked_at": utc_now(),
+                   "status": "preview-only", "action_phase": "preview", "action": args.action,
+                   "target": args.target, "artifact_sha256": reader_file_hash(artifact),
+                   "lifecycle": lifecycle, "preview_write_authorized": True,
+                   "publishable": False, "verified_finished_artifact": False,
+                   "authorization_evidence_sha256": hashlib.sha256(decisions["authorization_evidence"].encode()).hexdigest()}
+        write_json(args.receipt.resolve(), receipt)
+        print(f"PREVIEW ONLY: authorized pending-page write; not final publication | receipt={args.receipt.resolve()}")
+        return
     review_path = args.review.resolve()
     review = read_json(review_path)
     content_snapshot = args.content_snapshot.resolve() if args.content_snapshot else None
@@ -538,11 +550,15 @@ def command_check_action(args: argparse.Namespace) -> None:
     if reader_failures:
         fail("; ".join(reader_failures))
     assert reader_aggregate is not None
+    lifecycle = verify_lifecycle(getattr(args, "lifecycle_run", None), artifact,
+                                 args.reader_review_aggregate, contract_path=args.contract)
     receipt = {
         "schema_version": 1,
         "contract_id": contract["contract_id"],
         "checked_at": utc_now(),
         "status": "pass",
+        "action_phase": "final",
+        "lifecycle": lifecycle,
         "action": args.action,
         "target": args.target,
         "artifact_sha256": reader_file_hash(artifact),
@@ -567,6 +583,7 @@ def validate_action_receipt(
     semantic_review: Path,
     reader_review_aggregate: Path | None,
     judge_result: Path | None,
+    lifecycle: dict | None = None,
 ) -> tuple[list[str], dict | None]:
     decisions = contract["decisions"]
     expected_target = decisions["publication_target"]
@@ -585,6 +602,8 @@ def validate_action_receipt(
         failures.append("action receipt belongs to a different contract")
     if result.get("status") != "pass":
         failures.append("action receipt status is not pass")
+    if result.get("action_phase", "final") != "final":
+        failures.append("preview-only receipt cannot authorize final publication or verification")
     if result.get("action") != expected_action:
         failures.append("action receipt does not match the locked external action")
     if result.get("target") != expected_target:
@@ -604,6 +623,11 @@ def validate_action_receipt(
     expected_judge_hash = reader_file_hash(judge_result.resolve()) if judge_result else None
     if result.get("independent_judge_sha256") != expected_judge_hash:
         failures.append("action receipt does not match the independent judge result")
+    recorded_lifecycle = result.get("lifecycle")
+    if (lifecycle is None or not isinstance(recorded_lifecycle, dict)
+            or recorded_lifecycle.get("run_path") != lifecycle.get("run_path")
+            or recorded_lifecycle.get("verified_inputs") != lifecycle.get("verified_inputs")):
+        failures.append("action receipt does not match the current lifecycle evidence")
     return failures, result
 
 
@@ -939,6 +963,15 @@ def command_verify(args: argparse.Namespace) -> None:
         args.reader_review_aggregate, contract, artifact
     )
     failures.extend(reader_failures)
+    lifecycle = None
+    lifecycle_run = getattr(args, "lifecycle_run", None)
+    external = (contract["decisions"]["publication_target"] != "none"
+                or args.actual_publication_target != "none" or args.actual_external_action != "none")
+    if lifecycle_run is not None or external:
+        try:
+            lifecycle = verify_lifecycle(lifecycle_run, artifact, args.reader_review_aggregate, contract_path=args.contract)
+        except (ValueError, OSError) as exc:
+            failures.append(str(exc))
     judge_failures, judge_result = validate_judge_result(args.judge_result, contract)
     failures.extend(judge_failures)
     action_failures, action_receipt = validate_action_receipt(
@@ -948,6 +981,7 @@ def command_verify(args: argparse.Namespace) -> None:
         semantic_review=args.review,
         reader_review_aggregate=args.reader_review_aggregate,
         judge_result=args.judge_result,
+        lifecycle=lifecycle,
     )
     failures.extend(action_failures)
     checks: list[dict] = []
@@ -1039,6 +1073,10 @@ def command_verify(args: argparse.Namespace) -> None:
             if content_snapshot.is_file() else None
         ),
         "status": "fail" if failures else "pass",
+        "verification_scope": "writing-lifecycle-and-native-review" if lifecycle else "semantic-and-format-only",
+        "verified_finished_artifact": not failures and lifecycle is not None,
+        "lifecycle": lifecycle,
+        "verified_inputs": {} if lifecycle is None else lifecycle["verified_inputs"],
         "failures": failures,
         "checks": checks,
         "semantic_review": {
@@ -1072,24 +1110,30 @@ def command_verify(args: argparse.Namespace) -> None:
         for message in failures:
             print(f"FAIL: {message}", file=sys.stderr)
         raise SystemExit(1)
-    print(f"PASS: runtime contract verified | receipt={args.receipt.resolve()}")
+    scope = "runtime and writing lifecycle verified" if lifecycle else "local semantic/format checks only; not finished delivery"
+    print(f"PASS: {scope} | receipt={args.receipt.resolve()}")
 
 
 def command_present_draft(args: argparse.Namespace) -> None:
     contract = read_json(args.contract.resolve())
     verify_contract_integrity(contract)
     artifact = args.artifact.resolve()
+    cumulative = args.command == "lifecycle-draft"
+    lifecycle = None
+    if getattr(args, "lifecycle_run", None) is not None or cumulative:
+        lifecycle = verify_lifecycle(getattr(args, "lifecycle_run", None), artifact,
+                                     args.reader_review_aggregate, draft=True, contract_path=args.contract)
     failures, aggregate = validate_aggregate_for_artifact(
         args.reader_review_aggregate,
         contract,
         artifact,
-        allowed_statuses={"needs-user-decision"},
+        allowed_statuses={"revision-required", "needs-user-decision"} if cumulative else {"needs-user-decision"},
         require_all_pass=False,
     )
     if aggregate is not None:
-        if aggregate.get("round") != READER_REVIEW_MAX_ROUNDS:
+        if not cumulative and aggregate.get("round") != READER_REVIEW_MAX_ROUNDS:
             failures.append("review-incomplete draft presentation requires the third review round")
-        if aggregate.get("max_rounds_exhausted") is not True:
+        if not cumulative and aggregate.get("max_rounds_exhausted") is not True:
             failures.append("reader review aggregate does not show an exhausted three-round cycle")
         if not aggregate.get("issues"):
             failures.append("review-incomplete draft presentation requires actionable unresolved issues")
@@ -1112,6 +1156,9 @@ def command_present_draft(args: argparse.Namespace) -> None:
         "contract_id": contract["contract_id"],
         "presented_at": utc_now(),
         "status": "fail" if failures else "review-incomplete-draft",
+        "verification_scope": "writing-lifecycle-and-native-review" if lifecycle else "semantic-and-format-only",
+        "lifecycle": lifecycle,
+        "verified_inputs": {} if lifecycle is None else lifecycle["verified_inputs"],
         "delivery_mode": "review-incomplete-draft",
         "artifact": str(artifact),
         "artifact_sha256": reader_file_hash(artifact) if artifact.is_file() else None,
@@ -1145,6 +1192,12 @@ def command_present_draft(args: argparse.Namespace) -> None:
         "PASS: current version may be shown only as a review-incomplete draft; "
         f"external publication remains blocked | receipt={args.receipt.resolve()}"
     )
+
+
+def command_init_lifecycle(args: argparse.Namespace) -> None:
+    verify_contract_integrity(read_json(args.contract.resolve()))
+    result = init_native_run(args.lifecycle_run, args.contract)
+    print(json.dumps(result))
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1181,6 +1234,11 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--module-manifest", type=Path)
     init.set_defaults(func=command_init)
 
+    lifecycle = subparsers.add_parser("init-lifecycle", help="derive the lifecycle plan from the existing locked native task")
+    lifecycle.add_argument("--contract", type=Path, required=True)
+    lifecycle.add_argument("--lifecycle-run", type=Path, required=True)
+    lifecycle.set_defaults(func=command_init_lifecycle)
+
     bind = subparsers.add_parser("bind-review", help="bind the pending semantic review to one artifact version")
     bind.add_argument("--contract", type=Path, required=True)
     bind.add_argument("--review", type=Path, required=True)
@@ -1197,10 +1255,12 @@ def build_parser() -> argparse.ArgumentParser:
     action.add_argument("--content-snapshot", type=Path)
     action.add_argument("--reader-review-aggregate", type=Path)
     action.add_argument("--judge-result", type=Path)
+    action.add_argument("--lifecycle-run", type=Path, required=True)
+    action.add_argument("--preview", action="store_true", help="authorize only a pending preview write before layout/review; never final publication")
     action.add_argument("--receipt", type=Path, required=True)
     action.set_defaults(func=command_check_action)
 
-    verify = subparsers.add_parser("verify", help="compare the actual deliverable with locked decisions")
+    verify = subparsers.add_parser("verify", help="check semantics/format locally; finished delivery also needs --lifecycle-run")
     verify.add_argument("--contract", type=Path, required=True)
     verify.add_argument("--review", type=Path, required=True)
     verify.add_argument("--artifact", type=Path, required=True)
@@ -1212,6 +1272,7 @@ def build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--reader-review-aggregate", type=Path)
     verify.add_argument("--receipt", type=Path, required=True)
     verify.add_argument("--judge-result", type=Path)
+    verify.add_argument("--lifecycle-run", type=Path)
     verify.set_defaults(func=command_verify)
 
     draft = subparsers.add_parser(
@@ -1222,13 +1283,24 @@ def build_parser() -> argparse.ArgumentParser:
     draft.add_argument("--artifact", type=Path, required=True)
     draft.add_argument("--reader-review-aggregate", type=Path, required=True)
     draft.add_argument("--receipt", type=Path, required=True)
+    draft.add_argument("--lifecycle-run", type=Path)
     draft.set_defaults(func=command_present_draft)
+    cumulative = subparsers.add_parser("lifecycle-draft", help="show only a draft after three completed rounds and current failure with issues")
+    cumulative.add_argument("--contract", type=Path, required=True)
+    cumulative.add_argument("--artifact", type=Path, required=True)
+    cumulative.add_argument("--reader-review-aggregate", type=Path, required=True)
+    cumulative.add_argument("--lifecycle-run", type=Path, required=True)
+    cumulative.add_argument("--receipt", type=Path, required=True)
+    cumulative.set_defaults(func=command_present_draft)
     return parser
 
 
 def main() -> int:
     args = build_parser().parse_args()
-    args.func(args)
+    try:
+        args.func(args)
+    except (OSError, ValueError) as exc:
+        fail(str(exc), code=1)
     return 0
 
 

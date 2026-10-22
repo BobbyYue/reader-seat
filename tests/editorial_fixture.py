@@ -1,9 +1,10 @@
 """Synthetic receipt factory ONLY for structural tests, never a semantic review."""
 import reader_value
+from context_fixture import structural_context, structural_attribution
 
 
 def structural_review(axes, binding, text, source="", render=""):
-    review = reader_value.template(axes, binding)
+    review = reader_value.template(axes, binding, text, source)
     for axis, item in review["checks"].items():
         item.update(status="pass", action="keep", location="STRUCTURAL TEST FIXTURE",
                     quote=text[:100], reader_effect="STRUCTURAL FIXTURE, not a reader judgment.",
@@ -13,7 +14,9 @@ def structural_review(axes, binding, text, source="", render=""):
                 probe.update(status="pass", quote=text[:100], reason="STRUCTURAL FIXTURE, not an assessment of writing quality.")
         if axis == "selection":
             item["removal_effect"] = "STRUCTURAL FIXTURE: removed text would be absent."
+            item['context_review'] = structural_context(text)
         if axis == "meaning":
+            item['source_attribution'] = structural_attribution(text, source, 'source')
             item["source_quote"] = source[:100]
             item["detail_support"] = "STRUCTURAL FIXTURE, not evidence that details are supported."
         if axis == "presentation":

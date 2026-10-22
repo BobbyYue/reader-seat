@@ -3,6 +3,11 @@
 This module turns critical Reader's Seat decisions into a fail-closed runtime
 contract. It applies to every task. The contract supplements semantic judgment;
 it does not replace source review, scenario reasoning, or rendered inspection.
+For finished delivery and all external actions, also keep the mandatory
+[writing lifecycle](writing-lifecycle.md). Bare local verification is not full
+acceptance; return document bytes only through `deliver.py --lifecycle-run RUN`.
+Initialize [managed execution](writing-execution.md) before units; the checked
+entry requires its actual captured returns and task registry, not just declared IDs.
 
 ## Why It Exists
 
@@ -12,7 +17,7 @@ proves only structural properties. Neither proves that one actual deliverable
 used the required language, format, authorization, evidence boundary, or
 scenario contract.
 
-The runtime flow therefore separates six concerns:
+The runtime flow therefore separates these concerns:
 
 1. **Decision derivation:** compute language and format from explicit signals
    and defaults instead of letting later drafting choose again.
@@ -180,9 +185,10 @@ review packets until the source/claim record, candidate, renders, deterministic
 checks, and reviewer inputs are stable. The normal path spends one complete
 parallel review batch per artifact.
 After the draft passes cheap deterministic checks, use `reader_review.py prepare`
-to create four immutable packets. Launch exactly four fresh subagents in one
-parallel batch for `no-context`, `readability`, `source-reliability`, and
-`structure-visual`. Do not pass parent context or another review to any child.
+with `--lifecycle-run RUN` to register four immutable packets. Managed execution
+dispatches `no-context`, `readability`, `source-reliability`, and `structure-visual`
+in one batch: independent jobs run concurrently; source-answer evaluation waits
+for frozen blind answers. Do not supply author conversation or other opinions.
 
 Use `reader_review.py aggregate` only after all four return. All dimensions must
 pass for the current artifact hash. Later action and delivery checks reopen the manifest, packets, and four
@@ -208,6 +214,7 @@ python3 scripts/runtime_contract.py present-draft \
   --contract .reader-seat/task-contract.json \
   --artifact path/to/current-report.html \
   --reader-review-aggregate .reader-seat/reviews/round-3/aggregate.json \
+  --lifecycle-run .reader-seat/lifecycle \
   --receipt .reader-seat/review-incomplete-draft-receipt.json
 ```
 
@@ -224,12 +231,19 @@ python3 scripts/runtime_contract.py check-action \
   --target feishu \
   --artifact path/to/verified-export.md \
   --reader-review-aggregate .reader-seat/reviews/round-1/aggregate.json \
+  --lifecycle-run .reader-seat/lifecycle \
   --judge-result .reader-seat/independent-judge.json \
   --receipt .reader-seat/action-preflight-receipt.json
 ```
 
 A failure blocks the tool call. Retain the passing action receipt for final
 verification. Do not publish first and validate afterward.
+For an already-authorized pending-page write needed to inspect real layout,
+use `check-action --preview --lifecycle-run RUN` as described in
+[writing-lifecycle.md](writing-lifecycle.md). It returns only `preview-only`,
+requires prewrite/unit/current-candidate readiness, and cannot serve as final
+action evidence. Reuse the same authorization; do not request another approval
+for the same output/scope merely to form its review page.
 Omit `--judge-result` only for standard-risk work. High-risk external actions
 must pass the independent judge before the side effect, not only during final
 verification.
@@ -257,6 +271,7 @@ python3 scripts/runtime_contract.py verify \
   --actual-format html \
   --actual-publication-target none \
   --reader-review-aggregate .reader-seat/reviews/round-1/aggregate.json \
+  --lifecycle-run .reader-seat/lifecycle \
   --judge-result .reader-seat/independent-judge.json \
   --receipt .reader-seat/verification-receipt.json
 ```
@@ -277,7 +292,8 @@ The runtime contract verifies format and language; the document-specific native
 validator still owns package structure, layout, and rendered-page inspection.
 
 A finished or externally publishable delivery is allowed only when the receipt
-contains `status=pass`. A failed or missing receipt means the output is
+contains `status=pass` and `verified_finished_artifact=true`, including the
+lifecycle check. A local `status=pass` alone is not full acceptance. A failed or missing receipt means the output is
 incomplete, even when a file was created, an export succeeded, or a platform
 reported publication success. The only direct-presentation exception is the
 round-3 `review-incomplete-draft` flow above; it must remain visibly incomplete

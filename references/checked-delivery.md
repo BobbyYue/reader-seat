@@ -1,8 +1,11 @@
 # Checked Delivery
 
 Use `scripts/deliver.py verify` with the same arguments as
-`runtime_contract.py verify`, except `--receipt`. The wrapper owns a new private
-temporary receipt, calls the existing verifier, and returns JSON only after
+`runtime_contract.py verify`, except `--receipt`; `--lifecycle-run RUN` is
+mandatory for every delivery operation.
+Follow [writing-lifecycle.md](writing-lifecycle.md) for the stage records. A bare
+runtime semantic/format receipt is not finished delivery. The wrapper owns a
+new private temporary receipt, calls the existing verifier, and returns JSON only after
 checking its typed state and unchanged inputs. It does not add a review round.
 For agent tool calls, add `--output NEW_ENVELOPE.json`: only a short status is
 printed, so the encoded document does not consume model context. The file is
@@ -13,6 +16,9 @@ For the existing third-round fallback, use `scripts/deliver.py present-draft`
 with the corresponding runtime arguments except `--receipt`. This rechecks the
 three-round condition and returns `delivery_state=draft`, actual unresolved
 issues and required user notice/question. It never turns a draft into a pass.
+`scripts/deliver.py lifecycle-draft` also supports three completed cumulative
+lifecycle rounds with current failure/issues and the original four-review aggregate; earlier passes do not disqualify the draft. It does not
+relax native review validation or permit external actions.
 
 The JSON envelope contains `delivery_state`, `review_method`, the local artifact
 hash and base64 `payload`. Consumers must check process success AND
@@ -24,7 +30,8 @@ asset/render checks; copying one HTML file does not prove portable delivery.
 `external_action_authorized=false` is deliberate: a local content check is not
 permission to publish or replace. Keep `check-action`, exact native readback,
 and live render verification. Native text-patch delivery retains its separate
-prewrite/readback protocol; do not claim this wrapper enforces that host path.
+prewrite/readback protocol and enforces its own lifecycle-bound CLI preflight;
+this wrapper still cannot enforce arbitrary host calls.
 
 ## Host Boundary
 

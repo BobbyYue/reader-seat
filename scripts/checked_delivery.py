@@ -72,6 +72,8 @@ def pack(artifact, inputs, verify):
         raise DeliveryBlocked("No final check result; prepared, built and schema-only states cannot deliver")
     if result.get("artifact_sha256") != digest(payload):
         raise DeliveryBlocked("Verification result is not bound to the returned bytes")
+    if result.get("verification_scope") == "semantic-and-format-only":
+        raise DeliveryBlocked("Local semantic verification is not finished delivery")
     if any(before.get(path) != value for path, value in result.get("verified_inputs", {}).items()):
         raise DeliveryBlocked("Verifier consumed a different input snapshot")
     after = snapshots(watched)

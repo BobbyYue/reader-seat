@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Reader's Seat independent reader review result",
   "type": "object",
+  "description": "Record format, not verdict guidance: use exactly packet.required_checks, each with status and evidence (not basis). Complete supplied nested templates without replacing IDs, hashes, context or context_start. Do not replace attribution items with narrative clauses; an empty items template still requires a whole_text_scan. If adding an actual concern, use the full attribution item fields. reader_value action: keep/revise/remove/defer. context_review decision: keep/remove/rewrite/move. Its effect: information/interpretation/confidence/action/connection/learning/voice/required-disclosure/none. For each deletion comparison choose a continuous exact quote covering the detected signal; compute without=context.replace(quote, '', 1) preserving every other character and whitespace. Every quoted excerpt must be an exact continuous substring. presentation.render_path must equal a packet.render_evidence path, not a nested image path; name nested screenshots in observation. Attribution item fields: id, quote, context, kind, speaker, speaker_basis, support_quote, source_scope, negative_status, basis, status. kind: source-fact/author-interpretation/author-recommendation/unknown/fictional-voice. source_scope: quoted-passage/provided-material/not-source-claim/unresolved. negative_status: not-applicable/unconfirmed/confirmed. Reader mode leaves support_quote and speaker_basis empty because no external source was seen. Keep legitimate negative judgments; do not adjust them to satisfy a validator. You may write your own temporary result and use scripts/check_review_result.py --packet PACKET --result RESULT from the Skill that prepared this review; only read that diagnostic and its parser dependencies, not other reviews or author context. This checks formatting and anchors, never creates final acceptance.",
   "required": [
     "schema_version",
     "contract_id",
@@ -18,7 +19,7 @@
   ],
   "properties": {
     "reader_value": {"type": "object", "required": ["version", "artifact_binding", "checks"]},
-    "answer_responses": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"type": "object", "required": ["surface_id", "surface_sha256", "reader_id", "findings", "remaining_questions"]}},
+    "answer_responses": {"type": "array", "minItems": 1, "maxItems": 1, "description": "Report your substantive understanding across the full supplied surface, including explanations and concrete applications, in findings. Do not merely list section names or reduce an explanatory report to its overall theme. You need not memorize every number. Use only the supplied reading surface, never hidden expected answers. Remaining questions must preserve uncertainty.", "items": {"type": "object", "required": ["surface_id", "surface_sha256", "reader_id", "findings", "remaining_questions"]}},
     "answer_evaluation": {"type": "object", "required": ["manifest_sha256", "response_sha256", "reviewer_id", "plan_source_coverage", "source_coverage_evidence", "source_fidelity", "answers", "questions"]},
     "schema_version": {"const": 1},
     "contract_id": {"type": "string", "minLength": 1},
@@ -49,7 +50,7 @@
     },
     "status": {"enum": ["pass", "fail", "blocked"]},
     "summary": {"type": "string", "minLength": 20},
-    "checks": {"type": "object"},
+    "checks": {"type": "object", "additionalProperties": {"type": "object", "required": ["status", "evidence"], "properties": {"status": {"enum": ["pass", "fail", "blocked"]}, "evidence": {"type": "string", "minLength": 20}}}},
     "issues": {
       "type": "array",
       "items": {

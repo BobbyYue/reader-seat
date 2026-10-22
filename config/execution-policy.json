@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skill": "reader-seat",
+  "max_rounds": 3,
+  "max_technical_attempts": 2,
+  "roles": ["no-context", "readability", "source-reliability", "structure-visual"],
+  "dependencies": {"source-reliability": ["no-context"]},
+  "rules": [
+    {"id": "current-stages", "stage": "candidate", "owner": "writing_lifecycle.session and registered checkpoints", "kind": "code"},
+    {"id": "reproducible-measurement", "stage": "candidate", "owner": "writing_lifecycle.measure_data", "kind": "code"},
+    {"id": "actual-artifact", "stage": "candidate", "owner": "writing_lifecycle.artifact_text", "kind": "code"},
+    {"id": "captured-review", "stage": "delivery", "owner": "writing_execution.verify_reviews", "kind": "execution"},
+    {"id": "native-acceptance", "stage": "delivery", "owner": "runtime_contract and reader_review", "kind": "native"}
+  ]
+}

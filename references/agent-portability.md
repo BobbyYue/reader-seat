@@ -44,15 +44,16 @@ An adapter has eleven responsibilities:
    peer-review context;
 8. run `reader_review.py aggregate`, return every non-pass issue to the main
    agent, rerun all four dimensions after a change, and stop after round 3; on a
-   third-round non-pass, run `runtime_contract.py present-draft`, show the
+   third-round non-pass, run `deliver.py present-draft --lifecycle-run RUN`, show the
    current version with unresolved issues, and ask for the user's optimization
    decision without treating it as verified or publishable;
-9. run `runtime_contract.py check-action` with the exact locked action, artifact,
+9. run `runtime_contract.py check-action --lifecycle-run RUN` with the exact locked action, artifact,
    artifact-bound semantic review, target, passing reader aggregate backed by
    its original result files, and the independent judge result for high-risk work
    immediately before any publish, overwrite, or cross-application replacement;
-10. run `runtime_contract.py verify` against the actual candidate or artifact and
-   reject delivery unless the resulting receipt has `status=pass`;
+10. use `deliver.py verify --lifecycle-run RUN` against the actual artifact and
+   consume only its checked payload; a bare `runtime_contract.py verify` receipt
+   with `status=pass` is local semantic/format checking, not full acceptance;
 11. return the verified artifact or response separately from logs, runtime files,
    and internal reasoning; the only exception is a valid
    `review-incomplete-draft` handoff, which must expose its unresolved issues and
@@ -66,6 +67,12 @@ reader dimensions or replace an unavailable child-agent facility with main-agent
 self-review. If the host cannot enforce the runtime
 preconditions, label the adapter `advisory-only`; it cannot support a stability
 claim.
+Keep one functional [writing lifecycle](writing-lifecycle.md) for the task and
+bind its final round to the same original four-review aggregate. The cumulative
+three-completed-round draft exit is `deliver.py lifecycle-draft` when the current
+last round fails with issues, regardless of earlier passes; never publication.
+`runtime_contract.py present-draft` remains a local native draft check; it does
+not replace the lifecycle-bound wrapper that releases the current bytes.
 
 For high-risk or regression work, use explicit invocation. Automatic discovery
 is a host feature and must be tested separately; it is not evidence that the

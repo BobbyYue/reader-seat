@@ -86,8 +86,9 @@ class NativeTextPatchTests(unittest.TestCase):
             "version": reader_answers.CONTRACT_VERSION,
             "reader": {"profile": "Fixture reader", "known_context": "No actual live reading",
                        "decision": "Validate the local evidence-binding protocol"},
+            "depth": {"mode": "orientation", "reason": "Structural fixture only: recover the one supplied finding"},
             "surfaces": [{"id": "finding-and-evidence", "mode": "blocks", "block_ids": ["finding", "evidence"]}],
-            "answers": [{"id": "A1", "question": "What changed and what remains unknown?",
+            "answers": [{"id": "A1", "kind": "takeaway", "question": "What changed and what remains unknown?",
                          "expected_information": "Pilot rose 5%; cause unknown.",
                          "source_location": "Structural fixture source", "source_status": "supported",
                          "required_on": ["finding-and-evidence"]}]})
@@ -108,6 +109,8 @@ class NativeTextPatchTests(unittest.TestCase):
             "reviewer_id": "invented-fixture-source-reviewer", "plan_source_coverage": "pass",
             "source_coverage_evidence": "Structural fixture only, not actual source verification.",
             "source_fidelity": "pass", "questions": [],
+            "depth_fit": {"mode": "orientation", "status": "pass", "reason": "Structural fixture: only the supplied bounded pilot statement is requested",
+                          "reader_quote": finding, "source_quote": source.read_text(encoding="utf-8")},
             "answers": [{"answer_id": "A1", "surface_id": surface["id"], "status": "pass",
                          "reader_quote": finding, "rationale": "Structural fixture only, not semantic evidence."}]})
         manifest_path = surfaces / "surface-manifest.json"
@@ -147,6 +150,24 @@ class NativeTextPatchTests(unittest.TestCase):
     def verify(self):
         return patch.verify(self.prewrite, self.readback, self.render, self.inspection)
 
+    def native_gate(self):
+        if not hasattr(self, "native_gate_args"):
+            import test_runtime_contract as fixtures
+            from lifecycle_support import make_run
+            task = fixtures.RuntimeContractTests()
+            task.setUp()
+            self.addCleanup(task.tearDown)
+            answer = patch.load(self.paths["answer_receipt"])
+            manifest = patch.load(answer["manifest_path"])
+            lock, _ = reader_answers.open_lock(manifest["lock_path"])
+            task.init_contract("--explicit-format", "feishu", "--reader-answer-plan", lock["plan"]["path"],
+                               "--source-bundle", lock["source"]["path"])
+            aggregate = task.complete_reader_review(self.paths["candidate"], content_snapshot=Path(manifest["snapshot"]["path"]))
+            run = make_run(self.base / "native-lifecycle", Path(manifest["snapshot"]["path"]), aggregate,
+                           contract_path=task.contract)
+            self.native_gate_args = {"contract": task.contract, "reader_review_aggregate": aggregate, "lifecycle_run": run}
+        return self.native_gate_args
+
     def test_editorial_review_must_quote_body_not_metadata(self):
         self.ready_for_verify()
         inspection = patch.load(self.inspection)
@@ -156,6 +177,11 @@ class NativeTextPatchTests(unittest.TestCase):
             self.verify()
 
     def run_cli(self, command, arguments, output, expected=0):
+        arguments = dict(arguments)
+        if command == "prepare":
+            arguments.update(self.native_gate())
+        elif expected != 2:
+            arguments["lifecycle_run"] = self.native_gate()["lifecycle_run"]
         args = [sys.executable, "-B", str(ROOT / "scripts" / "native_text_patch.py"), command]
         for name, path in arguments.items():
             args.extend(["--" + name.replace("_", "-"), str(path)])
@@ -167,7 +193,8 @@ class NativeTextPatchTests(unittest.TestCase):
     def test_prepare_requires_no_render_and_cannot_claim_completion(self):
         self.assertFalse(self.render.exists())
         receipt = self.prepare()
-        self.assertEqual(receipt["status"], "prewrite-approved")
+        self.assertEqual(receipt["status"], "patch-preconditions-pass")
+        self.assertFalse(receipt["action_preflight"])
         self.assertIs(receipt["complete"], False)
         self.assertIs(receipt["native_render_pending"], True)
         self.assertIs(receipt["external_write_performed"], False)
@@ -187,6 +214,39 @@ class NativeTextPatchTests(unittest.TestCase):
         self.assertIs(final["complete"], True)
         self.assertIs(final["native_render_pending"], False)
         self.assertEqual(final["evidence"]["prewrite"]["sha256"], patch.digest(self.prewrite))
+
+    def test_local_native_checks_are_not_a_complete_delivery(self):
+        self.ready_for_verify()
+        result = self.verify()
+        self.assertEqual(result["status"], "local-checks-pass")
+        self.assertFalse(result["complete"])
+
+    def test_native_cli_cannot_skip_lifecycle_or_promote_a_local_preflight(self):
+        self.ready_for_verify()
+        command = [sys.executable, "-B", str(ROOT / "scripts/native_text_patch.py"), "verify",
+                   "--prewrite", str(self.prewrite), "--readback", str(self.readback),
+                   "--render", str(self.render), "--inspection", str(self.inspection), "--output", str(self.final)]
+        missing = subprocess.run(command, text=True, capture_output=True)
+        self.assertNotEqual(missing.returncode, 0)
+        self.assertFalse(self.final.exists())
+        local = subprocess.run([*command, "--lifecycle-run", str(self.native_gate()["lifecycle_run"])],
+                               text=True, capture_output=True)
+        self.assertNotEqual(local.returncode, 0)
+        self.assertFalse(self.final.exists())
+
+    def test_native_completion_reopens_lifecycle_evidence(self):
+        self.ready_for_verify()
+        gate = self.native_gate()
+        self.write(self.prewrite, patch.prepare(**self.paths, **gate))
+        (gate["lifecycle_run"].parent / "unit.json").write_text('{"summary":"changed"}')
+        with self.assertRaisesRegex(ValueError, "changed"):
+            self.verify()
+
+    def test_native_answer_receipt_cannot_use_a_different_source_or_answer_plan(self):
+        gate = self.native_gate()
+        self.make_answer_receipt()
+        with self.assertRaisesRegex(ValueError, "another required-answer plan or source"):
+            patch.prepare(**self.paths, **gate)
 
     def test_candidate_style_change_is_rejected(self):
         self.candidate["blocks"][0]["style"]["bold"] = False
@@ -271,7 +331,7 @@ class NativeTextPatchTests(unittest.TestCase):
         self.write(self.paths["candidate"], self.candidate)
         self.write(self.paths["changes"], self.changes)
         self.make_answer_receipt()
-        self.assertEqual(self.prepare()["status"], "prewrite-approved")
+        self.assertEqual(self.prepare()["status"], "patch-preconditions-pass")
 
     def test_stale_answer_receipt_is_rejected(self):
         receipt = patch.load(self.paths["answer_receipt"])
@@ -319,6 +379,7 @@ class NativeTextPatchTests(unittest.TestCase):
 
     def test_missing_render_cannot_complete(self):
         self.ready_for_verify()
+        self.write(self.prewrite, patch.prepare(**self.paths, **self.native_gate()))
         self.render.unlink()
         self.run_cli("verify", {"prewrite": self.prewrite, "readback": self.readback,
                                 "render": self.render, "inspection": self.inspection}, self.final, expected=1)

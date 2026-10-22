@@ -21,6 +21,21 @@ from editorial_fixture import structural_review
 
 
 class RuntimeContractTests(unittest.TestCase):
+    def test_blind_reader_cannot_omit_attribution_replay(self):
+        self.init_contract()
+        artifact = self.base / 'report.html'
+        artifact.write_text('<html><body>Observed changes in the pilot only.</body></html>')
+        aggregate_path = self.complete_reader_review(artifact)
+        import reader_review
+        aggregate = json.loads(aggregate_path.read_text())
+        manifest = json.loads(Path(aggregate['manifest_path']).read_text())
+        entry = next(e for e in manifest['packets'] if e['dimension'] == 'no-context')
+        packet = json.loads(Path(entry['path']).read_text())
+        record = next(e for e in aggregate['reviews'] if e['dimension'] == 'no-context')
+        result = json.loads(Path(record['result_path']).read_text())
+        del result['reader_understanding']['attribution_replay']
+        self.assertTrue(reader_review.validate_result(result, manifest, packet))
+
     def test_editorial_checks_cannot_be_removed_from_finished_review(self):
         self.init_contract()
         artifact = self.base / "report.html"
@@ -111,6 +126,26 @@ class RuntimeContractTests(unittest.TestCase):
                     arguments.extend(["--reader-profile", "A target reader without project history"])
                 if "--source-bundle" not in arguments:
                     arguments.extend(["--source-bundle", str(self.source_bundle)])
+        # Keep the original action/authorization regressions on a real, complete
+        # lifecycle. Dedicated lifecycle tests exercise absent/broken stages.
+        if (arguments and arguments[0] in {"check-action", "verify"}
+                and "--artifact" in arguments and "--reader-review-aggregate" in arguments
+                and "--lifecycle-run" not in arguments):
+            task = json.loads(self.contract.read_text())
+            if arguments[0] == "check-action" or task["decisions"]["publication_target"] != "none":
+                from lifecycle_support import make_run
+                artifact = Path(arguments[arguments.index("--artifact") + 1])
+                aggregate = Path(arguments[arguments.index("--reader-review-aggregate") + 1])
+                raw = json.loads(aggregate.read_text())
+                if raw.get("status") == "pass":
+                    key = (str(artifact), str(aggregate))
+                    if not hasattr(self, "lifecycle_runs"):
+                        self.lifecycle_runs = {}
+                    if key not in self.lifecycle_runs:
+                        directory = self.base / f"lifecycle-action-{len(self.lifecycle_runs)}"
+                        self.lifecycle_runs[key] = make_run(directory, artifact, aggregate, contract_path=self.contract)
+                    run = self.lifecycle_runs[key]
+                    arguments.extend(["--lifecycle-run", str(run)])
         completed = subprocess.run(
             [sys.executable, "-B", str(RUNTIME), *arguments],
             cwd=ROOT,
@@ -144,6 +179,7 @@ class RuntimeContractTests(unittest.TestCase):
         self,
         artifact: Path,
         *,
+        content_snapshot: Path | None = None,
         round_number: int = 1,
         previous_aggregate: Path | None = None,
         failing_dimension: str | None = None,
@@ -165,10 +201,13 @@ class RuntimeContractTests(unittest.TestCase):
         ]
         if previous_aggregate:
             prepare_args.extend(["--previous-aggregate", str(previous_aggregate)])
+        if content_snapshot:
+            prepare_args.extend(["--content-snapshot", str(content_snapshot)])
         self.run_reader_cli(*prepare_args)
 
         result_paths: list[Path] = []
         answer_manifest = reader_answers.load(review_dir / "answers" / "surface-manifest.json")
+        locked_source = Path(json.loads(self.contract.read_text())["decisions"]["reader_validation"]["source_bundle"]["path"])
         surface = answer_manifest["surfaces"][0]
         responses = [{"surface_id": surface["id"], "surface_sha256": surface["sha256"],
                       "reader_id": f"agent-no-context-{self.review_counter}",
@@ -220,11 +259,13 @@ class RuntimeContractTests(unittest.TestCase):
             if "reader_value_template" in packet:
                 result["reader_value"] = structural_review(
                     tuple(packet["reader_value_template"]["checks"]), packet["artifact"]["sha256"],
-                    reader_value.read_text(artifact), reader_value.read_text(self.source_bundle), render,
+                    reader_value.read_text(packet.get('editorial_text', packet['artifact'])['path']), reader_value.read_text(locked_source), render,
                 )
             if dimension == "no-context":
+                from context_fixture import structural_attribution
                 result["answer_responses"] = responses
                 result["reader_understanding"] = {
+                    "attribution_replay": structural_attribution(reader_value.read_text(packet['artifact']['path'])),
                     "object": "The documented workflow",
                     "main_conclusion": "The workflow should preserve relevant evidence and context.",
                     "evidence": "The report explains the supporting mechanisms and constraints.",
@@ -239,7 +280,7 @@ class RuntimeContractTests(unittest.TestCase):
                     "plan_source_coverage": "pass", "source_coverage_evidence": "Structural fixture only",
                     "source_fidelity": "pass", "questions": [],
                     "depth_fit": {"mode": "orientation", "status": "pass", "reason": "STRUCTURAL FIXTURE: the limited task only requests the supplied statement.",
-                                  "reader_quote": responses[0]["findings"][0], "source_quote": self.source_bundle.read_text()[:70]},
+                                  "reader_quote": responses[0]["findings"][0], "source_quote": locked_source.read_text()[:70]},
                     "answers": [{"answer_id": "A1", "surface_id": surface["id"], "status": "pass",
                                  "reader_quote": responses[0]["findings"][0], "rationale": "Structural fixture only"}]
                 }

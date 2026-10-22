@@ -4,7 +4,14 @@ This is a narrow alternative to the full-artifact runtime, not a waiver of final
 render verification. Use it only for an explicitly authorized, standard-risk
 Feishu text replacement in existing blocks. Do not use it for new publication,
 structural/style/chart edits, unknown targets, sensitive/high-risk changes, or
-to avoid a failed full-artifact review.
+to avoid a failed full-artifact review. Its action/completion CLI requires the
+same functional [writing lifecycle](writing-lifecycle.md) and original four-reader
+aggregate as checked delivery. Python local checks alone are not action approval.
+If an actual pending page must be written before layout/review, use the narrow
+`runtime_contract.py check-action --preview` route in [writing-lifecycle.md](writing-lifecycle.md)
+under the same existing authorization. Its preview-only receipt is not a final
+native verification or publication receipt. Register the checked canonical XML,
+not the candidate JSON tool snapshot, as the lifecycle text artifact.
 
 1. Read the live native document. Save a lossless normalized snapshot with
    `document_id`, `revision`, ordered `blocks` and their original IDs, text,
@@ -36,10 +43,11 @@ to avoid a failed full-artifact review.
 python3 scripts/native_text_patch.py prepare \
   --baseline baseline.json --live-baseline live.json --candidate candidate.json \
   --changes changes.json --authorization authorization.json \
-  --answer-receipt answers.json --output prewrite.json
+  --answer-receipt answers.json --contract task-contract.json \
+  --reader-review-aggregate aggregate.json --lifecycle-run RUN --output prewrite.json
 python3 scripts/native_text_patch.py verify \
   --prewrite prewrite.json --readback readback.json --render native.png \
-  --inspection inspection.json --output verified.json
+  --inspection inspection.json --lifecycle-run RUN --output verified.json
 ```
 
 Include `reader_value` in the existing inspection: use `reader_value.template` with axes `expression`, `selection`, `meaning`, `presentation` and the readback SHA256. Anchor quotations to readback text, source quotation to the original baseline, and presentation to the supplied native render. Explain retention and protected meaning. Missing/stale/unresolved editorial evidence blocks completion; do not add a separate review round.

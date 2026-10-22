@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.35.1 - 2026-10-22
+
+- Fix a real preview-run failure: source identity now compares the original path and content hash, not optional language-detection metadata. Changed hashes and substituted source paths are still rejected; regression tests cover all three cases.
+- Clarify the existing nested review record fields in the reviewer schema and add read-only format diagnostics. Malformed records can be corrected without rewriting a negative judgment or claiming acceptance; capture and retry limits are unchanged.
+
+### Included From The 0.35 Runtime
+
+- Synchronize the latest installed runtime's compact review transport, version-bound measurement cache, dependency-aware native dispatch, and execution statistics.
+- Preserve original reviewer judgments and missing-evidence failures. Matching prose does not replace rendering or permit reusing judgments across changed drafts.
+
+### Included From The 0.34 Runtime And New Examples
+
+- Synchronize the current canonical runtime: version-bound writing stages, stable task identities, captured native review dispatch, bounded semantic and technical retries, and lifecycle-bound checked delivery.
+- Add context-value and source-attribution checks to existing reader reviews. Keep useful background and material limits; reject unsupported attribution rather than imposing a phrase blacklist.
+- Preserve the public fictional evaluation case and its privacy regression tests; private-origin examples and local run records are excluded from this repository.
+- Replace the README showcase with a prompt-to-research-report example about AI and work, with English and Chinese prompts, report previews, cited HTML reports, and direct reading links.
+- Upgrade: use the lifecycle and managed execution entrypoints described in the linked references. Older self-filled review records do not establish captured execution. This does not install a host-wide hook, prove semantic truth, or claim stability across all agents.
+
 ## 0.30.0 - 2026-10-10
 
 - Strengthen reader relevance, direct syntax, decision-changing caveats and purposeful whole-document progression. Keep useful repetition, author voice and source uncertainty; load additional fictional examples only when needed.

@@ -14,7 +14,9 @@ block_id">XML-escaped text</block> per block in existing order, then </document>
 Every line ends with LF. Both quotes are escaped; CR is &#13;, and attribute LF
 and TAB are &#10; and &#9;. No trimming, HTML rendering, or text substitution.
 
-prepare requires no screenshot. Its prewrite-approved receipt is NOT completion.
+prepare needs no post-write screenshot. Its prewrite-approved receipt is NOT
+completion. The checked CLI also binds a functional lifecycle and four-review
+aggregate. Python checks without this gate return partial local states only.
 After the separately executed authorized write, verify requires a new readback
 revision, matching native blocks, a PNG/JPEG, and an inspection JSON:
   {readback_sha256, render_sha256,
@@ -30,8 +32,10 @@ images and inspection records are structural fixtures, never live Feishu proof.
 
 CLI:
   prepare --baseline B --live-baseline L --candidate C --changes D
-          --authorization A --answer-receipt R --output P
-  verify --prewrite P --readback N --render I --inspection V --output F
+          --authorization A --answer-receipt R --contract T
+          --reader-review-aggregate G --lifecycle-run RUN --output P
+  verify --prewrite P --readback N --render I --inspection V
+         --lifecycle-run RUN --output F
 Receipts are created exclusively; existing evidence is never overwritten.
 """
 from __future__ import annotations
@@ -48,7 +52,7 @@ from xml.sax.saxutils import escape
 import reader_answers
 
 
-VERSION = "native-text-patch-1"
+VERSION = "native-text-patch-2"
 INPUT_NAMES = ("baseline", "live_baseline", "candidate", "changes",
                "authorization", "answer_receipt")
 CHECK_NAMES = ("readability", "overflow", "claim_evidence_adjacency")
@@ -199,7 +203,35 @@ def _validate_answer_receipt(answer_path, candidate_path, candidate):
         raise ValueError("reader snapshot is not the exact candidate block XML")
 
 
-def prepare(baseline, live_baseline, candidate, changes, authorization, answer_receipt):
+def _lifecycle_gate(contract, aggregate, lifecycle_run, candidate, answer_receipt):
+    import runtime_contract as runtime
+    from lifecycle_guard import verify_lifecycle
+    if contract is None or aggregate is None or lifecycle_run is None:
+        raise ValueError("native action requires contract, reader-review aggregate and lifecycle run")
+    contract_path, aggregate_path = Path(contract).resolve(), Path(aggregate).resolve()
+    task = runtime.read_json(contract_path)
+    runtime.verify_contract_integrity(task)
+    answer = load(answer_receipt)
+    manifest = load(answer["manifest_path"])
+    answer_lock, _ = reader_answers.open_lock(manifest["lock_path"])
+    task_lock = task["decisions"]["reader_validation"].get("answer_lock", {})
+    if any(answer_lock.get(key) != task_lock.get(key) for key in ("plan", "source")):
+        raise ValueError("native answer receipt uses another required-answer plan or source")
+    failures, original = runtime.validate_aggregate_for_artifact(aggregate_path, task, Path(candidate).resolve())
+    if failures or original is None:
+        raise ValueError("native reader reviews failed: " + "; ".join(failures))
+    # Native JSON is a lossless tool snapshot, not a text extraction format.
+    # _validate_answer_receipt has checked this exact canonical XML against it.
+    lifecycle_artifact = Path(manifest["snapshot"]["path"])
+    lifecycle = verify_lifecycle(lifecycle_run, lifecycle_artifact, aggregate_path, contract_path=contract_path)
+    return {"contract": reference(contract_path), "reader_review_aggregate": reference(aggregate_path),
+            "lifecycle_artifact": reference(lifecycle_artifact),
+            "run_path": str(Path(lifecycle_run).resolve()),
+            "evidence": [reference(path) for path in lifecycle["evidence_paths"]]}
+
+
+def prepare(baseline, live_baseline, candidate, changes, authorization, answer_receipt,
+            *, contract=None, reader_review_aggregate=None, lifecycle_run=None):
     """Return prewrite evidence only. This never writes to the native document."""
     paths = dict(zip(INPUT_NAMES, (baseline, live_baseline, candidate, changes,
                                   authorization, answer_receipt)))
@@ -218,7 +250,12 @@ def prepare(baseline, live_baseline, candidate, changes, authorization, answer_r
         raise ValueError("reader surface omits a changed block")
     for name, item in inputs.items():
         check_reference(item, name)
-    return {"version": VERSION, "status": "prewrite-approved", "complete": False,
+    gate = None
+    if any(value is not None for value in (contract, reader_review_aggregate, lifecycle_run)):
+        gate = _lifecycle_gate(contract, reader_review_aggregate, lifecycle_run, candidate, answer_receipt)
+    return {"version": VERSION, "status": "prewrite-approved" if gate else "patch-preconditions-pass", "complete": False,
+            "verification_scope": "writing-lifecycle-and-native-review" if gate else "patch-preconditions-only",
+            "action_preflight": gate is not None, "lifecycle_gate": gate,
             "native_render_pending": True, "external_write_performed": False,
             "document_id": old["document_id"], "baseline_revision": old["revision"],
             "block_ids": block_ids, "inputs": inputs,
@@ -303,13 +340,13 @@ def _validate_inspection(inspection, readback_sha, render_sha):
 
 
 def verify(prewrite, readback, render, inspection):
-    """Recheck original evidence and native results before returning completion."""
+    """Recheck native results; only a lifecycle-bound preflight can complete."""
     originals = {name: reference(path) for name, path in
                  (("prewrite", prewrite), ("readback", readback),
                   ("render", render), ("inspection", inspection))}
     receipt = load(prewrite)
     if (not isinstance(receipt, dict) or receipt.get("version") != VERSION
-            or receipt.get("status") != "prewrite-approved"
+            or receipt.get("status") not in {"prewrite-approved", "patch-preconditions-pass"}
             or receipt.get("complete") is not False
             or receipt.get("native_render_pending") is not True):
         raise ValueError("verify requires a valid prewrite-approved receipt; prewrite is not completion")
@@ -318,7 +355,17 @@ def verify(prewrite, readback, render, inspection):
         raise ValueError("prewrite receipt must bind every original input")
     for name, item in inputs.items():
         check_reference(item, name)
-    rebuilt = prepare(**{name: inputs[name]["path"] for name in INPUT_NAMES})
+    gate = receipt.get("lifecycle_gate")
+    gate_args = {}
+    if gate is not None:
+        for name in ("contract", "reader_review_aggregate"):
+            check_reference(gate.get(name), name)
+        for item in gate.get("evidence", []):
+            check_reference(item, "lifecycle")
+        gate_args = {"contract": gate["contract"]["path"],
+                     "reader_review_aggregate": gate["reader_review_aggregate"]["path"],
+                     "lifecycle_run": gate["run_path"]}
+    rebuilt = prepare(**{name: inputs[name]["path"] for name in INPUT_NAMES}, **gate_args)
     if canonical(receipt) != canonical(rebuilt):
         raise ValueError("prewrite receipt no longer matches its original evidence")
     candidate = snapshot(load(inputs["candidate"]["path"]), "candidate")
@@ -344,7 +391,11 @@ def verify(prewrite, readback, render, inspection):
     for name, item in inputs.items():
         check_reference(item, name)
     _validate_answer_receipt(inputs["answer_receipt"]["path"], inputs["candidate"]["path"], candidate)
-    return {"version": VERSION, "status": "verified", "complete": True,
+    if gate is not None:
+        for item in gate["evidence"]:
+            check_reference(item, "lifecycle")
+    return {"version": VERSION, "status": "verified" if gate else "local-checks-pass", "complete": gate is not None,
+            "lifecycle_gate": gate,
             "native_render_pending": False, "document_id": actual["document_id"],
             "baseline_revision": candidate["revision"], "readback_revision": actual["revision"],
             "block_ids": rebuilt["block_ids"], "inputs": inputs,
@@ -365,13 +416,21 @@ def main():
     preparing = commands.add_parser("prepare", help="authorize only the declared patch; native render remains pending")
     for name in INPUT_NAMES:
         preparing.add_argument("--" + name.replace("_", "-"), required=True)
+    for name in ("contract", "reader-review-aggregate", "lifecycle-run"):
+        preparing.add_argument("--" + name, required=True)
     preparing.add_argument("--output", required=True)
     verifying = commands.add_parser("verify", help="complete only after exact readback and native render inspection")
     for name in ("prewrite", "readback", "render", "inspection", "output"):
         verifying.add_argument("--" + name, required=True)
+    verifying.add_argument("--lifecycle-run", required=True)
     args = vars(parser.parse_args())
     command, output = args.pop("command"), args.pop("output")
     try:
+        if command == "verify":
+            lifecycle_run = args.pop("lifecycle_run")
+            gate = load(args["prewrite"]).get("lifecycle_gate")
+            if not gate or Path(lifecycle_run).resolve() != Path(gate["run_path"]).resolve():
+                raise ValueError("native completion requires its original lifecycle-bound preflight")
         receipt = prepare(**args) if command == "prepare" else verify(**args)
         save_new(output, receipt)
         print(receipt["status"] + (": native render and readback still required; not complete" if command == "prepare" else ": post-write evidence verified"))

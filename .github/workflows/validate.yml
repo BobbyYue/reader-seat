@@ -28,6 +28,14 @@ jobs:
       - name: Test runtime contract enforcement
         run: python -m unittest discover -s tests -v
 
+      - name: Set up Node for the native review bridge
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test native review bridge
+        run: node tests/test_writing_host.js
+
       - name: Smoke-test module resolution
         run: >-
           python scripts/resolve_modules.py

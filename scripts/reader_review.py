@@ -10,6 +10,7 @@ import json
 import sys
 from pathlib import Path
 import reader_value
+import source_attribution
 
 
 DIMENSIONS = (
@@ -233,6 +234,8 @@ def command_prepare(args: argparse.Namespace) -> None:
             "render_evidence": renders if dimension == "structure-visual" else [],
         }
         if dimension == "no-context":
+            packet['attribution_template'] = source_attribution.template(Path(packet['artifact']['path']).read_text(encoding='utf-8'))
+            packet['reading_guidance'] += ' Complete attribution_template as reader_understanding.attribution_replay from this surface only: who says what, and is a negative conclusion established? ' + source_attribution.GUIDANCE
             packet["answer_packet"] = reader_answers.load(primary_surface["packet_path"])
             packet["reading_guidance"] += " Read only this extracted surface; never open the full artifact. Include answer_responses as a one-item array using answer_packet.response_fields. Do not score against unseen expected answers."
             packet["reading_guidance"] += " Restate any reasons or relationships you actually understand; do not fill missing explanations from your own knowledge."
@@ -248,7 +251,7 @@ def command_prepare(args: argparse.Namespace) -> None:
         if axes:
             editorial_text = args.content_snapshot.resolve() if args.content_snapshot else artifact
             packet["editorial_text"] = {"path": str(editorial_text), "sha256": file_hash(editorial_text)}
-            packet["reader_value_template"] = reader_value.template(axes, artifact_sha256)
+            packet["reader_value_template"] = reader_value.template(axes, artifact_sha256, reader_value.read_text(packet.get("editorial_text", packet["artifact"])["path"]), reader_value.read_text(source_bundle) if dimension == 'source-reliability' else '')
             packet["reader_value_guidance"] = {axis: reader_value.GUIDANCE[axis] for axis in axes}
             packet["reading_guidance"] += " Complete reader_value_template as reader_value in the same response. Quote the final artifact, explain reader impact and protected meaning. Every requested addition must name a concrete misunderstanding it prevents; completeness or style preference alone does not justify it. Never expose this audit in the document."
         packet["packet_sha256"] = object_hash(packet)
@@ -279,6 +282,10 @@ def command_prepare(args: argparse.Namespace) -> None:
     }
     manifest_path = output_dir / "round-manifest.json"
     write_json(manifest_path, manifest)
+    if getattr(args, "lifecycle_run", None):
+        import writing_execution
+        writing_execution.register_packets(args.lifecycle_run,
+            {p["dimension"]: p["path"] for p in packets}, manifest_path)
     print(f"PASS: reader review round prepared | manifest={manifest_path}")
 
 
@@ -387,6 +394,7 @@ def validate_result(result: dict, manifest: dict, packet: dict) -> list[str]:
         if not isinstance(understanding, dict):
             failures.append("no-context result has no reader_understanding object")
         else:
+            failures.extend(source_attribution.validate(understanding.get('attribution_replay'), Path(packet['artifact']['path']).read_text(encoding='utf-8')))
             for field in ("object", "main_conclusion", "evidence", "meaning", "action"):
                 if len(str(understanding.get(field, "")).strip()) < 2:
                     failures.append(f"no-context reader understanding lacks {field}")
@@ -411,7 +419,12 @@ def validate_answer_evidence(manifest, contract, results):
         source = results["source-reliability"]
         responses = blind["answer_responses"]
         evaluation = source["answer_evaluation"]
+        source_map = source['reader_value']['checks']['meaning']['source_attribution']
+        failures_attribution = source_attribution.compare(source_map, blind['reader_understanding']['attribution_replay'])
+        readability = results['readability']['reader_value']['checks']['selection']['context_review']['attribution_replay']
+        failures_attribution.extend(source_attribution.compare(source_map, readability))
         failures = reader_answers.validate_answers(answer_manifest, responses, evaluation)
+        failures.extend(failures_attribution)
         if any(r["reader_id"] != blind["reviewer"]["agent_id"] for r in responses):
             failures.append("answer response identity differs from the no-context reviewer")
         if evaluation["reviewer_id"] != source["reviewer"]["agent_id"]:
@@ -743,6 +756,7 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--round", type=int, required=True)
     prepare.add_argument("--previous-aggregate", type=Path)
     prepare.add_argument("--output-dir", type=Path, required=True)
+    prepare.add_argument("--lifecycle-run", type=Path, help="Register exact packets with the managed writing task")
     prepare.set_defaults(func=command_prepare)
 
     aggregate = subparsers.add_parser("aggregate", help="validate and combine four review results")

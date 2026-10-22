@@ -7,8 +7,8 @@ contract decides whether delivery may continue.
 
 ## Non-Negotiable Execution Model
 
-Each review round is one parallel batch containing exactly four fresh
-subagents:
+Each round is one parallel batch containing exactly four fresh subagents.
+Independent jobs run concurrently; source-answer evaluation waits for frozen blind answers:
 
 1. `no-context` checks what a target reader can understand without project
    history or source access;
@@ -61,7 +61,9 @@ at least one real render. The source bundle is selected and hashed during
 `runtime_contract.py init`; it must contain the substantive source material and
 source metadata used by the artifact, not the main agent's summary of it.
 
-Launch all four packet reviews concurrently. Give each subagent only its packet
+Use [managed execution](writing-execution.md), not hand-filled identity records.
+Prepare packets with `--lifecycle-run RUN` so the actual dispatched files are
+registered. Give each subagent only its packet
 and the artifact or evidence paths named by that packet. Require one JSON result
 that follows `config/reader-review-result.schema.json`; do not ask the reviewer
 to rewrite the document.

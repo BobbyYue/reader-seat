@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import reader_value
+from context_fixture import structural_context, structural_attribution
 
 
 class WritingJudgmentTests(unittest.TestCase):
@@ -31,7 +32,7 @@ class WritingJudgmentTests(unittest.TestCase):
     def test_existing_evidence_is_required_without_new_style_fields(self):
         review = reader_value.template(("expression", "selection", "meaning"), "f" * 64)
         checks = review["checks"]
-        self.assertEqual(review["version"], 2)
+        self.assertEqual(review["version"], 4)
         self.assertEqual(set(checks["expression"]["craft_checks"]),
                          {"concrete_detail", "progression", "reading_flow"})
         self.assertNotIn("literary_score", checks["expression"])
@@ -43,7 +44,9 @@ class WritingJudgmentTests(unittest.TestCase):
         for probe in checks["expression"]["craft_checks"].values():
             probe.update(status="pass", quote=text, reason="The reader can identify the missing result.")
         checks["selection"]["removal_effect"] = "Removing this hides the unknown result."
+        checks["selection"]["context_review"] = structural_context(text)
         checks["meaning"].update(source_quote=text, detail_support="No extra result was added.")
+        checks['meaning']['source_attribution'] = structural_attribution(text, text, 'source')
         self.assertEqual(reader_value.validate(review, tuple(checks), "f" * 64, text, source=text), [])
         checks["expression"]["craft_checks"]["reading_flow"]["reason"] = ""
         self.assertTrue(reader_value.validate(review, tuple(checks), "f" * 64, text, source=text))

@@ -1,20 +1,44 @@
 # Reader's Seat
 
-> Turn scattered source material into complete documents readers can understand, verify, and act on.
+> Write complete documents readers can understand, starting from a question or existing material.
 
-[中文说明](README.zh-CN.md) · [Prompt examples](examples/quick-start.en.md) · [Install](#install)
+[中文说明](README.zh-CN.md) · [Read the example report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.30.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.35.1-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
-Information-rich sources can still leave the reader to reconstruct the point: which result matters, what supports it, and what decision follows. Reader's Seat turns that material into a complete document with the conclusion, evidence, limits, and next step visible, without inventing missing facts.
+An AI answer can be long, fluent, and still leave you asking: what is the conclusion, what supports it, and what does it mean for me? Reader's Seat organizes a complete document around those reader questions. It can research and write from a prompt, or restructure material you already have, without filling evidence gaps with invented facts.
 
-<p align="center"><strong>① Original webpage on the left → ② Reader's Seat output on the right</strong></p>
+## Example: how will AI affect jobs at internet companies?
 
-<img src="assets/readme-preview-v3.jpg" alt="A real long screenshot of the Artificial Analysis comparison page transformed into a concise Reader's Seat decision brief" width="1280">
+You work in engineering, product, data, or operations. You keep seeing claims about AI replacing jobs, but need to distinguish changes already observed from forecasts before deciding what to learn or change at work.
 
-<sub>The left panel uses a real continuous screenshot excerpt from the live [Artificial Analysis model comparison](https://artificialanalysis.ai/models/); the right panel synthesizes all 11 comparison sections. The preview is a dated snapshot and rankings will change.</sub>
+**Input: a research question, not a finished article.**
+
+```text
+Will advances in AI replace human work? How are existing jobs being affected,
+especially roles at internet companies? Cover changes already taking place
+and possible long-term changes. Based on current authoritative research and
+surveys, use Reader's Seat to produce a research report.
+Write in English and output HTML.
+```
+
+**Output: a complete, source-linked report.**
+
+The screenshot shows the report's explanation of how task automation affects staffing. Open the full report for the research findings, six-role comparison, and practical next steps.
+
+<a href="https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html"><img src="assets/ai-and-work-report.en.png" alt="Actual English report generated with Reader's Seat: AI and work, observed evidence, implications for internet-company roles, and conditional long-term scenarios" width="1120"></a>
+
+**[Open the English report →](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html)** · [HTML file](docs/reports/ai-and-work.en.html) · [Chinese report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html)
+
+The report gives the reader three things:
+
+- **A way to read the evidence:** task exposure, AI use, productivity, and employment are different measures.
+- **A concrete view of familiar work:** task-level implications for engineering, data analysis, product, design and content, operations and marketing, and customer support.
+- **A usable outlook:** observed changes are separated from long-term scenarios, with sources and practical questions to investigate in your own work.
+
+<sub>Generated with the Reader's Seat 0.34 workflow; evidence checked on 22 October 2026. It draws on nine primary sources, including ILO, Stanford, Microsoft Research, METR, the World Economic Forum, and Anthropic. Role mappings are synthesis, not measured job-loss forecasts. This is one example, not a cross-agent benchmark.</sub>
 
 ## Install
 
@@ -25,7 +49,9 @@ Send this instruction to an agent that can install skills:
 ```text
 Install Reader's Seat from https://github.com/BobbyYue/reader-seat.
 Use the skill installer supported by this agent, keep the folder name reader-seat,
-then confirm that SKILL.md can be loaded. Do not overwrite an existing installation without asking.
+then confirm that this agent can load the skill, run its Python checks, and
+support its isolated review workflow. Report missing support rather than
+claiming full verification. Do not overwrite an existing installation without asking.
 ```
 
 ### Clone Manually
@@ -38,10 +64,13 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 
 Then start a new agent session or ask the agent to load `reader-seat/SKILL.md` explicitly. Skill discovery differs between agents.
 
+Full checked delivery also needs a compatible review-capture integration. Loading the instructions alone does not connect that integration; see [host requirements](references/writing-execution.md).
+
 ## What You Can Make
 
 | Start with | Get a complete document |
 | --- | --- |
+| A question, intended reader, and access to reliable sources | **Research report** that explains the evidence, competing interpretations, uncertainty, and implications |
 | Weekly reports, milestones, meeting notes, issue lists | **Project status brief** with the current conclusion, progress, blockers, decisions, and next steps |
 | Metric definitions, query results, charts, methodology notes | **Analysis report** with the finding and magnitude, supporting evidence, data limits, alternative explanations, and next validation |
 | Requirements, constraints, candidate architectures, benchmarks | **Technical decision document** with the decision, option comparison, trade-offs, implementation impact, rollback, and unresolved risks |
@@ -73,7 +102,16 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 - **Output fit:** the default is self-contained HTML in the source material's dominant language, unless another format or language is requested.
 - **Delivery boundary:** language, format, and publication permission are locked before drafting; failed or missing verification blocks delivery.
 
-Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents rather than short-message polishing or unsupported content expansion.
+Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents, including research from a question, rather than short-message polishing or unsupported content expansion.
+
+<details>
+<summary><strong>What's new in 0.35.1 and earlier upgrade notes</strong></summary>
+
+### Current workflow
+
+Version 0.34.0 binds writing stages, actual isolated review returns, and final delivery to the same document version. It also checks whether context adds reader value and whether claims are attributed to the right source. The integration rejects missing or stale evidence; it does not guarantee semantic correctness or install a host-wide enforcement hook. See the [changelog](CHANGELOG.md), [writing lifecycle](references/writing-lifecycle.md), and [managed execution](references/writing-execution.md).
+
+Version 0.35 adds compact review records, reuse of unchanged computed measurements, and dependency-aware review scheduling. Version 0.35.1 also fixes a source-identity mismatch discovered while preparing this example: optional language metadata no longer blocks an unchanged source; changed source contents and paths remain blocked.
 
 ### Upgrading to 0.30.0
 
@@ -93,6 +131,8 @@ Artifact initialization now requires a source-backed reader-answer plan. Older r
 
 Version 0.24.1 adds contextual expression review: locate the passage, explain its reader impact, and make the smallest meaning-preserving edit. Clear professional language stays unchanged; reviewer taste alone cannot trigger another round. This reuses the existing reviewers and retry limits.
 
+</details>
+
 <details>
 <summary><strong>Repository structure, validation, and licenses</strong></summary>
 
@@ -104,6 +144,7 @@ Version 0.24.1 adds contextual expression review: locate the passage, explain it
 | `config/` | Defines document scenarios, module-loading profiles, agent adapters, and the enforceable skill contract. |
 | `evals/` | Provides frozen trigger, behavior, and cross-agent cases with judging criteria. |
 | `examples/` | Contains prompts users can adapt to common document tasks. |
+| `docs/` | Hosts complete, directly readable HTML examples on GitHub Pages. |
 | `references/` | Provides detailed rules selected for each scenario, format, title, evidence, and visual need. |
 | `scripts/` | Validates the skill, selects modules, creates HTML report scaffolds, and runs evaluations. |
 | `tests/` | Verifies language, format, authorization, source integrity, and delivery-receipt enforcement. |

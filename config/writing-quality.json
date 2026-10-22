@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "max_review_rounds": 3,
+  "metrics": ["vocabulary", "terms", "sentence_length", "paragraphs", "verbosity", "evidence", "grammar", "time", "reading_burden", "reading_efficiency"],
+  "signals": {
+    "zh_sentence_review_start": 30,
+    "longest_paragraph_candidates": 3,
+    "literal_attention_terms": ["进行", "相关", "方面", "综上所述", "值得注意的是", "in conclusion", "it is worth noting"],
+    "all_are_review_signals_not_quality_thresholds": true
+  },
+  "profiles": {
+    "functional": {
+      "purpose": "Readers can understand and use supported information with its decisive conditions.",
+      "required_answers": true,
+      "review_mode": "existing-skill-review",
+      "preserve": ["facts", "conditions", "scope", "uncertainty", "ownership", "time", "source_definitions"],
+      "opening": "Required first-pass answers and decisive qualifications remain visible. A position measurement is not a timed human test."
+    },
+    "literary": {
+      "purpose": "The work sustains its literary intention, voice, character knowledge and internal relations.",
+      "required_answers": false,
+      "review_mode": "independent-literary-review",
+      "review_roles": ["professional", "reader"],
+      "preserve": ["explicit_constraints", "fiction_permission", "internal_coherence", "voice", "meaningful_ambiguity", "rhythm"],
+      "opening": "An actual person, situation, voice or image supports further reading; quiet openings and plural readings are allowed."
+    }
+  }
+}

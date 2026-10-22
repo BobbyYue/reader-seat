@@ -1,6 +1,11 @@
 {
   "schema_version": 3,
-  "skill_version": "0.30.0",
+  "skill_version": "0.35.1",
+  "managed_execution": {
+    "policy": "config/execution-policy.json",
+    "controller": "scripts/writing_execution.py",
+    "required_at_checked_exit": true
+  },
   "name": "reader-seat",
   "primary_routes": [
     {
@@ -277,6 +282,16 @@
     "reader_answer_plan_required_before_drafting": true,
     "reader_answer_script": "scripts/reader_answers.py",
     "native_text_patch_script": "scripts/native_text_patch.py",
+    "writing_lifecycle_script": "scripts/writing_lifecycle.py",
+    "writing_lifecycle_guard": "scripts/lifecycle_guard.py",
+    "writing_lifecycle_reference": "references/writing-lifecycle.md",
+    "writing_lifecycle_profile": "functional",
+    "writing_lifecycle_required_for_checked_delivery": true,
+    "writing_lifecycle_required_for_external_actions": true,
+    "writing_lifecycle_binds_original_reader_aggregate": true,
+    "writing_lifecycle_reuses_native_task_basis": true,
+    "writing_lifecycle_preview_only_action_supported": true,
+    "bare_runtime_verification_scope": "semantic-and-format-only",
     "reader_validation_required_for_finished_artifacts": true,
     "reader_validation_context_isolation_required": true,
     "reader_validation_parallel_required": true,
@@ -547,5 +562,6 @@
     "task-bundle-reader-and-gates-complete",
     "reader-review-aggregate-source-result-revalidation",
     "high-risk-action-preflight-judge-required"
-  ]
+  ],
+  "content_value_version": 1
 }

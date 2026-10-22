@@ -8,8 +8,8 @@
     },
     {
       "id": "G2-source",
-      "required_record": "Record sourced facts, numbers, definitions, scope, claims, uncertainty, ownership, commitments, title/visual claims, and provenance; for mutable sources, add observation and visible version/update time when material.",
-      "exit_condition": "The source boundary is explicit and every material claim or visual has a support decision."
+      "required_record": "Record source facts, numbers, definitions, scope, claims, uncertainty, owners, commitments, title/visual claims and provenance; mutable sources need observed time and visible version/update markers when material.",
+      "exit_condition": "Every material claim/visual has an explicit source boundary and support decision."
     },
     {
       "id": "G3-route",
@@ -51,11 +51,11 @@
     },
     {
       "id": "evidence-calibration",
-      "instruction": "Keep observed fact, interpretation, causal claim, recommendation, assumption, and unknown distinguishable; action must not exceed evidence or authority."
+      "instruction": "Keep facts, judgments, causes, assumptions and unknowns distinct. Match speaker, clause support and negatives to reader replay; act within evidence/authority."
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Require anchored reader_value v2 craft_checks/detail_support via references/writing-craft.md. Missing/stale/unresolved evidence blocks delivery; reuse current rounds."
+      "instruction": "Require reader_value v4 craft/detail, selection.context_review, meaning.source_attribution. Missing/stale/unresolved or mismatched records block pass; reuse rounds."
     },
     {
       "id": "external-action-authorization",
@@ -89,7 +89,7 @@
     "runtime-enforcement": [
       {
         "id": "runtime-init-before-draft",
-        "instruction": "Before drafting artifacts, init with --reader-answer-plan; follow references/required-reader-answers.md and the locked task contract."
+        "instruction": "Before units, init the native functional lifecycle and writing_execution with the host task ID. Use captured dispatch/delivery; declarations are not execution proof."
       },
       {
         "id": "runtime-decisions-immutable",
@@ -101,16 +101,16 @@
       },
       {
         "id": "runtime-action-preflight",
-        "instruction": "Immediately before any authorized external mutation, run check-action against the exact artifact, target, action, and reader-review aggregate.",
+        "instruction": "Before external mutation, check-action --lifecycle-run RUN with exact artifact, target, action and original aggregate. Native patches require the same gate.",
         "allow_not_applicable": true
       },
       {
         "id": "runtime-final-verification",
-        "instruction": "Use deliver.py verify to recheck the exact artifact, contract, bundle, manifest and reviews; consume only its checked payload. Native patches retain live verification."
+        "instruction": "Use deliver.py verify --lifecycle-run RUN for the exact checked payload; native patches retain live verification. Bare runtime verify is local only."
       },
       {
         "id": "runtime-third-round-draft",
-        "instruction": "After a valid third-round reader-review non-pass, use present-draft and show only a clearly labeled review-incomplete draft with unresolved issues and a user decision request; external actions remain blocked.",
+        "instruction": "For round-three non-pass use deliver.py present-draft --lifecycle-run RUN; lifecycle-draft needs three completed rounds and current failure/issues. Label the draft, ask for direction; never publish.",
         "allow_not_applicable": true
       },
       {
@@ -121,7 +121,7 @@
     "reader-validation": [
       {
         "id": "reader-review-four-isolated",
-        "instruction": "For every finished artifact, use reader_review.py prepare and launch exactly four fresh, mutually isolated reviewers concurrently: no-context, readability, source-reliability, and structure-visual."
+        "instruction": "Prepare four native roles, then writing_execution dispatches fresh processes. Parallelize independent jobs; source-answer evaluation waits for frozen no-context answers in the same batch."
       },
       {
         "id": "reader-review-packet-boundary",
@@ -174,7 +174,7 @@
       },
       {
         "id": "evidence-and-calibrated-certainty",
-        "instruction": "Keep evidence and decisive limits beside claims, execution cautions at the step; omit generic warnings. Preserve uncertainty and causal limits."
+        "instruction": "Compare suspect lines with/without in reader context. Omit redundant caveats/internal checks; retain decisive limits by claims. Tighten claims directly."
       },
       {
         "id": "scope-and-assumption-fidelity",

@@ -10,8 +10,10 @@ import re
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
+import context_value
+import source_attribution
 
-VERSION = 2
+VERSION = 4
 EMPTY_ATTESTATIONS = {"pass", "passed", "ok", "yes", "checked", "none", "n/a", "true", "false", "通过", "正常", "无", "已检查"}
 CRAFT_GUIDANCE = {
     "concrete_detail": "Quote the supported action/change/problem that makes this worth reading for the intended reader. Generic benefits are not evidence. Invent no stakes, scene, motive, number or reaction; a simple fact may suffice.",
@@ -20,13 +22,14 @@ CRAFT_GUIDANCE = {
 }
 GUIDANCE = {
     "expression": "Identify a concrete proposition or real contrast. Keep useful contrasts; revise empty framing only when it delays or distorts understanding. No banned phrase list.",
-    "selection": "Explain removal's effect on required answers. Keep decisive limits by claims and execution cautions by steps; defer lookup detail, omit generic warnings/empty sections. Preserve real unknowns and required disclosures; never delete caution just to sound decisive.",
+    "selection": "Complete context_review for the whole current text using context_value guidance. Compare suspect lines with/without in their real reader context, not isolated truth or imagined ignorance. Remove repeated caveats/internal checks; fix claim strength directly. Retain decision-changing limits, learning bridges and required notices. No new reviewer/round. " + context_value.GUIDANCE,
     "presentation": "Inspect the rendering: does the main contrast stand out without hiding other claims or qualifiers? Check reading order, dense regions, re-entry and comparison effort. Explain actual benefit, not visual novelty. No decorative diagram or repeated-container quota.",
     "meaning": "Compare the source and final text: facts, request/refusal, urgency, ownership, numbers and uncertainty must survive. Natural wording must not weaken or invent a request.",
     "unit_roles": "Explain how takeaway, picture and table serve the main judgment with distinct jobs. Expose relationships, not just prose boxes. Keep decisive limits nearby, useful repetition, every P0 and the coverage denominator; never force a winner.",
 }
 GUIDANCE["expression"] += " Review the whole candidate; record craft_checks with quote, pass/fail and reason. Clear messages may reuse one span. For unresolved wording only, consult the matching references/writing-craft-cases.md case; no extra round. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
 GUIDANCE["meaning"] += " In detail_support, compare source and edits: preserve quantity, range, frequency, attribution, logic, uncertainty and intent. No invention for rhythm; label permitted illustrative examples."
+GUIDANCE['meaning'] += ' Complete source_attribution in this same source review. ' + source_attribution.GUIDANCE
 
 
 class VisibleText(HTMLParser):
@@ -116,6 +119,7 @@ def validate(review, axes, binding, text, *, source="", renders=()):
     checks = review.get("checks")
     if not isinstance(checks, dict) or set(checks) != set(axes):
         return errors + ["reader_value checks must match the assigned axes"]
+    normalized_text, normalized_source = normalize(text), normalize(source)
     for axis in axes:
         item = checks[axis]
         prefix = f"reader_value.{axis}"
@@ -126,7 +130,7 @@ def validate(review, axes, binding, text, *, source="", renders=()):
             if not substantive(item.get(key)):
                 errors.append(f"{prefix} missing {key}")
         quote = item.get("quote", "")
-        if not isinstance(quote, str) or not normalize(quote) or normalize(quote) not in normalize(text):
+        if not isinstance(quote, str) or not normalize(quote) or normalize(quote) not in normalized_text:
             errors.append(f"{prefix} quote not found in reviewed text")
         if not isinstance(item.get("status"), str) or item.get("status") not in {"pass", "fail"}:
             errors.append(f"{prefix} requires pass/fail")
@@ -145,19 +149,22 @@ def validate(review, axes, binding, text, *, source="", renders=()):
                         errors.append(f"{label} must be an object")
                         continue
                     evidence = probe.get("quote", "")
-                    if not isinstance(evidence, str) or not normalize(evidence) or normalize(evidence) not in normalize(text):
+                    if not isinstance(evidence, str) or not normalize(evidence) or normalize(evidence) not in normalized_text:
                         errors.append(f"{label} quote not found in reviewed text")
                     if not substantive(probe.get("reason")):
                         errors.append(f"{label} requires a concrete reader-effect reason")
                     if probe.get("status") != "pass":
                         errors.append(f"{label} missing or unresolved; no extra style-only review round")
-        if axis == "selection" and not substantive(item.get("removal_effect")):
-            errors.append(f"{prefix} must explain the consequence of removing this passage")
+        if axis == "selection":
+            if not substantive(item.get("removal_effect")):
+                errors.append(f"{prefix} must explain the consequence of removing this passage")
+            errors.extend(context_value.validate(item.get("context_review"), text, 'functional'))
         if axis == "meaning":
+            errors.extend(source_attribution.validate(item.get('source_attribution'), text, source, 'source'))
             if not substantive(item.get("detail_support")):
                 errors.append(f"{prefix} must explain source support for specificity")
             quote = item.get("source_quote", "")
-            if not isinstance(quote, str) or not normalize(quote) or normalize(quote) not in normalize(source):
+            if not isinstance(quote, str) or not normalize(quote) or normalize(quote) not in normalized_source:
                 errors.append(f"{prefix} source quote not found")
         if axis == "presentation":
             allowed = {str(Path(p).resolve()) for p in renders}
@@ -172,10 +179,15 @@ def validate(review, axes, binding, text, *, source="", renders=()):
                 errors.append(f"{prefix} must explain all three mandatory units")
             elif any(not substantive(v) for v in roles.values()):
                 errors.append(f"{prefix} unit reader jobs cannot be empty")
+    if isinstance(checks.get('selection'), dict) and isinstance(checks.get('meaning'), dict) and isinstance(checks['selection'].get('context_review'), dict):
+        source_record = checks['meaning'].get('source_attribution', {})
+        replay = checks['selection'].get('context_review', {}).get('attribution_replay', {})
+        if isinstance(source_record, dict) and isinstance(replay, dict):
+            errors.extend(source_attribution.compare(source_record, replay))
     return errors
 
 
-def template(axes, binding):
+def template(axes, binding, text="", source=""):
     checks = {}
     for axis in axes:
         item = {"status": "fail", "action": "revise", "location": "", "quote": "",
@@ -184,7 +196,9 @@ def template(axes, binding):
             item["craft_checks"] = {name: {"status": "fail", "quote": "", "reason": ""} for name in CRAFT_GUIDANCE}
         if axis == "selection":
             item["removal_effect"] = ""
+            item["context_review"] = context_value.template(text)
         if axis == "meaning":
+            item['source_attribution'] = source_attribution.template(text, source, 'source')
             item["source_quote"] = ""
             item["detail_support"] = ""
         if axis == "presentation":

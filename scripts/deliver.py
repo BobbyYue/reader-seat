@@ -10,19 +10,25 @@ from pathlib import Path
 
 import checked_delivery as delivery
 import runtime_contract as runtime
+import writing_execution
+from lifecycle_guard import verify_lifecycle
 
 
 def checked_document(arguments):
     arguments = list(arguments)
-    if not arguments or arguments[0] not in {"verify", "present-draft"}:
-        raise delivery.DeliveryBlocked("Only verify and present-draft are delivery operations")
+    if not arguments or arguments[0] not in {"verify", "present-draft", "lifecycle-draft"}:
+        raise delivery.DeliveryBlocked("Only verified delivery and incomplete-draft operations are allowed")
     if any(arg == "--receipt" or arg.startswith("--receipt=") for arg in arguments):
         raise delivery.DeliveryBlocked("The wrapper owns the fresh verification receipt")
     with tempfile.TemporaryDirectory(prefix="reader-seat-delivery-") as temporary:
         receipt = Path(temporary) / "verification.json"
         args = runtime.build_parser().parse_args([*arguments, "--receipt", str(receipt)])
+        lifecycle = verify_lifecycle(args.lifecycle_run, args.artifact,
+                                     args.reader_review_aggregate,
+                                     draft=args.command != "verify", contract_path=args.contract)
         paths = [value for key, value in vars(args).items()
-                 if isinstance(value, Path) and key != "receipt"]
+                 if isinstance(value, Path) and key not in {"receipt", "lifecycle_run"}]
+        paths.extend(map(Path, lifecycle["evidence_paths"]))
         scripts = Path(__file__).resolve().parent
         paths.extend(scripts.glob("*.py"))
         paths.extend((scripts.parent / "config").glob("*.json"))
@@ -37,6 +43,8 @@ def checked_document(arguments):
                     raise delivery.DeliveryBlocked("Runtime verification failed") from exc
             result = json.loads(receipt.read_text(encoding="utf-8"))
             result["review_method"] = "independent" if result.get("reader_validation") else "not-attested"
+            result["managed_execution"] = writing_execution.accept_native(
+                args.lifecycle_run, args.artifact, [args.reader_review_aggregate], result)
             return result
 
         return delivery.pack(args.artifact, paths, verify)

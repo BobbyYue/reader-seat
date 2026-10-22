@@ -1,20 +1,43 @@
 # Reader's Seat
 
-> 把零散材料整理成读者容易理解、验证和行动的完整文档。
+> 从一个问题或已有材料出发，把复杂内容写明白。
 
-[English](README.md) · [提示词示例](examples/quick-start.md) · [安装](#安装)
+[English](README.md) · [阅读案例报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.30.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.35.1-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
-信息很多不等于结论清楚。面对密集网页或长文档，读者往往仍要自己找重点、对证据、判断该怎么做。Reader's Seat 把材料整理成完整文档，让结论、证据、边界和下一步容易找到，同时不补写材料里没有的事实。
+AI 写了很多，读完却还是不知道：结论是什么，依据在哪里，跟自己有什么关系。Reader's Seat 围绕这些读者问题组织完整文档。它既能根据一个问题查资料、写文章，也能整理你已经有的材料，不用编出来的事实填补信息缺口。
 
-<p align="center"><strong>① 左侧是原始网页 → ② 右侧是 Reader's Seat 输出</strong></p>
+## 案例：AI 会怎样影响互联网公司的岗位？
 
-<img src="assets/readme-preview-v3.jpg" alt="把 Artificial Analysis 真实网页长截图整理成简洁的 Reader's Seat 决策摘要" width="1280">
+你从事研发、产品、数据或运营工作，经常看到“AI 将替代岗位”的说法。你需要先分清哪些变化已经发生、哪些还只是预测，再判断自己应该学什么、调整什么。
 
-<sub>左侧使用实时 [Artificial Analysis 模型对比页面](https://artificialanalysis.ai/models/)的真实连续长截图片段，右侧综合页面全部 11 个比较部分。预览为特定日期的快照，排名会继续变化。</sub>
+**输入：一个调查问题，不需要先准备一篇文章。**
+
+```text
+AI 的发展是否会替代人类工作？已有的工作岗位会怎样受到 AI 的影响，
+尤其是当前互联网公司的岗位？请包含正在发生的变化，以及预估的未来长期变化。
+根据当前已有的权威调查和研究，使用 Reader's Seat 生成一份调查报告。
+用中文输出为 HTML。
+```
+
+**产出：一份可以查证来源的完整调查报告。**
+
+截图展示报告中“任务自动化如何影响用人”的解释。打开完整报告，还能查看研究证据、六类岗位对照与行动建议。
+
+<a href="https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html"><img src="assets/ai-and-work-report.zh.png" alt="Reader's Seat 实际生成的中文报告片段：任务能否交给AI、整体交付成本、需求与用人变化" width="1120"></a>
+
+**[打开中文报告 →](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html)** · [HTML 文件](docs/reports/ai-and-work.zh.html) · [英文报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html)
+
+读者可以从报告中得到：
+
+- **看懂研究数字的方法：**任务可能受影响、实际使用 AI、生产效率变化、岗位增减，分别说明什么。
+- **与自己工作有关的分析：**研发、数据分析、产品、设计与内容、运营与营销、客服六类岗位，哪些任务可能变化。
+- **可以继续判断的依据：**已经观察到的变化与长期情景分开写，保留来源，并给出可以在自己工作中验证的问题。
+
+<sub>案例使用 Reader's Seat 0.34 版流程生成，资料核对日期为 2026 年 10 月 22 日。采用九项一手来源，包括国际劳工组织、斯坦福、微软研究院、METR、世界经济论坛和 Anthropic。岗位映射为综合分析，不冒充裁员预测；这个案例也不代表所有 Agent 都有相同效果。</sub>
 
 ## 安装
 
@@ -25,7 +48,8 @@
 ```text
 从 https://github.com/BobbyYue/reader-seat 安装 Reader's Seat。
 使用当前 Agent 支持的 skill 安装方式，文件夹名称保持为 reader-seat，
-然后确认 SKILL.md 可以被加载。已有同名安装时不要直接覆盖，先询问我。
+然后确认当前 Agent 能加载说明、运行 Python 检查，并支持隔离审阅流程。
+缺少支持时请说明，不要宣称已经完整验证。已有同名安装时不要直接覆盖，先询问我。
 ```
 
 ### 手动 Git Clone
@@ -38,10 +62,13 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 
 然后新建一个 Agent 会话，或让 Agent 显式加载 `reader-seat/SKILL.md`。不同 Agent 的 skill 发现方式不同。
 
+完整检查后交付还需要兼容的审阅结果接入方式，加载说明不等于已经接通。具体要求见[运行环境说明](references/writing-execution.md)。
+
 ## 能生成哪些文档
 
 | 你提供 | 得到的完整文档 |
 | --- | --- |
+| 一个问题、目标读者，以及可查询的可靠来源 | **调查报告**：证据、不同解释、不确定性与实际影响 |
 | 周报、里程碑计划、会议记录、问题清单 | **项目进展报告**：当前结论、进度、阻塞、待决策事项和下一步 |
 | 指标定义、查询结果、图表、方法说明 | **数据分析报告**：结论与幅度、支持证据、数据限制、其他解释和下一步验证 |
 | 业务需求、技术约束、候选架构、性能测试 | **技术决策文档**：决策、方案比较、取舍、实施影响、回滚和未解决风险 |
@@ -73,7 +100,16 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 - **输出符合场景：**默认使用原材料的主要语言生成自包含 HTML；用户指定时可以改为飞书、Word、Markdown 等格式。
 - **交付边界明确：**生成前锁定语言、格式和发布权限；校验未通过或缺少回执时不交付。
 
-未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向有实质材料的完整文档，而不是短消息润色或没有依据的内容扩写。
+未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向完整文档，也支持从一个问题开始调研写作；不用于短消息润色或没有依据的内容扩写。
+
+<details>
+<summary><strong>0.35.1 更新与历史升级说明</strong></summary>
+
+### 当前流程
+
+0.34.0 将写作阶段、实际隔离审阅结果和最终交付绑定到同一版本，并检查上下文是否帮助读者、观点是否归属于正确的来源。接入流程会拦截缺失或过期的证据，但不保证模型判断永远正确，也不会自动控制宿主中的所有输出。详见[版本说明](CHANGELOG.md)、[写作流程](references/writing-lifecycle.md)和[执行与接入](references/writing-execution.md)。
+
+0.35 精简审阅记录的传输、复用输入未变的计算结果，并让有依赖的检查及时开始。0.35.1 另修复了制作本案例时发现的来源误判：附加语言信息不再阻止同一份来源通过检查；来源正文或路径变化仍会被拦截。
 
 ### 升级至 0.30.0
 
@@ -93,6 +129,8 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 
 完整产物初始化时需提供有来源依据的读者必答信息计划。旧审阅记录若缺少对应的理解证据，需重新生成后才能用于已验证交付。限定范围的原生文字修改也必须在写入后回读并检查排版，写入前通过不等于完成。详见[版本说明](CHANGELOG.md)和[必答信息流程](references/required-reader-answers.md)。
 
+</details>
+
 <details>
 <summary><strong>仓库结构、校验和许可证</strong></summary>
 
@@ -104,6 +142,7 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 | `config/` | 定义文档场景、模块加载方式、Agent 适配设置和可校验的 skill 约束。 |
 | `evals/` | 提供固定的触发、行为和跨 Agent 测试案例及评判标准。 |
 | `examples/` | 提供可以直接改写使用的常见文档提示词。 |
+| `docs/` | 托管可以通过 GitHub Pages 直接阅读的完整 HTML 案例。 |
 | `references/` | 提供按场景、格式、标题、证据和视觉需要选择的详细规则。 |
 | `scripts/` | 校验 skill、选择模块、创建 HTML 报告骨架并运行评测。 |
 | `tests/` | 验证语言、格式、授权、来源完整性和交付回执约束。 |

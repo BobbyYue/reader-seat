@@ -25,12 +25,12 @@ class WritingCraftCorpusTests(unittest.TestCase):
             for field in ("request", "source_material", "expected_behaviors", "forbidden_behaviors"):
                 self.assertTrue(case[field], (case["id"], field))
         prepared = reader_value.template(("expression", "meaning"), "a" * 64)
-        self.assertEqual(prepared["version"], 2)
+        self.assertEqual(prepared["version"], 4)
         self.assertEqual(set(prepared["checks"]["expression"]["craft_checks"]),
                          {"concrete_detail", "progression", "reading_flow"})
         self.assertEqual(set(prepared["checks"]["meaning"]),
                          {"status", "action", "location", "quote", "reader_effect",
-                          "protected_meaning", "source_quote", "detail_support"})
+                          "protected_meaning", "source_quote", "detail_support", "source_attribution"})
 
     def test_corpus_has_fix_keep_and_fidelity_cases(self):
         data = json.loads((ROOT / "evals/writing-craft-cases.json").read_text())

@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 import test_runtime_contract as fixtures
+from lifecycle_support import make_run
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -20,9 +21,10 @@ class CheckedDeliveryCLITests(unittest.TestCase):
         self.artifact = self.fixture.write_html(language="en", body="This fixture reports only the inspected period; later data is unknown. " * 4)
         self.fixture.complete_review(self.artifact)
         self.aggregate = self.fixture.complete_reader_review(self.artifact)
+        self.lifecycle_run = make_run(self.fixture.base / "lifecycle", self.artifact, self.aggregate, contract_path=self.fixture.contract)
         self.args = ["verify", "--contract", str(self.fixture.contract), "--review", str(self.fixture.review),
                      "--artifact", str(self.artifact), "--actual-format", "html",
-                     "--reader-review-aggregate", str(self.aggregate)]
+                     "--reader-review-aggregate", str(self.aggregate), "--lifecycle-run", str(self.lifecycle_run)]
 
     def run_delivery(self, args=None):
         return subprocess.run([sys.executable, "-B", str(ROOT / "scripts/deliver.py"),
@@ -65,7 +67,9 @@ class CheckedDeliveryCLITests(unittest.TestCase):
             previous = self.fixture.complete_reader_review(self.artifact, round_number=round_number,
                 previous_aggregate=previous, failing_dimension="no-context", expected=1)
         args = ["present-draft", "--contract", str(self.fixture.contract), "--artifact", str(self.artifact),
-                "--reader-review-aggregate", str(previous)]
+                "--reader-review-aggregate", str(previous), "--lifecycle-run",
+                str(make_run(self.fixture.base / "draft-lifecycle", self.artifact, previous, rounds=3,
+                             verdict="fail", contract_path=self.fixture.contract))]
         result = self.run_delivery(args)
         self.assertEqual(result.returncode, 0, result.stderr)
         envelope = json.loads(result.stdout)

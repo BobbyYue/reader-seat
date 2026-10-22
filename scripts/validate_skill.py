@@ -756,6 +756,7 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         else:
             for required in (
                 "runtime_init",
+                "writing_lifecycle",
                 "semantic_review_binding",
                 "reader_review_orchestration",
                 "reader_review_delivery_gate",
@@ -886,6 +887,11 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
         "semantic_review_artifact_binding_required",
         "semantic_review_binding_receipt_required",
         "reader_review_aggregate_revalidates_source_results",
+        "writing_lifecycle_required_for_checked_delivery",
+        "writing_lifecycle_required_for_external_actions",
+        "writing_lifecycle_binds_original_reader_aggregate",
+        "writing_lifecycle_reuses_native_task_basis",
+        "writing_lifecycle_preview_only_action_supported",
         "independent_judge_required_for_high_risk",
         "high_risk_action_preflight_judge_required",
         "module_manifest_full_execution_gate_contract_required",
@@ -896,6 +902,17 @@ def check_runtime_enforcement(contract: dict, errors: list[str]) -> None:
     for key in expected_true:
         if runtime.get(key) is not True:
             fail(f"runtime_enforcement must set {key}=true", errors)
+    for key, expected in {
+        "writing_lifecycle_script": "scripts/writing_lifecycle.py",
+        "writing_lifecycle_guard": "scripts/lifecycle_guard.py",
+        "writing_lifecycle_reference": "references/writing-lifecycle.md",
+    }.items():
+        if runtime.get(key) != expected or not (ROOT / expected).is_file():
+            fail(f"runtime_enforcement must reference existing {expected}", errors)
+    if runtime.get("writing_lifecycle_profile") != "functional":
+        fail("Reader's Seat must use the functional writing lifecycle", errors)
+    if runtime.get("bare_runtime_verification_scope") != "semantic-and-format-only":
+        fail("bare runtime verification must remain explicitly local", errors)
 
     expected_lock = {
         "output-language",

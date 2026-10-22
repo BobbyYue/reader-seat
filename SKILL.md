@@ -45,6 +45,7 @@ Detailed commands and failure behavior remain in
 [references/runtime-enforcement.md](references/runtime-enforcement.md).
 The mandatory work-order and retry policy is in
 [references/execution-efficiency.md](references/execution-efficiency.md).
+Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lifecycle](references/writing-lifecycle.md) from the existing locked task/answer plan. Before units, initialize [managed execution](references/writing-execution.md) with the stable host task ID; use its packet derivation, actual review dispatch and checked delivery. Keep the same native basis and four roles; no self-filled execution claims substitute for collected returns.
 
 1. Define the operation, one primary scenario, target reader, reader task,
    channel, risk, source boundary, title need, visual state, and whether the
@@ -81,7 +82,7 @@ The mandatory work-order and retry policy is in
    adjacency, density, spacing, and native-render rules cannot be marked
    `not-applicable` or waived by selecting another output format.
 9. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
-   to run exactly four fresh, mutually isolated reviewers concurrently:
+   to prepare four fresh, mutually isolated reviewers; managed execution runs independent jobs concurrently and waits for raw blind answers before source-answer evaluation:
    no-context (extracted surface only), readability, source-reliability, and structure-visual. The source reviewer then matches the frozen raw replay to every required answer. All four
    must pass for the exact artifact hash. Complete the prepared `reader_value`
    fields in the same reviews: supported detail, progression, reading flow, content necessity, source
@@ -95,18 +96,20 @@ The mandatory work-order and retry policy is in
    non-pass, run `present-draft`; show the current version only as a clearly
    labeled review-incomplete draft, explain unresolved reader impact, ask the
    user which tradeoff to prioritize, and block external actions.
+   `deliver.py lifecycle-draft` also permits a draft after three completed cumulative rounds when the current last round still fails with issues; an earlier pass does not hide regression. Retain the current original four-review evidence.
 11. Immediately before an authorized external mutation, run `check-action` with
    the artifact-bound semantic review, original reader-review results, and the
    independent judge result for high-risk work. Finish with `verify` against the actual
    artifact, unchanged task bundle,
    module manifest, semantic review, reader aggregate, and action receipt when
-   applicable.
+   applicable. Use `deliver.py verify --lifecycle-run RUN` for the returned bytes; bare runtime `verify` without a lifecycle is only a local semantic/format check, not completion.
 
 If a required script cannot execute, a bundle or source hash changes, a review
 is incomplete, or a receipt fails, stop before finished delivery. Do not replace
 the control with an informal checklist.
 
 For an authorized, standard-risk Feishu text-only replacement, use [native-text-patch.md](references/native-text-patch.md). Writing may follow `prewrite-approved`; completion requires exact live readback and native render inspection. Never use this exception for layout, charts, structural edits or broader publishing.
+To form an already-authorized pending page before layout/review, use `check-action --preview --lifecycle-run RUN`; its `preview-only` receipt never counts as final publication or verification. See [writing-lifecycle.md](references/writing-lifecycle.md).
 
 ## Output Behavior
 
