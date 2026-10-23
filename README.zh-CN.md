@@ -25,19 +25,19 @@ AI 的发展是否会替代人类工作？已有的工作岗位会怎样受到 A
 
 **产出：一份可以查证来源的完整调查报告。**
 
-截图展示报告中“任务自动化如何影响用人”的解释。打开完整报告，还能查看研究证据、六类岗位对照与行动建议。
+截图展示报告中的一张数据图。三张图分别呈现招聘占比、任务耗时和岗位预测，数字旁保留口径与来源。打开完整报告，还能查看六类岗位的影响分析与行动建议。
 
-<a href="https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html"><img src="assets/ai-and-work-report.zh.png" alt="Reader's Seat 实际生成的中文报告片段：任务能否交给AI、整体交付成本、需求与用人变化" width="1120"></a>
+<a href="https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html"><img src="assets/ai-and-work-report.zh.png" alt="报告实际图表：初级技术招聘占比对比，附数据口径与来源" width="1120"></a>
 
 **[打开中文报告 →](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html)** · [HTML 文件](docs/reports/ai-and-work.zh.html) · [英文报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html)
 
 读者可以从报告中得到：
 
-- **看懂研究数字的方法：**任务可能受影响、实际使用 AI、生产效率变化、岗位增减，分别说明什么。
+- **能直观看懂的数据：**用三张图分别展示招聘结构、任务耗时及其不确定范围、全球岗位预测，保持不同研究口径的区别。
 - **与自己工作有关的分析：**研发、数据分析、产品、设计与内容、运营与营销、客服六类岗位，哪些任务可能变化。
 - **可以继续判断的依据：**已经观察到的变化与长期情景分开写，保留来源，并给出可以在自己工作中验证的问题。
 
-<sub>案例使用 Reader's Seat 0.34 版流程生成，资料核对日期为 2026 年 10 月 22 日。采用九项一手来源，包括国际劳工组织、斯坦福、微软研究院、METR、世界经济论坛和 Anthropic。岗位映射为综合分析，不冒充裁员预测；这个案例也不代表所有 Agent 都有相同效果。</sub>
+<sub>使用 Reader's Seat 0.36 起草，并根据用户反馈修改；图表版更新于 2026 年 10 月 23 日，沿用 10 月 22 日核对的九项一手来源。岗位映射为本文综合分析。这是一份经过编辑的案例，完整审阅尚有未通过项，见[生成与验证说明](docs/reports/example-notes.md#中文)。</sub>
 
 ## 安装
 

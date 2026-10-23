@@ -26,19 +26,19 @@ Write in English and output HTML.
 
 **Output: a complete, source-linked report.**
 
-The screenshot shows the report's explanation of how task automation affects staffing. Open the full report for the research findings, six-role comparison, and practical next steps.
+The screenshot shows one of three evidence charts in the report. Each keeps the measured quantity and source beside the numbers. Open the report for hiring changes, task-time evidence, job projections, and implications for six familiar roles.
 
-<a href="https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html"><img src="assets/ai-and-work-report.en.png" alt="Actual English report generated with Reader's Seat: AI and work, observed evidence, implications for internet-company roles, and conditional long-term scenarios" width="1120"></a>
+<a href="https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html"><img src="assets/ai-and-work-report.en.png" alt="Actual report chart comparing junior technical hiring shares, with the source and interpretation note" width="1120"></a>
 
 **[Open the English report →](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html)** · [HTML file](docs/reports/ai-and-work.en.html) · [Chinese report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html)
 
 The report gives the reader three things:
 
-- **A way to read the evidence:** task exposure, AI use, productivity, and employment are different measures.
+- **Evidence you can inspect:** three charts show hiring composition, a task-time estimate with its uncertainty, and a global jobs projection. Their different measures stay separate.
 - **A concrete view of familiar work:** task-level implications for engineering, data analysis, product, design and content, operations and marketing, and customer support.
 - **A usable outlook:** observed changes are separated from long-term scenarios, with sources and practical questions to investigate in your own work.
 
-<sub>Generated with the Reader's Seat 0.34 workflow; evidence checked on 22 October 2026. It draws on nine primary sources, including ILO, Stanford, Microsoft Research, METR, the World Economic Forum, and Anthropic. Role mappings are synthesis, not measured job-loss forecasts. This is one example, not a cross-agent benchmark.</sub>
+<sub>Drafted with Reader's Seat 0.36 and revised with user feedback; visual edition updated on 23 October 2026, using nine primary sources checked on 22 October. Role mappings are the report's synthesis. This is an edited example, with a full-review limitation documented in the [generation and review notes](docs/reports/example-notes.md#english).</sub>
 
 ## Install
 
