@@ -82,8 +82,10 @@ class NativeTextPatchTests(unittest.TestCase):
         folder.mkdir()
         source = folder / "source.txt"
         source.write_text("STRUCTURAL FIXTURE: pilot revenue rose 5%; causality is unknown.", encoding="utf-8")
+        from expression_fixture import structural_expression_plan
         plan = self.write(folder / "plan.json", {
             "version": reader_answers.CONTRACT_VERSION,
+            "expression_plan": structural_expression_plan(),
             "reader": {"profile": "Fixture reader", "known_context": "No actual live reading",
                        "decision": "Validate the local evidence-binding protocol"},
             "depth": {"mode": "orientation", "reason": "Structural fixture only: recover the one supplied finding"},

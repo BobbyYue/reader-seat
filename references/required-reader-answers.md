@@ -42,6 +42,15 @@ conflict, emotion or a personal story to engage the reader. For a choice, keep
 facts separate from priorities: use supplied criteria and contrary evidence;
 do not mirror a reader's preference or force equally weighted opposing views.
 
+Plan how to state the answer as well as what it contains. Add `expression_plan`
+to this same pre-draft plan: select the answers that lead, choose an opening
+move for the actual reader task, and place essential boundaries where they affect
+interpretation. Prefer a direct assertion when equally accurate; a necessary
+negative finding, refusal or prohibition can be that assertion. A corrective
+opening needs a relevant misconception, not an invented opponent. Use
+[direct-expression.md](direct-expression.md) for comparison and repeat-burden
+judgment; neither negative-word counts nor a positive tone determine quality.
+
 Examples of task-dependent required information:
 - An analytical finding may need the actual feature, compared groups, direction,
   outcome and a material scope condition. Put decisive magnitude nearby when it
@@ -81,6 +90,16 @@ Save a plan with this structure (replace all example content with actual facts):
   },
   "depth": {"mode": "explanation", "reason": "The reader must understand why the reported benefit remains bounded"},
   "surfaces": [{"id": "opening", "mode": "between", "start": "## Summary", "end": "## Details"}],
+  "expression_plan": {
+    "lead_answer_ids": ["A1"],
+    "opening_move": "direct",
+    "opening_reason": "Lead with the supported pilot finding so this reader can judge its relevance",
+    "essential_boundaries": [{
+      "answer_id": "A1",
+      "reason": "Keep the finding's source-supported scope visible to prevent overgeneralization",
+      "placement": "claim-adjacent"
+    }]
+  },
   "answers": [{
     "id": "A1",
     "kind": "evidence",
@@ -92,6 +111,18 @@ Save a plan with this structure (replace all example content with actual facts):
   }]
 }
 ```
+
+`expression_plan.lead_answer_ids` references existing answer IDs, not a second
+answer list. `opening_move` is `direct`, `correction`, `comparison` or
+`instruction`; explain its reader-specific purpose in `opening_reason`.
+`essential_boundaries` contains `{answer_id, reason, placement}` entries linked
+to existing answers, or an empty array when none is needed. Placement is
+`claim-adjacent`, `section-once` or `method-note`. Keep interpretation-changing
+conditions beside their claim; use a shared section statement or method note
+only when that reading surface still supports the intended judgment. These
+placements are not repetition quotas. Record only source-backed boundaries or
+explicit source gaps, not generic warnings. Later expression-review record
+details come from `direct_expression.py`, not this preplan example.
 
 Surface modes: `headings` extracts Markdown or HTML headings; `blocks` selects
 exact HTML/XML `block_ids`; `between` requires unique ordered anchors;

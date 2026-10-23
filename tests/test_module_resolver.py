@@ -18,6 +18,8 @@ import run_evals  # noqa: E402
 class ModuleResolverTests(unittest.TestCase):
     def test_expression_scan_is_required_in_every_scenario_without_new_module(self):
         baseline = run_evals.selected_cases(["xagent-relation-clear-fact-keep"])[0]
+        scan = next(gate for gate in resolve_modules.load_runtime_rules()["execution_gates"]
+                    if gate["id"] == "G5-signals")
         for scenario in ("news", "technical", "product", "business", "analysis", "procedure"):
             for artifact in (False, True):
                 with self.subTest(scenario=scenario, artifact=artifact):
@@ -25,7 +27,9 @@ class ModuleResolverTests(unittest.TestCase):
                     bundle = resolve_modules.render_bundle(plan)
                     for rule in ("natural-non-template-expression", "signal-context-decision", "signal-proportional-action", "signal-recheck"):
                         self.assertIn(rule, plan["required_rule_ids"])
-                    self.assertIn("Expression scan completed", bundle)
+                    self.assertTrue(scan["required_record"])
+                    self.assertEqual(bundle.count(scan["required_record"]), 1)
+                    self.assertEqual(bundle.count(scan["exit_condition"]), 1)
                     self.assertIn("protected meaning", bundle)
                     self.assertIn("Style preference alone cannot block", bundle)
                     self.assertNotIn("expression-review", {m["id"] for m in plan["modules"]})

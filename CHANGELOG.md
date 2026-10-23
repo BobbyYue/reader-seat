@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.36.0 - 2026-10-23
+
+- Lead with the supported answer and review corrective phrasing in context. Compare a faithful direct alternative with the original, and check repeated framing across the whole document. Necessary prohibitions, refusals, negative findings and evidence limits remain intact; this is not a phrase blacklist.
+- Before drafting, require an `expression_plan` that selects the opening and places material boundaries. During drafting, require a text-bound `expression_review` for each complete unit. After drafting, the existing independent readability review checks `direct_expression`, including cumulative reading effort.
+- Upgrade reader-value records to version 5. Regenerate affected plans and review records; missing, stale, incomplete or unresolved expression evidence blocks checked delivery. Reviewer counts and retry limits remain unchanged.
+- Add focused and integration regressions, plus two independently fictional behavioral cases covering repetitive correction and necessary negative statements.
+- Retain the published 0.35.1 source-identity fix, reviewer-format guidance and diagnostic tool. Keep the public fictional evaluation case and exclude local-only examples and private run records.
+
+### Known Limitations
+
+- In a recent document run, the blind replay explained the overall argument but omitted a concrete role-level application already present in the text. The required-answer check remained unresolved. This is incomplete comprehension evidence, not proof that the document contains a factual error; this release does not claim to solve it.
+- The third-round incomplete-draft exit can reject semantic validation failures even when draft presentation is requested. That fallback issue remains open. Retain the draft and its original review evidence; do not remove failed checks, reset rounds or present it as a verified final document.
+- Offline tests exercise contracts and failure handling. They do not establish consistent writing quality across all agents. The existing README reports remain the previously published examples, not new 0.36.0 acceptance evidence.
+
 ## 0.35.1 - 2026-10-22
 
 - Fix a real preview-run failure: source identity now compares the original path and content hash, not optional language-detection metadata. Changed hashes and substituted source paths are still rejected; regression tests cover all three cases.

@@ -5,6 +5,7 @@ import writing_lifecycle as lifecycle
 from lifecycle_guard import init_native_run, native_plan
 from lifecycle_fixture import prepare_flow
 from execution_fixture import init_fixture, seed_fixture
+from expression_fixture import structural_expression, structural_expression_plan
 
 
 def make_run(root, artifact, result, *, rounds=1, verdict="pass", profile="functional", format="html",
@@ -32,6 +33,7 @@ def make_run(root, artifact, result, *, rounds=1, verdict="pass", profile="funct
         "material": {"mode": "source-grounded", "gaps": []},
         "required_answers": [{"id": "A1", "question": "What is the statement?", "expected": text[:40],
                               "source_location": "Synthetic source.txt"}],
+        "expression_plan": structural_expression_plan(),
         "literary_intent": "Synthetic fixture", "constraints": [],
         "reading_path": [{"id": "body", "purpose": "Inspect the fixture statement"}],
     })
@@ -54,6 +56,7 @@ def make_run(root, artifact, result, *, rounds=1, verdict="pass", profile="funct
         return run
     unit = root / "unit.json"
     lifecycle.write_json(unit, {"unit_id": active_plan["reading_path"][0]["id"], "summary": "Structural checkpoint only",
+                               "expression_review": structural_expression(text, "during"),
                                "observations": [{"quote": text[:40], "reason": "Fixture text exists, not a semantic judgment"}]})
     lifecycle.record_unit(run, artifact, unit)
     if until == "unit":

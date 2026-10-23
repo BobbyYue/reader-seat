@@ -4,7 +4,7 @@
 
 [English](README.md) · [阅读案例报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.35.1-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.36.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -103,7 +103,13 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向完整文档，也支持从一个问题开始调研写作；不用于短消息润色或没有依据的内容扩写。
 
 <details>
-<summary><strong>0.35.1 更新与历史升级说明</strong></summary>
+<summary><strong>0.36.0 更新与历史升级说明</strong></summary>
+
+### 把表达检查放进写前、写中和写后
+
+0.36.0 会检查文章是否直接给出答案、更直接的说法是否保留原意，以及反复纠偏是否增加了整篇文章的阅读负担。这些检查分别进入写作计划、每个完整草稿单元和独立可读性审阅。有实际用途的警告、禁止事项和负面研究结果仍然保留。详见[直接表达规则](references/direct-expression.md)。
+
+升级后需重新生成相关计划和审阅记录，新版要求表达检查字段及第 5 版读者价值记录。0.35.1 的来源识别和审阅格式修复继续保留。目前仍有盲读复述覆盖不全、第三轮草稿出口可能被未解决检查项阻塞的限制，详见[版本限制](CHANGELOG.md#known-limitations)。上方报告案例沿用此前发布的版本，不作为 0.36.0 的新验收结果。
 
 ### 当前流程
 

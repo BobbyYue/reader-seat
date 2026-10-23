@@ -25,7 +25,7 @@ class WritingCraftCorpusTests(unittest.TestCase):
             for field in ("request", "source_material", "expected_behaviors", "forbidden_behaviors"):
                 self.assertTrue(case[field], (case["id"], field))
         prepared = reader_value.template(("expression", "meaning"), "a" * 64)
-        self.assertEqual(prepared["version"], 4)
+        self.assertEqual(prepared["version"], 5)
         self.assertEqual(set(prepared["checks"]["expression"]["craft_checks"]),
                          {"concrete_detail", "progression", "reading_flow"})
         self.assertEqual(set(prepared["checks"]["meaning"]),

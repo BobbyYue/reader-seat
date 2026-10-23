@@ -96,6 +96,29 @@ failures. Preserve precise specialist language when the target reader needs it.
 Check whether compression hides necessary context; do not request a slogan,
 parallel clauses, fewer words, or another round when the prose is already clear.
 
+In the same review, independently supply
+`reader_value.checks.expression.direct_expression` with `stage: after` using the
+current script-generated template. Evaluate the stable candidate, not the
+author's earlier decisions; do not receive or copy author `expression_review`
+keep rationales. This adds no reviewer, parallel audit or extra round.
+
+For corrective framing, compare the original with an equally accurate direct
+alternative, not only with deletion. Check whether the opening answers the
+reader's question or first refutes an unsupported assumption. Inspect repeated
+labels, headings and section leads together: explain what each recurrence adds
+for that reading path, whether a shared boundary would suffice, and which
+conditions must remain claim-adjacent. Individually plausible keep reasons do
+not by themselves resolve the whole-document burden. An all-keep result can be
+sound when alternatives lose necessary meaning or access.
+
+Apply [direct-expression.md](direct-expression.md): preserve necessary refusal,
+prohibition, correction, negative evidence and the author's natural voice.
+Directness does not require affirmative wording. Counts of “不是……而是……”,
+“不能”, “不按” or repeated labels are signals, not failure thresholds or a
+request to remove those words. Judge a real detour or misreading, and keep style
+preferences nonblocking. The script owns exact record fields and bindings;
+prepared records alone do not establish improved comprehension or source truth.
+
 For the locked understanding depth, check whether the reader can explain
 important reasons, evidence or relationships rather than repeat topic names.
 Do not accept a shallow answer plan merely because every planned label appears.

@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from execution_fixture import init_fixture, seed_fixture
 from context_fixture import structural_context, structural_attribution
+from expression_fixture import structural_expression, structural_expression_plan
 
 
 def save(path, value):
@@ -25,6 +26,7 @@ def prepare_flow(lifecycle, base, artifact, native_result=None, profile="functio
         "material": {"mode": "source-grounded" if profile == "functional" else "fiction", "gaps": []},
         "reading_path": [{"id": "unit", "purpose": "Exercise this complete synthetic unit"}],
         "required_answers": [{"id": "A1", "question": "What did the source state?", "expected": quote, "source_location": "synthetic source.txt"}],
+        "expression_plan": structural_expression_plan(),
         "literary_intent": "Preserve the concrete situation and allow supported plural interpretations", "constraints": [],
         "author_context_id": "synthetic-author"
     }
@@ -35,6 +37,7 @@ def prepare_flow(lifecycle, base, artifact, native_result=None, profile="functio
     mode = 'self-check' if native_result and Path(native_result).exists() and json.loads(Path(native_result).read_text()).get('review_method') == 'self-check' else 'independent'
     init_fixture(run, mode=mode)
     unit = save(root / "unit.json", {"unit_id": "unit", "summary": "Synthetic unit observation; not a semantic audit",
+                "expression_review": structural_expression(value, "during"),
                 "observations": [{"quote": quote, "reason": "Quote identity fixture"}]})
     lifecycle.record_unit(run, artifact, unit)
     report_path = root / "report.json"

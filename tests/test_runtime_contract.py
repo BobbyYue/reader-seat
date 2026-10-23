@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import reader_answers
 import reader_value
 from editorial_fixture import structural_review
+from expression_fixture import structural_expression_plan
 
 
 class RuntimeContractTests(unittest.TestCase):
@@ -84,7 +85,7 @@ class RuntimeContractTests(unittest.TestCase):
         wording = by_dimension["readability"]["reading_guidance"]
         for field in ("observed_problem", "reader_consequence", "required_fix", "protected meaning"):
             self.assertIn(field, wording)
-        self.assertIn("nonblocking", wording)
+        self.assertRegex(wording, r"(?:unsupported taste|style) preference[^.]*cannot start another round")
         self.assertIn("rhetorical overstatement", by_dimension["source-reliability"]["reading_guidance"])
         self.assertIn("not counts", by_dimension["structure-visual"]["reading_guidance"])
         self.assertNotIn("empty abstraction", blind["reading_guidance"])
@@ -108,6 +109,7 @@ class RuntimeContractTests(unittest.TestCase):
             "version": reader_answers.CONTRACT_VERSION,
             "reader": {"profile": "Test reader", "known_context": "No project history", "decision": "Inspect the specified fixture"},
             "depth": {"mode": "orientation", "reason": "This structural fixture asks only what the supplied statement says"},
+            "expression_plan": structural_expression_plan(),
             "surfaces": [{"id": "fixture", "mode": "full", "reason": "Full-document structural fixture; semantic extraction has separate tests"}],
             "answers": [{"id": "A1", "kind": "takeaway", "question": "What does this fixture state?", "expected_information": "Fixture content only", "source_location": "Test source bundle", "source_status": "supported", "required_on": ["fixture"]}]
         })

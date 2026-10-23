@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Read the example report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.35.1-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.36.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -105,7 +105,13 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents, including research from a question, rather than short-message polishing or unsupported content expansion.
 
 <details>
-<summary><strong>What's new in 0.35.1 and earlier upgrade notes</strong></summary>
+<summary><strong>What's new in 0.36.0 and earlier upgrade notes</strong></summary>
+
+### Clearer Expression Before, During And After Writing
+
+Version 0.36.0 checks whether the document gives its answer directly, whether a clearer alternative preserves the meaning, and whether repeated corrections make the whole article harder to read. These checks run in the writing plan, each completed draft unit, and the independent readability review. Necessary warnings and negative findings stay when they help the reader. See [direct expression](references/direct-expression.md).
+
+When upgrading, regenerate affected plans and review records: the new expression fields and reader-value version 5 are required. The 0.35.1 source-identity and reviewer-format fixes remain included. Current limitations include incomplete blind-replay coverage and a third-round draft fallback that can reject unresolved semantic checks; see the [release limitations](CHANGELOG.md#known-limitations). The report examples above remain from the previously published workflow.
 
 ### Current workflow
 

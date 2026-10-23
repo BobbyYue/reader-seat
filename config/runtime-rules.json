@@ -3,33 +3,33 @@
   "execution_gates": [
     {
       "id": "G1-task",
-      "required_record": "Record scenario, reader/context/decision, reading mode/surface, source-backed answers/unknowns, channel, language/format, risk and access-find-understand-use path.",
-      "exit_condition": "Reader outcome, language, format, scope, risk, and that path are testable without visible framework labels."
+      "required_record": "Record scenario, reader/context/decision, surface/mode, sourced answers/unknowns, channel/language/format, risk and access-find-understand-use. Lock expression_plan: lead answers, opening reason and boundary placement.",
+      "exit_condition": "Reader outcome, language, format, scope, risk and path are testable without framework labels."
     },
     {
       "id": "G2-source",
-      "required_record": "Record source facts, numbers, definitions, scope, claims, uncertainty, owners, commitments, title/visual claims and provenance; mutable sources need observed time and visible version/update markers when material.",
+      "required_record": "Record sourced facts/numbers/definitions/scope, claims, uncertainty, owners/commitments and title/visual provenance; mutable sources need observation time and visible version/update markers when material.",
       "exit_condition": "Every material claim/visual has an explicit source boundary and support decision."
     },
     {
       "id": "G3-route",
       "required_record": "Selected scenario, required content, evidence requirements, acceptance questions, compact runtime rules, and any title, visual, format, evaluation, or maintenance modules.",
-      "exit_condition": "One primary route is selected and every applicable scenario and feature requirement is accounted for."
+      "exit_condition": "Select one primary route; account for every applicable scenario and feature requirement."
     },
     {
       "id": "G4-build",
-      "required_record": "Status and artifact evidence for all selected output, title, format, reading-path layout, visual, and scenario rules, including heading propositions, section reader jobs, evidence adjacency, density rhythm, and concrete value expressions when applicable.",
-      "exit_condition": "The planned reading path is implemented in the artifact and no unsupported, decorative, misleading, obstructive, or task-incomplete structure remains."
+      "required_record": "Record output/title/format/layout/visual/scenario evidence: heading facts, section jobs, adjacent evidence, density and concrete value. Each unit needs text-bound expression_review for direct alternatives and repeated framing.",
+      "exit_condition": "Implement the reading path; resolve unsupported, decorative, misleading, obstructive or incomplete structure."
     },
     {
       "id": "G5-signals",
-      "required_record": "Expression scan completed (even if clear); signals record quote/location, impact, confirmed/dismissed/unresolved, smallest fix, protected meaning and recheck.",
-      "exit_condition": "No signal caused an automatic rewrite and every material confirmed or unresolved signal has a proportional outcome."
+      "required_record": "Scan even clear text: quote/location, impact, decision, smallest fix, protected meaning/recheck. Cover opening/headings/labels and repeated caveats; compare original, deletion and direct wording. Counts only select review.",
+      "exit_condition": "No automatic signal-based rewrites; material confirmed/unresolved signals have proportional outcomes."
     },
     {
       "id": "G6-verify",
-      "required_record": "Meaning preservation, hard gates, scenario acceptance, selected runtime rules, signal recheck, artifact-bound semantic review, reader review when required, reading-path and density checks, visual checks, rendered checks, and remaining limitations.",
-      "exit_condition": "The exact artifact and its rendered reading path pass the locked contract, or the third-round incomplete-draft path is used without a completion claim or external action."
+      "required_record": "Record fidelity, hard gates, scenario/rule acceptance, signal recheck, bound semantic/reader reviews, reading path/density/visual/render checks and remaining limits.",
+      "exit_condition": "Exact artifact/render passes the locked contract; after round three, use incomplete-draft delivery with no completion claim or external action."
     }
   ],
   "core": [
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Require reader_value v4 craft/detail, selection.context_review, meaning.source_attribution. Missing/stale/unresolved or mismatched records block pass; reuse rounds."
+      "instruction": "Before: lock expression_plan. During: require unit expression_review. After: reader_value v5 direct_expression compares faithful alternatives/repeated framing. Retain craft/context/attribution checks and necessary negatives; missing/stale/unresolved records block pass."
     },
     {
       "id": "external-action-authorization",

@@ -9,6 +9,7 @@ from pathlib import Path
 def native_plan(contract_path):
     """Project the existing locked task; do not maintain a second answer list."""
     import reader_answers
+    import direct_expression
     contract_path = Path(contract_path).resolve()
     task = reader_answers.load(contract_path)
     decisions = task["decisions"]
@@ -22,6 +23,9 @@ def native_plan(contract_path):
     errors = reader_answers.plan_errors(original, require_depth=lock.get("requires_depth", False))
     if errors:
         raise ValueError("native reader-answer plan is invalid: " + "; ".join(errors))
+    errors = direct_expression.plan_errors(original.get('expression_plan'), original['answers'])
+    if errors:
+        raise ValueError('; '.join(errors))
     sources = [reader["source_bundle"]]
     if decisions.get("source_snapshot"):
         sources.append(decisions["source_snapshot"])
@@ -41,7 +45,7 @@ def native_plan(contract_path):
             "material": {"mode": "source-grounded", "gaps": []}, "required_answers": answers,
             "reading_path": [{"id": surface["id"], "purpose": surface.get("reason") or original["reader"]["decision"]}
                              for surface in original["surfaces"]],
-            "native_binding": binding}
+            "expression_plan": original['expression_plan'], "native_binding": binding}
     return plan, sources
 
 
@@ -58,7 +62,7 @@ def validate_native_binding(run_path, contract_path):
     expected, sources = native_plan(contract_path)
     state = json.loads((Path(run_path) / "lifecycle.json").read_text(encoding="utf-8"))
     plan = state["plan"]
-    for key in ("native_binding", "task", "genre", "purpose", "language", "format", "reader", "required_answers"):
+    for key in ("native_binding", "task", "genre", "purpose", "language", "format", "reader", "required_answers", "expression_plan"):
         if plan.get(key) != expected[key]:
             raise ValueError("lifecycle differs from locked native task: " + key)
     if plan.get("material", {}).get("mode") != "source-grounded":

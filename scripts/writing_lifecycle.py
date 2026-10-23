@@ -21,6 +21,7 @@ import re
 import statistics
 import sys
 import context_value
+import direct_expression
 import source_attribution
 import tempfile
 import unicodedata
@@ -159,6 +160,11 @@ def seal(state):
     return digest({k: v for k, v in state.items() if k != "state_digest"})
 
 
+def implementation():
+    return {"engine": sha(Path(__file__).read_bytes()), "config": ref(CONFIG),
+            "direct_expression": sha(Path(direct_expression.__file__).read_bytes())}
+
+
 @contextmanager
 def session(run, mutate=False):
     p = Path(run)
@@ -170,7 +176,7 @@ def session(run, mutate=False):
         fcntl.flock(lock, fcntl.LOCK_EX)
         state = load_json(statefile)
         need(state.get("version") == 1 and state.get("state_digest") == seal(state), "Lifecycle state integrity failed")
-        need(state["implementation"] == {"engine": sha(Path(__file__).read_bytes()), "config": ref(CONFIG)}, "Lifecycle implementation changed; migrate explicitly")
+        need(state["implementation"] == implementation(), "Lifecycle implementation changed; migrate explicitly")
         for value in [state["plan_ref"], *state["sources"], *state["evidence"]]:
             verify_ref(value)
         for item in state["units"]:
@@ -215,6 +221,8 @@ def validate_plan(plan, profile, sources):
                 nonempty(a.get(key), "answer." + key)
             need(a["id"] not in ids, "Duplicate answer id")
             ids.add(a["id"])
+        errors = direct_expression.plan_errors(plan.get('expression_plan'), answers)
+        need(not errors, '; '.join(errors))
     else:
         nonempty(plan.get("literary_intent"), "literary_intent")
         need(isinstance(plan.get("constraints"), list), "Record literary constraints, even if empty")
@@ -244,7 +252,7 @@ def init_run(run, plan_path, profile, source_paths=()):
     p = Path(run)
     p.mkdir(parents=True, mode=0o700, exist_ok=False)
     state = {"version": 1, "profile": profile, "plan": plan, "plan_ref": ref(plan_path), "sources": sources,
-             "implementation": {"engine": sha(Path(__file__).read_bytes()), "config": ref(CONFIG)},
+             "implementation": implementation(),
              "units": [], "candidates": [], "rounds": [],
              "evidence": [ref(p) for p in plan.get("wordlists", {}).values()] +
                          [ref(i["source_path"]) for i in plan.get("evidence_items", []) if i.get("source_path")], "events": []}
@@ -271,6 +279,9 @@ def record_unit(run, text_path, record_path):
             quote = nonempty(observation.get("quote"), "unit quote")
             need(quote in value, "Unit quote not in registered text")
             nonempty(observation.get("reason"), "unit observation reason")
+        if state['profile'] == 'functional':
+            errors = direct_expression.validate(record.get('expression_review'), value, 'during')
+            need(not errors, '; '.join(errors))
         item = {"unit_id": record["unit_id"], "text": value, "text_sha256": sha(value.encode()), "record": record}
         state["units"].append(item)
         state["evidence"].append(ref(record_path))

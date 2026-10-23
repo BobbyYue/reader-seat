@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.35.1",
+  "skill_version": "0.36.0",
   "managed_execution": {
     "policy": "config/execution-policy.json",
     "controller": "scripts/writing_execution.py",
@@ -264,6 +264,12 @@
     }
   },
   "runtime_enforcement": {
+    "direct_expression_script": "scripts/direct_expression.py",
+    "direct_expression_reference": "references/direct-expression.md",
+    "expression_plan_required_before_drafting": true,
+    "unit_expression_review_required": true,
+    "independent_direct_expression_review_required": true,
+    "expression_counts_are_quality_thresholds": false,
     "contract_script": "scripts/runtime_contract.py",
     "unit_tests": "tests/test_runtime_contract.py",
     "module_resolver_unit_tests": "tests/test_module_resolver.py",

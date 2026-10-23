@@ -386,6 +386,10 @@ def command_init(args: argparse.Namespace) -> None:
         try:
             reader_answer_lock = reader_answers.lock_plan(args.reader_answer_plan, source_bundle_path, require_depth=True)
             answer_plan = reader_answers.load(args.reader_answer_plan)
+            import direct_expression
+            expression_errors = direct_expression.plan_errors(answer_plan.get('expression_plan'), answer_plan['answers'])
+            if expression_errors:
+                fail('; '.join(expression_errors))
             if len(answer_plan["surfaces"]) != 1:
                 fail("select one primary reading surface per independent no-context reviewer")
         except (ValueError, OSError) as exc:

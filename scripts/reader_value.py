@@ -11,9 +11,10 @@ import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 import context_value
+import direct_expression
 import source_attribution
 
-VERSION = 4
+VERSION = 5
 EMPTY_ATTESTATIONS = {"pass", "passed", "ok", "yes", "checked", "none", "n/a", "true", "false", "通过", "正常", "无", "已检查"}
 CRAFT_GUIDANCE = {
     "concrete_detail": "Quote the supported action/change/problem that makes this worth reading for the intended reader. Generic benefits are not evidence. Invent no stakes, scene, motive, number or reaction; a simple fact may suffice.",
@@ -28,6 +29,7 @@ GUIDANCE = {
     "unit_roles": "Explain how takeaway, picture and table serve the main judgment with distinct jobs. Expose relationships, not just prose boxes. Keep decisive limits nearby, useful repetition, every P0 and the coverage denominator; never force a winner.",
 }
 GUIDANCE["expression"] += " Review the whole candidate; record craft_checks with quote, pass/fail and reason. Clear messages may reuse one span. For unresolved wording only, consult the matching references/writing-craft-cases.md case; no extra round. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
+GUIDANCE['expression'] += ' Complete direct_expression independently for the final text. ' + direct_expression.GUIDANCE
 GUIDANCE["meaning"] += " In detail_support, compare source and edits: preserve quantity, range, frequency, attribution, logic, uncertainty and intent. No invention for rhythm; label permitted illustrative examples."
 GUIDANCE['meaning'] += ' Complete source_attribution in this same source review. ' + source_attribution.GUIDANCE
 
@@ -139,6 +141,7 @@ def validate(review, axes, binding, text, *, source="", renders=()):
         if item.get("status") != "pass" or item.get("action") != "keep":
             errors.append(f"{prefix} retains an unresolved reader problem")
         if axis == "expression":
+            errors.extend(direct_expression.validate(item.get('direct_expression'), text, 'after'))
             probes = item.get("craft_checks")
             if not isinstance(probes, dict) or set(probes) != set(CRAFT_GUIDANCE):
                 errors.append(f"{prefix} requires concrete_detail, progression and reading_flow evidence")
@@ -193,6 +196,7 @@ def template(axes, binding, text="", source=""):
         item = {"status": "fail", "action": "revise", "location": "", "quote": "",
                 "reader_effect": "", "protected_meaning": ""}
         if axis == "expression":
+            item['direct_expression'] = direct_expression.template(text, 'after')
             item["craft_checks"] = {name: {"status": "fail", "quote": "", "reason": ""} for name in CRAFT_GUIDANCE}
         if axis == "selection":
             item["removal_effect"] = ""

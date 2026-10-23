@@ -57,6 +57,7 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
 3. Save the source and a pre-draft [required-answer plan](references/required-reader-answers.md) with task-specific `depth`; pass `--reader-answer-plan` to `runtime_contract.py init`. It locks the
    decisions and generates `resolved-task-contract.md`,
    `module-manifest.json`, and the semantic review.
+   Include `expression_plan`: lead answers, opening choice and essential limits; see [direct expression](references/direct-expression.md).
 4. Continue only when `status=locked`. Read the generated task contract as the
    default instruction context. It contains every selected compact rule and the
    target reader, active scenario contract, and the required record and exit
@@ -71,6 +72,7 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
    deterministic source, content, reading-path, format, asset, visual, and
    rendered checks. Classify each pre-audit change and rerun only the affected
    checks; use the union when a change crosses categories.
+   Each complete unit needs a text-bound `expression_review`; compare faithful direct wording and repeated framing before registering it.
 7. Once the exact stable candidate exists,
    run `runtime_contract.py bind-review` before filling any review item. This
    creates a separate binding receipt and locks it into the task contract, so
@@ -88,6 +90,7 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
    fields in the same reviews: supported detail, progression, reading flow, content necessity, source
    meaning and actual reading layout. Missing or unresolved fields block both
    aggregation and final verification; do not add reviewers or visible checklists.
+   The readability reviewer independently checks `expression.direct_expression`, including cumulative effort; accuracy alone does not settle expression quality.
    The normal path starts one complete
    batch only after the candidate and packets are stable. If it fails, wait for
    all results, merge every blocker, revise once, restabilize, then rerun all

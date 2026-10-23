@@ -349,7 +349,7 @@ def validate_native_return(run, body, role, packet_path):
             errors = editorial_gate.validate(body, load(owners[-1]))
     # A valid negative judgment is not a transport error. Missing fields,
     # wrong bindings or absent quoted evidence remain retryable technical errors.
-    semantic = ('source_attribution unresolved', 'context_value unresolved content selection', 'retains an unresolved reader problem', 'missing or unresolved; no extra style-only review round',
+    semantic = ('source_attribution unresolved', 'context_value unresolved content selection', 'direct_expression unresolved reader effort', 'retains an unresolved reader problem', 'missing or unresolved; no extra style-only review round',
                 ' review did not pass', ' required checks are absent, failed or unexplained', ' has unresolved or missing ')
     structural = [error for error in errors if not any(value in error for value in semantic)]
     need(not structural, 'Native return has malformed fields or invalid evidence; retry the technical return')

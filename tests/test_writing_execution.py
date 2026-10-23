@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import writing_execution as execution
 import writing_lifecycle as lifecycle
+from expression_fixture import structural_expression, structural_expression_plan
 
 
 class ExecutionTests(unittest.TestCase):
@@ -34,6 +35,7 @@ class ExecutionTests(unittest.TestCase):
                 'authority': {'status': 'confirmed', 'basis': 'Synthetic test only', 'reference': 'Not real acceptance'},
                 'material': {'mode': 'source-grounded', 'gaps': []},
                 'required_answers': [{'id': 'A1', 'question': 'What is known?', 'expected': 'No release date is confirmed.', 'source_location': 'synthetic'}],
+                'expression_plan': structural_expression_plan(),
                 'reading_path': [{'id': 'U1', 'purpose': 'One complete statement'}]}
         self.plan = self.save('plan.json', plan)
         self.run = self.root / 'run'
@@ -52,6 +54,7 @@ class ExecutionTests(unittest.TestCase):
     def candidate(self):
         value = self.artifact.read_text()
         unit = self.save('unit.json', {'unit_id': 'U1', 'summary': 'Synthetic observation',
+            'expression_review': structural_expression(value, 'during'),
             'observations': [{'quote': value, 'reason': 'Identity fixture only'}]})
         lifecycle.record_unit(self.run, self.artifact, unit)
         report_path = self.root / 'measurement.json'

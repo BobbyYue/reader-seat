@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import reader_value
 from context_fixture import structural_context, structural_attribution
+from expression_fixture import structural_expression
 
 
 class WritingJudgmentTests(unittest.TestCase):
@@ -32,11 +33,12 @@ class WritingJudgmentTests(unittest.TestCase):
     def test_existing_evidence_is_required_without_new_style_fields(self):
         review = reader_value.template(("expression", "selection", "meaning"), "f" * 64)
         checks = review["checks"]
-        self.assertEqual(review["version"], 4)
+        self.assertEqual(review["version"], 5)
         self.assertEqual(set(checks["expression"]["craft_checks"]),
                          {"concrete_detail", "progression", "reading_flow"})
         self.assertNotIn("literary_score", checks["expression"])
         text = "The result is still unknown."
+        checks["expression"]["direct_expression"] = structural_expression(text)
         for check in checks.values():
             check.update(status="pass", action="keep", location="opening",
                          quote=text, reader_effect="Preserves the unknown result.",

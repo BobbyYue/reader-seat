@@ -15,8 +15,19 @@ source, reader or answer checklist. After normal runtime initialization:
    required-answer plan, reader, language, actual format and source references.
    Reading units default to the native reading surfaces. Keep the original plan
    authoritative; the generated `RUN.plan.json` is not another hand-maintained list.
+   Include `expression_plan` in that original prewrite plan: lead answers,
+   opening move and reason, and essential-boundary placements follow
+   [required-reader-answers.md](required-reader-answers.md).
 2. During writing, `unit RUN --text UNIT.txt --record UNIT.json`. Register every
    planned unit's actual text, quoted observation and reason; recheck changed units.
+   Before registration, run `python3 scripts/direct_expression.py prepare --text PATH --stage during --output JSON`
+   against the actual complete unit. Complete the generated `expression_review`
+   in the existing complete-unit record. Compare original wording with an equally
+   accurate direct alternative and assess repetition across the reading path;
+   keeping a caveat needs more than showing that deletion loses information.
+   The script owns the exact record fields and bindings; use its generated
+   template rather than copying a separate schema. See
+   [direct-expression.md](direct-expression.md) for judgment and examples.
 3. For the stabilized whole candidate, `measure RUN --text TEXT --output METRICS.json`,
    then `candidate RUN --artifact ARTIFACT --text TEXT --report METRICS.json --record ASSESSMENT.json`.
    Fill the generated `METRICS.json.assessment.json` template: preserve its
@@ -29,8 +40,19 @@ source, reader or answer checklist. After normal runtime initialization:
    Run the existing four fresh, isolated reviewers concurrently. After all return,
    aggregate with `reader_review.py` and register that exact original aggregate:
    `review-finish RUN --result AGGREGATE.json --verdict pass` (or `fail`).
+   The readability reviewer independently completes
+   `reader_value.checks.expression.direct_expression` with `stage: after`, using
+   the current generated review template. This checks the stable whole candidate,
+   including accumulated corrective framing, without inheriting author keep
+   rationales. It adds no reviewer or review round.
    During-writing review batches use `--stage during`; both stages count toward
    the same three-round limit. Do not fill a synthetic pass to replace a review.
+
+Expression match counts are prompts for contextual review, never pass/fail
+thresholds. Preserve necessary prohibitions, refusals, negative findings and
+natural voice; favor affirmative phrasing only when equally accurate. Preparing
+an author expression record is not an independent review batch and consumes no
+additional round.
 
 The final and action guards reopen these native references, require the same
 task/decisions, reader, projected answers, actual format and captured source,

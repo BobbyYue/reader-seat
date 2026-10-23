@@ -339,8 +339,10 @@ class ActionLifecycleTests(unittest.TestCase):
         unit = self.task.base / "short-unit.txt"
         unit.write_text("Only this inspected synthetic period is known.")
         record = self.task.base / "new-unit.json"
+        from expression_fixture import structural_expression
         writing_lifecycle.write_json(record, {"unit_id": state["plan"]["reading_path"][0]["id"],
             "summary": "Synthetic incomplete unit, not full current prose",
+            "expression_review": structural_expression(unit.read_text(), "during"),
             "observations": [{"quote": unit.read_text(), "reason": "Negative fixture: intentionally incomplete coverage"}]})
         writing_lifecycle.record_unit(run, unit, record)
         result = self.command(self.preview_args(run))

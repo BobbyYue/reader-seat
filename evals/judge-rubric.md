@@ -44,6 +44,9 @@ Score each item from 1 to 5 only after hard gates pass:
   ceremonial, promotional, agent-process, or formulaic filler. A value-bearing
   title, heading, or lead identifies its actual object and supported change or
   result instead of substituting method labels or generic benefit language.
+  For direct-expression cases, compare the candidate with an equally accurate
+  direct alternative and assess corrective framing across the reading path,
+  not just whether each caveat can be defended in isolation.
 - `actionability`: when action is intended, ownership, timing, dependency, and
   boundary are usable; otherwise the output does not invent an action.
 
@@ -53,3 +56,27 @@ the smallest source-grounded reason.
 Length thresholds and exact spacing are review signals, not semantic hard
 gates. A concise candidate passes when it preserves the complete reader task;
 do not require filler to satisfy a character count.
+
+## Direct Expression Cases
+
+For `xagent-direct-expression-report-repetition`, judge whether the opening and
+section leads make the supported progress and remaining work easy to retrieve.
+Repeated correction is a defect only when it adds a needless detour or obscures
+those answers. A different direct formulation or consolidated boundary may
+solve it; do not require a preferred phrase, a uniformly positive tone, or
+removal of all repetition. Necessary local conditions must remain accessible.
+
+For `xagent-direct-expression-essential-negatives`, preserve the operative
+prohibition, stop condition, negative finding and uncertainty. An already clear
+negative sentence may remain unchanged. Treat weakened restrictions or a
+negative finding recast as unsupported success as failures of the existing
+fidelity, scope or evidence gates, not as gains in natural expression.
+
+Both cases use new synthetic workplace material. Their wording and repetition
+counts are not pass/fail cutoffs; no negative word or construction is banned.
+Use the existing reader-outcome criteria to explain actual reading burden and
+the existing hard gates for meaning loss. Where lifecycle records are in scope,
+inspect the before plan, during comparison and independent after judgment;
+completed fields alone do not prove a reader improvement. Keep those records
+out of requested prose-only outputs. Existing cases, including private fixtures,
+retain their original boundaries and are not authorized for publication.
