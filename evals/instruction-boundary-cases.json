@@ -1,0 +1,14 @@
+{
+  "data_origin": "Independent synthetic maintenance cases; no user private material",
+  "scope": "Producer receives only task and materials. Judge receives expectations afterward. These are wording probes, not full artifact workflow certification.",
+  "cases": [
+    {"id":"report-style-request","skill":"reader-seat","producer":{"task":"把材料写成给项目负责人的一个短段落，专业但易读，不夸张。只给正文。","materials":"一项虚构试点：12个团队参与，9个完成数据接入，3个尚未确认字段。尚未验证后续收益。"},"judge":{"omit":"复述专业但易读、不夸张或给负责人的写作要求","retain":"12、9、3及收益未验证","allow":"必要证据边界，不强迫行动建议"}},
+    {"id":"report-needed-method","skill":"reader-seat","producer":{"task":"顺一下这段说明，只给正文，不改变方法或限制。","materials":"这次采用分层抽样，只检查了东区。其他地区还没验证。"},"judge":{"retain":"分层抽样、东区、其他地区未验证","reject":"将方法和限制当成写作过程删除"}},
+    {"id":"brief-style-caption","skill":"3080-brief","producer":{"task":"只修改这份摘要里的图注，专业但易读，别把写作过程写进去。","materials":"图为虚构试点的完成情况：12个团队，9个已接入，3个待确认字段。原图注：为了让读者三十秒看懂，本图专业但易读地展示试点情况。"},"judge":{"omit":"三十秒看懂、专业但易读等遵令说明","retain":"试点对象和完成/待确认的真实区分","allow":"不必把所有数字重复进图注"}},
+    {"id":"brief-requested-format","skill":"3080-brief","producer":{"task":"说明3080开头为什么保留TLDR、一句话、一张图和一个表，这次内容就是方法介绍。两句话即可。","materials":"这是一个介绍输出格式的说明，不是业务摘要。"},"judge":{"retain":"用户明确要求介绍的方法与格式名称","reject":"把所有方法名称一律删除"}},
+    {"id":"message-tone-request","skill":"hit-send","producer":{"task":"这句帮我顺一下，轻松点，不要给对方压力。只给能直接发的那句话。","materials":"你有空的时候帮我看下这份排期吧。"},"judge":{"omit":"轻松点、不施压或按照要求的遵令说明","retain":"请对方有空时看排期，不新增期限或承诺"}},
+    {"id":"message-real-agreement","skill":"hit-send","producer":{"task":"这句能发吗？只给消息正文。","materials":"按照你昨天的要求，我把风险项补进排期了，链接发你。背景：对方昨天明确要求补风险项，这是此次交付的确认。"},"judge":{"retain":"真实要求与完成情况可以保留，不能仅因按照你的要求就认定为指令泄漏","reject":"添加新完成事项、删掉必要交付确认"}},
+    {"id":"story-tone-request","skill":"writer-pen","producer":{"task":"把这个片段顺成两三句，克制一点，不煽情。只给正文，不拟题。","materials":"虚构片段：父亲把修好的伞放在门边。女儿走时没拿。晚上雨落下来。"},"judge":{"omit":"克制、不煽情、按要求创作等过程说明","retain":"人物、伞和未带走的行动，不强迫解释寓意"}},
+    {"id":"story-intentional-quote","skill":"writer-pen","producer":{"task":"轻微润色，保留人物台词，只给正文，不拟题。","materials":"虚构片段：编辑说，按照你的要求，我删掉了最后一页。作者翻到结尾，发现那页是空白的。"},"judge":{"retain":"人物台词中的按照你的要求","reject":"把人物对话误当用户写作要求删除"}}
+  ]
+}

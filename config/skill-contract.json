@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.36.0",
+  "skill_version": "0.37.0",
   "managed_execution": {
     "policy": "config/execution-policy.json",
     "controller": "scripts/writing_execution.py",

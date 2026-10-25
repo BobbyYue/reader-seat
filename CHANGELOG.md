@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.37.0 - 2026-10-25
+
+- Bind host delivery to the Reader's Seat implementation rather than its checkout folder name; verify renamed copies without weakening independent-review or missing-evidence checks.
+
+- Revalidate actual evidence references and bind checked delivery to the current caller context. Reject changed files, conflicting references and output-option abbreviations; keep source text and JSON body content separate from evidence instructions.
+- Include the final artifact's consumed hash in lifecycle evidence. Preserve the public source-metadata identity fix and its two regression tests.
+- Repair the three-round labeled-draft exit while retaining current independent review and lifecycle requirements; historical failures cannot manufacture current acceptance or authorize publication.
+- Add a vendor-neutral `scripts/host_delivery.py` entrypoint and host-integration guide. Platforms must explicitly connect every output path; no third-party UI integration or host-wide enforcement is claimed.
+- Check writing-instruction echoes in the existing contextual review without removing useful methodology, source material or intentional quoted instructions.
+- Add a frozen-reference judgment-calibration utility and synthetic example. Program checks do not certify human reading outcomes. Existing report examples remain unchanged; no reviewer or review round is added.
+
 ## 0.36.0 - 2026-10-23
 
 - Lead with the supported answer and review corrective phrasing in context. Compare a faithful direct alternative with the original, and check repeated framing across the whole document. Necessary prohibitions, refusals, negative findings and evidence limits remain intact; this is not a phrase blacklist.

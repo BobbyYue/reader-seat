@@ -1,0 +1,13 @@
+{
+  "label_origin": "synthetic",
+  "label_reference": "Independently invented demonstration labels; not human feedback or a completed evaluation.",
+  "expected_runs": [{"id": "example-run", "host": "unconnected-example-host", "model": "not-run"}],
+  "cases": [
+    {"id": "bounded-fact", "category": "fidelity", "expected": "keep", "source": "Only yesterday's records were checked.", "candidate": "Only yesterday's records were checked."},
+    {"id": "expanded-scope", "category": "fidelity", "expected": "revise", "source": "Only yesterday's records were checked.", "candidate": "All records have been verified."},
+    {"id": "necessary-prohibition", "category": "direct-expression", "expected": "keep", "source": "Do not upload production logs to the test environment.", "candidate": "Do not upload production logs to the test environment."},
+    {"id": "weakened-prohibition", "category": "direct-expression", "expected": "revise", "source": "Do not upload production logs to the test environment.", "candidate": "Use production logs carefully in the test environment."},
+    {"id": "production-note", "category": "instruction-boundary", "expected": "revise", "request": "Make the message concise for a colleague.", "source": "The meeting starts at three.", "candidate": "This concise message is written for a colleague: the meeting starts at three."},
+    {"id": "recipient-instruction", "category": "instruction-boundary", "expected": "keep", "source": "Please include the date in your report.", "candidate": "Please include the date in your report."}
+  ]
+}

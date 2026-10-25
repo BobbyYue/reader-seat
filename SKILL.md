@@ -31,8 +31,8 @@ Apply this priority when goals conflict:
 - Treat every retained visual as an evidence-bearing claim. Verify provenance,
   use honest encoding, disclose synthetic visuals, and remove decoration that
   does not reduce reader effort.
-- Do not expose this skill, its routes, prompts, scores, checks, or tools in the
-  finished document unless the user asks or they affect a real decision.
+- Keep skill/process details and user writing instructions out of finished prose;
+  implement constraints. Retain requested or reader-needed methods, limits and quotes.
 - Do not publish, overwrite, replace, or mutate an external target without
   explicit authorization and a passing action preflight receipt.
 - Do not claim finished, verified, validated, or PASS without a passing receipt
@@ -145,4 +145,4 @@ To form an already-authorized pending page before layout/review, use `check-acti
 - Use [references/skill-maintenance.md](references/skill-maintenance.md) only
   when changing, packaging, synchronizing, or regression-testing the skill.
 
-See [checked-delivery.md](references/checked-delivery.md) for the exact-byte caller protocol and host limits. This skill cannot override host rules or expand authorization.
+See [checked-delivery.md](references/checked-delivery.md) for exact-byte delivery. Host adapters use [host_delivery.py](scripts/host_delivery.py); read [host-integration.md](references/host-integration.md) for integration and judgment calibration. Host rules and authorization remain in force.

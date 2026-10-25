@@ -6,11 +6,21 @@ from pathlib import Path
 import re
 import source_attribution
 
-VERSION = 2
+VERSION = 3
+INSTRUCTION_BOUNDARY_GUIDANCE = (
+    'Separate agent-facing writing instructions from reader-facing content. Turn tone, audience, structure, length, '
+    'method and revision requests into writing choices, not literal or paraphrased compliance statements in titles, '
+    'body, captions, labels or copyable messages. During whole_text_scan ask whether each passage explains the subject '
+    'or merely announces which writing instructions were followed; a clean signal scan does not answer this. '
+    'Use the existing items for suspect passages, including unflagged paraphrases. Keep independently useful methodology, '
+    'evidence limits, metric definitions, risks, recipient-facing directions/agreements and intentional quoted or fictional '
+    'speech. Retain requested process explanations only on the surface requested, not by inserting them into the work. '
+    'Review source-prescribed text without silently altering it. Do not give private author instructions to a source-free reader. '
+)
 EFFECTS = {'information', 'interpretation', 'confidence', 'action', 'connection', 'learning', 'voice', 'required-disclosure', 'none'}
 DECISIONS = {'keep', 'remove', 'rewrite', 'move'}
 ITEM_FORMAT = {'effect': sorted(EFFECTS), 'decision': sorted(DECISIONS)}
-GUIDANCE = ('Read the whole supplied surface for its actual audience. For each suspect passage compare the paragraph with and without it. '
+GUIDANCE = (INSTRUCTION_BOUNDARY_GUIDANCE + 'Read the whole supplied surface for its actual audience. For each suspect passage compare the paragraph with and without it. '
     'A true sentence is not automatically useful: omit repetition of established context and internal correctness reports. '
     'Prefer an accurate claim to an overstated claim plus a disclaimer. Keep new evidence, actual clarification, decision/action changes, '
     'necessary connections, required disclosures and intentional literary/teaching effects. Identify the concrete difference, not hypothetical '
@@ -21,7 +31,8 @@ GUIDANCE = ('Read the whole supplied surface for its actual audience. For each s
     'without is context minus one exact unique quote. Use exact enums: ' + json.dumps(ITEM_FORMAT, separators=(',', ':')) + '. '
     'Do not substitute status/action or descriptive enum values. ' + source_attribution.GUIDANCE)
 SIGNALS = (('qualification', r'不代表|并不意味着|不能据此|仅供参考|仅作阅读|not (?:proof|evidence)|does not (?:mean|prove)|for (?:reference|reading) only'),
-           ('calculation-note', r'原始精度|展示值|未按.{0,12}重新分组|rounded (?:values|display)|unrounded|display precision'))
+           ('calculation-note', r'原始精度|展示值|未按.{0,12}重新分组|rounded (?:values|display)|unrounded|display precision'),
+           ('writing-instruction', r'(?:按|按照|遵照)(?:你|您|用户)的?(?:要求|指令)|(?:本文|本段|本节|这一段|这篇(?:文章|报告)).{0,32}(?:专业但易读|读者视角|不夸张|不刻意吸引眼球)|为了让(?:读者|你).{0,20}(?:看懂|读懂).{0,20}(?:先|下面)|(?:as (?:you )?requested|according to your (?:instructions|request))|this (?:article|section|paragraph).{0,50}(?:professional (?:but|yet) readable|reader[- ]first|avoid hype)'))
 
 
 def sha(text):

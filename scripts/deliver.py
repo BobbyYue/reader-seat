@@ -42,16 +42,27 @@ def checked_document(arguments):
                 except SystemExit as exc:
                     raise delivery.DeliveryBlocked("Runtime verification failed") from exc
             result = json.loads(receipt.read_text(encoding="utf-8"))
-            result["review_method"] = "independent" if result.get("reader_validation") else "not-attested"
+            reviewed = result.get("reader_validation") or (
+                args.command != "verify" and result.get("status") == "review-incomplete-draft"
+                and result.get("reader_review_status") in {"revision-required", "needs-user-decision"})
+            result["review_method"] = "independent" if reviewed else "not-attested"
             result["managed_execution"] = writing_execution.accept_native(
                 args.lifecycle_run, args.artifact, [args.reader_review_aggregate], result)
             return result
 
-        return delivery.pack(args.artifact, paths, verify)
+        # Drafts use the current four reviews, not an earlier semantic PASS.
+        # Watch the whole locked contract, but do not dereference that old binding.
+        inactive = {} if args.command == "verify" else {
+            str(args.contract.resolve()): {("semantic_review_binding",)}}
+        decisions = json.loads(args.contract.read_text())["decisions"]
+        reader = decisions["reader_validation"]
+        sources = [reader["source_bundle"], reader["answer_lock"]["source"], decisions.get("source_snapshot")]
+        return delivery.pack(args.artifact, paths, verify, inactive_fields=inactive,
+                             opaque_paths=[item["path"] for item in sources if item])
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     parser.add_argument("--output", type=Path)
     options, args = parser.parse_known_args(sys.argv[1:] if argv is None else argv)
     try:

@@ -25,6 +25,41 @@ python3 scripts/context_value.py prepare --text visible.txt --review value-revie
 python3 scripts/context_value.py check --text visible.txt --review value-review.json --profile functional
 ```
 
+## Instruction/Content Boundary
+
+Writing instructions belong to the authoring process, not automatically to the
+work. Implement requests about audience, tone, structure, length, method, and
+revision through writing choices. Do not turn them into literal or paraphrased
+compliance statements in titles, prose, captions, visual/table labels, or copyable
+messages. Keep requested revision notes separate from the requested work.
+
+During the existing `whole_text_scan`, ask: does this passage explain the subject,
+or merely announce which writing instructions were followed? Compare suspect
+passages in the existing `items`; include unflagged paraphrases. The author/source
+pass may consult the actual task. A source-free reader judges the visible text
+only, without being supplied private instructions or the intended answer.
+
+| Situation | Reader-grounded treatment |
+| --- | --- |
+| User asks for professional but readable prose; the report announces that writing style | Implement the style; remove the compliance announcement when it adds no subject information |
+| User asks to avoid hype; the artifact says "this section does not exaggerate" | State supported claims with appropriate strength, not a promise about the writing |
+| A methodology note explains actual sampling, a denominator, uncertainty or a risk | Keep when it changes interpretation; it is not an instruction echo merely because it describes a method |
+| An IM says "as requested, I sent the revised schedule" to acknowledge a real agreement | Preserve the supplied agreement when relevant to the recipient; do not confuse a business instruction with an agent instruction |
+| An article teaches prompt writing and quotes "make this less formal" | Keep the quote as the subject being explained |
+| A fictional editor tells a narrator "do not be sentimental" | Judge the dialogue or deliberate metafiction in the work; do not erase it as a forbidden phrase |
+| User explicitly requests an afterword explaining editorial choices | Put that explanation in the requested afterword, not in the story or copyable message |
+
+Do not fix an echo by inventing subject matter. Preserve protected/verbatim text
+or flag a conflict rather than silently editing it. Phrase matches request a
+context decision, not automatic deletion; no match is not semantic clearance.
+Unresolved remove/rewrite/move decisions use the existing revision path. This
+adds no reviewer, round, visible checklist, new scoring axis or sentence quota.
+
+Maintenance cases: [instruction-boundary-cases.json](../evals/instruction-boundary-cases.json).
+Give producers only their task/materials; judge fields are private expectations,
+not writing instructions. Program tests verify review obligations and exceptions,
+not that a model has correctly understood every paraphrase.
+
 The same record now contains `attribution_replay`: what the visible text makes
 the reader attribute to a source, author or fictional speaker. For mixed source
 statements and author judgments, follow [source attribution](source-attribution.md).

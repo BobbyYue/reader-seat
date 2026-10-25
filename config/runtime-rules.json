@@ -162,7 +162,7 @@
       },
       {
         "id": "reader-perspective",
-        "instruction": "Use supplied context, task and reading mode; keep critical answers accessible, findable, understandable and usable without hidden history."
+        "instruction": "Keep answers accessible, findable, understandable and usable. Context review: implement writing requests; omit compliance prose."
       },
       {
         "id": "progressive-disclosure",

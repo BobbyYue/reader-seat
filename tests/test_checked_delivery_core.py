@@ -24,7 +24,9 @@ class CheckedDeliveryCoreTests(unittest.TestCase):
         self.tmp.cleanup()
 
     def result(self, **extra):
-        return {"status": "pass", "artifact_sha256": delivery.digest(self.artifact.read_bytes()), **extra}
+        digest = delivery.digest(self.artifact.read_bytes())
+        return {"status": "pass", "review_method": "independent", "artifact_sha256": digest,
+                "verified_inputs": {str(self.artifact.resolve()): digest}, **extra}
 
     def test_nonfinal_success_states_never_release_payload(self):
         for status in ("PENDING", "prepared", "built", "ready", "PASS_SCHEMA_ONLY", "fail", None):

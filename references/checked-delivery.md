@@ -1,5 +1,12 @@
 # Checked Delivery
 
+For a host integration, use [host_delivery.py](../scripts/host_delivery.py) to
+invoke this checked path and validate current context, state and exact returned
+bytes before exposure. See [host-integration.md](host-integration.md) for the
+caller responsibilities, environment limits and separate judgment calibration.
+The consumer is implemented; actual third-party UI integration still needs its
+own acceptance test. No platform is certified merely by installation.
+
 Use `scripts/deliver.py verify` with the same arguments as
 `runtime_contract.py verify`, except `--receipt`; `--lifecycle-run RUN` is
 mandatory for every delivery operation.

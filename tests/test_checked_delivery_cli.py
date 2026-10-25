@@ -36,6 +36,7 @@ class CheckedDeliveryCLITests(unittest.TestCase):
         envelope = json.loads(result.stdout)
         self.assertEqual(envelope["delivery_state"], "checked")
         self.assertEqual(base64.b64decode(envelope["payload"]), self.artifact.read_bytes())
+
         self.assertFalse(envelope["external_action_authorized"])
 
     def test_init_or_bare_receipt_is_not_delivery(self):
@@ -78,6 +79,15 @@ class CheckedDeliveryCLITests(unittest.TestCase):
         self.assertTrue(envelope["user_question_required"])
         self.assertFalse(envelope["external_action_authorized"])
         self.assertEqual(base64.b64decode(envelope["payload"]), self.artifact.read_bytes())
+        import host_delivery
+        accepted = host_delivery.run(args, expected_artifact=self.artifact,
+            context_files=[self.fixture.source_bundle], accepted_state="draft")
+        self.assertEqual(accepted["delivery_state"], "draft")
+        with self.assertRaises(host_delivery.HostDeliveryBlocked):
+            host_delivery.run(args, expected_artifact=self.artifact,
+                context_files=[self.fixture.source_bundle])
+        previous.unlink()
+        self.assertNotEqual(self.run_delivery(args).returncode, 0)
 
 
 if __name__ == "__main__":

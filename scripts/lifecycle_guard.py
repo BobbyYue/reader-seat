@@ -131,11 +131,12 @@ def verify_lifecycle(run_path, artifact_path, aggregate_path, *, draft=False, co
     if not isinstance(evidence, list) or not evidence:
         raise ValueError("lifecycle did not return its evidence paths")
     engine = Path(lifecycle.__file__).resolve()
-    paths = [state, Path(aggregate_path).resolve(), engine,
+    paths = [artifact, state, Path(aggregate_path).resolve(), engine,
              engine.parents[1] / "config" / "writing-quality.json", *map(Path, evidence), *native_paths,
              *map(Path, captured.get("evidence_paths", []))]
     if any(not path.is_absolute() or not path.is_file() for path in paths):
         raise ValueError("lifecycle evidence is missing or not absolute")
     paths = sorted({str(path.resolve()) for path in paths})
-    return {**result, "run_path": str(run), "evidence_paths": paths,
-            "verified_inputs": {path: hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in paths}}
+    verified = {path: hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in paths}
+    verified[str(artifact)] = result["artifact_sha256"]
+    return {**result, "run_path": str(run), "evidence_paths": paths, "verified_inputs": verified}

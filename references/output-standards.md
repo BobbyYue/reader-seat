@@ -17,6 +17,12 @@ Apply all eight standards after selecting the scenario profile. These are qualit
   acceptance questions, not visible section labels.
 - Include methodology or implementation process only when it changes trust, interpretation, replication, or execution.
 - Exclude prompts, skill names, tool names, commands, schemas, checks, and generation history unless they materially affect a reader decision.
+- User requests about tone, audience, structure, length, method, or revision guide
+  writing; they are not source facts or default content. Do not paraphrase them
+  into titles, body, captions, labels, or summaries just to announce compliance.
+  Apply the instruction/content check in the existing [context review](context-value.md#instructioncontent-boundary).
+  Preserve methods, limitations, recipient instructions, and deliberate quotations
+  when they have an independent reader purpose or are explicitly requested.
 
 ## 3. Progressive Disclosure
 
