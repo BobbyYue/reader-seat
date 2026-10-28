@@ -91,6 +91,7 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
    meaning and actual reading layout. Missing or unresolved fields block both
    aggregation and final verification; do not add reviewers or visible checklists.
    The readability reviewer independently checks `expression.direct_expression`, including cumulative effort; accuracy alone does not settle expression quality.
+   In that same context review, [defensive-expression](references/defensive-expression.md) checks every candidate and whole-text repetition; computed C/D/R stay private, and unresolved excess or pending items block completion while necessary limits remain.
    The normal path starts one complete
    batch only after the candidate and packets are stable. If it fails, wait for
    all results, merge every blocker, revise once, restabilize, then rerun all

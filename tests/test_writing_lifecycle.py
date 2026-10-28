@@ -21,6 +21,16 @@ class WritingLifecycleTests(unittest.TestCase):
     def flow(self, **kwargs):
         return prepare_flow(lifecycle, self.root, self.artifact, **kwargs)
 
+    def test_defensive_signals_reach_prewrite_unit_and_measurement(self):
+        f = self.flow()
+        state = lifecycle.load_json(f["run"] / "lifecycle.json")
+        packet = lifecycle.load_json(f["run"] / "task-packet.json")
+        self.assertEqual(set(packet["defensive_expression"]), {"before", "during", "after"})
+        self.assertIn("defensive_expression", state["units"][-1])
+        report = lifecycle.measure_data(state, self.artifact.read_text())
+        self.assertIn("defensive_expression", report["metrics"])
+        self.assertIsNone(report["metrics"]["defensive_expression"]["data"]["D"])
+
     def test_missing_run_blocks(self):
         with self.assertRaises(lifecycle.LifecycleError):
             lifecycle.verify_delivery(self.root / "missing", self.artifact, "functional")

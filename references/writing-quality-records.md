@@ -57,7 +57,7 @@ formats still need the skill's live readback checks. Unknown delivery types are
 rejected instead of skipping content equivalence. PDF needs a separate verified
 extraction adapter and is not silently accepted by this engine.
 The measurement report is recomputed at registration and cannot be edited into
-a pass. It always reports all ten categories, including partial/unmeasured
+a pass. It always reports all eleven categories, including partial/unmeasured
 scope. A missing dictionary, tokenizer, grammar engine or actual page is not 0.
 
 `ASSESSMENT.json` contains:
@@ -82,7 +82,7 @@ scope. A missing dictionary, tokenizer, grammar engine or actual page is not 0.
   test pictures as production inspection evidence.
 
 IDs: `vocabulary`, `terms`, `sentence_length`, `paragraphs`, `verbosity`,
-`evidence`, `grammar`, `time`, `reading_burden`, `reading_efficiency`.
+`defensive_expression`, `evidence`, `grammar`, `time`, `reading_burden`, `reading_efficiency`.
 Counts, contextual judgment, AI replay and real-reader outcomes remain distinct.
 There is no quality total, automatic word replacement, literary length limit,
 or claim of actual 30-second human comprehension.

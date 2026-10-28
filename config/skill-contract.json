@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.37.0",
+  "skill_version": "0.38.0",
   "managed_execution": {
     "policy": "config/execution-policy.json",
     "controller": "scripts/writing_execution.py",
@@ -569,5 +569,18 @@
     "reader-review-aggregate-source-result-revalidation",
     "high-risk-action-preflight-judge-required"
   ],
-  "content_value_version": 1
+  "content_value_version": 1,
+  "defensive_expression_contract": {
+    "version": 1,
+    "script": "scripts/defensive_expression.py",
+    "required_in": "existing-context-review",
+    "counts": [
+      "C",
+      "D",
+      "R_percent",
+      "pending"
+    ],
+    "completion": "current-surface reviewed, D=0, pending=0",
+    "no_keyword_ban": true
+  }
 }

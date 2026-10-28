@@ -5,8 +5,9 @@ import json
 from pathlib import Path
 import re
 import source_attribution
+import defensive_expression
 
-VERSION = 3
+VERSION = 4
 INSTRUCTION_BOUNDARY_GUIDANCE = (
     'Separate agent-facing writing instructions from reader-facing content. Turn tone, audience, structure, length, '
     'method and revision requests into writing choices, not literal or paraphrased compliance statements in titles, '
@@ -30,6 +31,7 @@ GUIDANCE = (INSTRUCTION_BOUNDARY_GUIDANCE + 'Read the whole supplied surface for
     'New context_review.items require id, context, quote, without, with_reading, without_reading, effect, reason, decision; '
     'without is context minus one exact unique quote. Use exact enums: ' + json.dumps(ITEM_FORMAT, separators=(',', ':')) + '. '
     'Do not substitute status/action or descriptive enum values. ' + source_attribution.GUIDANCE)
+GUIDANCE += " " + defensive_expression.GUIDANCE
 SIGNALS = (('qualification', r'不代表|并不意味着|不能据此|仅供参考|仅作阅读|not (?:proof|evidence)|does not (?:mean|prove)|for (?:reference|reading) only'),
            ('calculation-note', r'原始精度|展示值|未按.{0,12}重新分组|rounded (?:values|display)|unrounded|display precision'),
            ('writing-instruction', r'(?:按|按照|遵照)(?:你|您|用户)的?(?:要求|指令)|(?:本文|本段|本节|这一段|这篇(?:文章|报告)).{0,32}(?:专业但易读|读者视角|不夸张|不刻意吸引眼球)|为了让(?:读者|你).{0,20}(?:看懂|读懂).{0,20}(?:先|下面)|(?:as (?:you )?requested|according to your (?:instructions|request))|this (?:article|section|paragraph).{0,50}(?:professional (?:but|yet) readable|reader[- ]first|avoid hype)'))
@@ -70,6 +72,7 @@ def template(text, profile='functional'):
         raise ValueError('Unknown content profile')
     return {'version': VERSION, 'text_sha256': sha(text), 'profile': profile,
             'attribution_replay': source_attribution.template(text, profile=profile),
+            'defensive_expression': defensive_expression.template(text, profile),
             'audience': '', 'purpose': '', 'whole_text_scan': '',
             'items': [dict(p, quote='', without='', with_reading='', without_reading='', effect='', reason='', decision='pending') for p in probes(text)]}
 
@@ -77,7 +80,7 @@ def template(text, profile='functional'):
 def validate(record, text, profile=None, source=None):
     if not isinstance(record, dict):
         return ['context_value missing contextual comparison']
-    errors = []
+    errors = defensive_expression.validate(record.get('defensive_expression'), text, record.get('profile'))
     errors.extend(source_attribution.validate(record.get('attribution_replay'), text, profile=record.get('profile')))
     if source is not None:
         errors.extend(source_attribution.validate(record.get('source_attribution'), text, source, 'source', record.get('profile')))
@@ -157,7 +160,8 @@ def main():
         if source is None and isinstance(replay, dict) and isinstance(replay.get('items'), list) and any(
                 isinstance(item, dict) and item.get('kind') == 'source-fact' for item in replay['items']):
             errors.append('source_attribution source snapshot required for quoted source claims')
-        result = {'status': 'blocked' if errors else 'record_checks_satisfied', 'errors': errors}
+        result = {'status': 'blocked' if errors else 'record_checks_satisfied', 'errors': errors,
+                  'defensive_expression_metrics': defensive_expression.summary(record.get('defensive_expression'), text, args.profile)}
     print(json.dumps(result, ensure_ascii=False))
     if args.mode == 'check' and errors:
         raise SystemExit(1)

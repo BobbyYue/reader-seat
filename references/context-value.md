@@ -96,3 +96,7 @@ literature preserve narrator knowledge, ambiguity, characterization, rhythm and
 purposeful repetition; no business-conclusion template or information-density score.
 No new reviewer, extra review round, forced rewrite, word quota or visible
 audit section is added. Resolve findings in the existing revision budget.
+
+## Defensive-expression metric
+
+Use [defensive-expression.md](defensive-expression.md) in the same context review. The prepared `defensive_expression` record is required for the exact delivered text; confirmed excess and pending items block checked completion. Counts are computed from anchored judgments, never from negative-word frequency.

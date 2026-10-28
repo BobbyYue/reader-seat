@@ -25,6 +25,15 @@ class ReaderValueTests(unittest.TestCase):
         return reader_value.validate(review, self.axes, self.binding, self.text,
                                      source=self.source, renders=[self.render])
 
+    def test_defensive_metric_is_mandatory_at_existing_delivery_review(self):
+        review = copy.deepcopy(self.review)
+        del review["checks"]["selection"]["context_review"]["defensive_expression"]
+        self.assertTrue(any("defensive_expression missing" in error for error in self.errors(review)))
+        review = copy.deepcopy(self.review)
+        metric = review["checks"]["selection"]["context_review"]["defensive_expression"]
+        metric["items"][0]["classification"] = "pending"
+        self.assertTrue(any("defensive_expression unresolved" in error for error in self.errors(review)))
+
     def test_complete_evidence_passes(self):
         self.assertEqual(self.errors(self.review), [])
 

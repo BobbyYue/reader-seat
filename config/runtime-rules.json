@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Before: lock expression_plan. During: require unit expression_review. After: reader_value v5 direct_expression compares faithful alternatives/repeated framing. Retain craft/context/attribution checks and necessary negatives; missing/stale/unresolved records block pass."
+      "instruction": "Lock expression_plan; require unit expression_review. Keep reader_value v5 craft/context/attribution checks. context_review v4 counts defensive C/D/R, reviews whole-text repetition and unflagged caveats; necessary negatives stay, excess/pending items block pass."
     },
     {
       "id": "external-action-authorization",

@@ -18,6 +18,8 @@ TEMPLATES = {'reader_value_template': 'reader_value', 'context_review_template':
 def kind(value):
     if not isinstance(value, dict):
         return None
+    if value.get('scope') == 'entire-supplied-surface':
+        return None  # Defensive records carry explicit spans; preserve them on the wire.
     if 'artifact_binding' in value and 'checks' in value:
         return 'editorial'
     if 'text_sha256' in value and 'items' in value:

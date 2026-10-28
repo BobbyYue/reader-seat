@@ -1,5 +1,6 @@
 """Synthetic record builder for schema tests only; never a semantic verdict."""
 import context_value
+from defensive_fixture import structural_defensive
 import source_attribution
 
 
@@ -14,6 +15,7 @@ def structural_attribution(text, source='', mode='reader', profile='functional')
 
 def structural_context(text, profile='functional'):
     result = context_value.template(text, profile)
+    result['defensive_expression'] = structural_defensive(text, profile)
     result['attribution_replay'] = structural_attribution(text, profile=profile)
     result.update(audience='STRUCTURAL FIXTURE reader', purpose='Test binding only',
                   whole_text_scan='STRUCTURAL FIXTURE, not a content-value judgment')

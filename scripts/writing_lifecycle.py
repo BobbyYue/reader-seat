@@ -21,6 +21,7 @@ import re
 import statistics
 import sys
 import context_value
+import defensive_expression
 import direct_expression
 import source_attribution
 import tempfile
@@ -162,6 +163,7 @@ def seal(state):
 
 def implementation():
     return {"engine": sha(Path(__file__).read_bytes()), "config": ref(CONFIG),
+            "defensive_expression": sha(Path(defensive_expression.__file__).read_bytes()),
             "direct_expression": sha(Path(direct_expression.__file__).read_bytes())}
 
 
@@ -258,6 +260,9 @@ def init_run(run, plan_path, profile, source_paths=()):
                          [ref(i["source_path"]) for i in plan.get("evidence_items", []) if i.get("source_path")], "events": []}
     packet = p / "task-packet.json"
     write_json(packet, {"profile": config["profiles"][profile], "task": plan,
+        "defensive_expression": {"before": "Identify real reader questions and necessary limits in the existing plan.",
+            "during": "Unit checkpoints compute candidates; use existing observations for contextual choices.",
+            "after": "Existing context review must resolve excess/pending items and compute C/D/R on the current surface."},
         "stage_order": ["init before drafting", "unit after a complete unit", "measure and candidate before review", "review-start before independent calls", "review-finish after all returns", "checked skill delivery"],
         "stop": "Count early and final independent batches together, at most three. Present the current draft with unresolved impact after exhaustion."}, exclusive=True)
     state["evidence"].append(ref(packet))
@@ -283,10 +288,12 @@ def record_unit(run, text_path, record_path):
             errors = direct_expression.validate(record.get('expression_review'), value, 'during')
             need(not errors, '; '.join(errors))
         item = {"unit_id": record["unit_id"], "text": value, "text_sha256": sha(value.encode()), "record": record}
+        item["defensive_expression"] = defensive_expression.measurement(value)
         state["units"].append(item)
         state["evidence"].append(ref(record_path))
         event(state, "during", {"unit_id": item["unit_id"], "text_sha256": item["text_sha256"]})
-    return {"status": "unit-recorded", "unit_id": record["unit_id"]}
+    return {"status": "unit-recorded", "unit_id": record["unit_id"],
+            "defensive_expression": item["defensive_expression"]}
 
 
 def p90(values):
@@ -454,6 +461,7 @@ def measure_data(state, value, geometry_path=None):
                        "opening_boundary": "Literal placement in a declared opening, not semantic correctness or 30-second comprehension", "sentences": len(sentences), "exact_duplicate_sentences": duplicate_count,
                        "exact_duplicate_ratio": duplicate_count / len(sentences) if sentences else None, "human_30_second_comprehension": "not-tested"},
                        "signals": [{"quote": s, "kind": "exact-repetition"} for s, n in counts.items() if n > 1]}
+    result["defensive_expression"] = defensive_expression.measurement(value)
     for metric, entry in result.items():
         for i, signal in enumerate(entry["signals"], 1):
             signal["id"] = metric + ":" + str(i)

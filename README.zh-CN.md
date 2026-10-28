@@ -4,7 +4,7 @@
 
 [English](README.md) · [阅读案例报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.37.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.38.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -103,7 +103,11 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向完整文档，也支持从一个问题开始调研写作；不用于短消息润色或没有依据的内容扩写。
 
 <details>
-<summary><strong>0.37.0 更新与历史升级说明</strong></summary>
+<summary><strong>0.38.0 更新与历史升级说明</strong></summary>
+
+### 删掉没有帮助读者的免责和兜底
+
+0.38.0 在现有审读中加入[防御性表达检查](references/defensive-expression.md)：分别统计候选表达与确认多余的问题，比较同样准确的直接说法，保留有用的范围限定和不确定性。缺失、过期或未解决的检查记录会阻止正式交付。升级时重新生成第4版上下文审读记录，审读角色与轮次不变；上方报告案例保持原样。
 
 ### 让检查结果对应当前任务
 

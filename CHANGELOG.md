@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.38.0 - 2026-10-28
+
+- Add context-reviewed defensive-expression metrics: candidate count C, confirmed excess count D, excess-character ratio R and unresolved judgments. Keyword matches select candidates; useful limits, uncertainty and source quotations remain protected.
+- Measure candidates in existing unit and whole-document checks. Require the exact-text `defensive_expression` record in context-review version 4, with deletion/direct alternatives, attribution, repeated-location coverage and manually identified unflagged concerns.
+- Reject missing, stale and unresolved metric evidence in checked completion. Recompute counts from anchored judgments; preserve existing reviewer roles, retry limits and draft handling.
+- Add paired synthetic cases and regression tests for counting, span unions, Unicode normalization, missing evidence and necessary negatives. Retain the public portability/source-identity fixes and existing report examples.
+- Upgrade affected context reviews and resume existing work with its pinned runtime or an explicit migration. Program checks and bounded synthetic trials do not establish general human-reading improvement.
+
 ## 0.37.0 - 2026-10-25
 
 - Bind host delivery to the Reader's Seat implementation rather than its checkout folder name; verify renamed copies without weakening independent-review or missing-evidence checks.

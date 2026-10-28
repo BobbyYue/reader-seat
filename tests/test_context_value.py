@@ -72,11 +72,13 @@ class ContextValueTests(unittest.TestCase):
         self.record['items'][0]['effect'] = 'voice'
         self.assertTrue(value.validate(self.record, self.text))
         self.record['profile'] = 'literary'
+        self.record['defensive_expression']['profile'] = 'literary'
         self.record['attribution_replay']['profile'] = 'literary'
         self.assertEqual(value.validate(self.record, self.text, 'literary'), [])
 
     def test_teaching_recap_can_have_learning_effect(self):
         self.record['profile'] = 'teaching'
+        self.record['defensive_expression']['profile'] = 'teaching'
         self.record['attribution_replay']['profile'] = 'teaching'
         self.record['items'][0]['effect'] = 'learning'
         self.assertEqual(value.validate(self.record, self.text, 'teaching'), [])

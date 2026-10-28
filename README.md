@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Read the example report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.37.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.38.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -105,7 +105,11 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents, including research from a question, rather than short-message polishing or unsupported content expansion.
 
 <details>
-<summary><strong>What's new in 0.37.0 and earlier upgrade notes</strong></summary>
+<summary><strong>What's new in 0.38.0 and earlier upgrade notes</strong></summary>
+
+### Remove Unhelpful Disclaimers
+
+Version 0.38.0 adds [defensive-expression checks](references/defensive-expression.md) to the existing review. It counts confirmed unnecessary caveats separately from candidate phrases, compares faithful alternatives, and keeps meaningful limits and uncertainty. Missing, stale or unresolved records block checked completion. Regenerate affected context reviews using version 4; reviewer roles and round limits stay the same. The report examples above are unchanged.
 
 ### Bind Checked Output To The Current Task
 

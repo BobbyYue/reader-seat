@@ -1,0 +1,16 @@
+{
+  "data_origin": "Synthetic maintenance cases; no private messages or drafts",
+  "scope": "Give the producer only input/profile/context. Expected and protected fields are judge-only. Records validate counts and process, not human benefit.",
+  "cases": [
+    {"id":"irrelevant-weather-correction","profile":"functional","context":"A colleague is deciding whether to walk home now.","text":"下班时雨停了，可以步行回去。不过，今天停雨不足以证明未来不会下雨，也不能代表天气总体改善。","expected":"remove_irrelevant_tail","protected":"Do not promise future weather or invent a forecast."},
+    {"id":"clear-status-update","profile":"functional","context":"Weekly support update.","text":"本周处理了28张工单，仍有3张等待客户补充截图，预计周五再次跟进。","expected":"retain","protected":"Numbers, dependency and timing; no mandatory disclaimer."},
+    {"id":"negative-experiment-result","profile":"functional","context":"A reader is deciding whether the experiment establishes improvement.","text":"实验组转化率为4.2%，对照组为4.0%，差异未达到统计显著。当前结果尚未证明方案能提升转化率。","expected":"retain_negative_finding_or_faithfully_merge","protected":"No claim of equal effects, success or no effect; retain rates and uncertainty."},
+    {"id":"unflagged-empty-caveat","profile":"functional","context":"A release message.","text":"请先在测试环境验证，再安排上线。这个建议覆盖了主要情形，世界上还有很多其他情况值得考虑。","expected":"review_unflagged_tail","protected":"Keep test-first sequence; do not invent missing scenarios."},
+    {"id":"source-quotation","profile":"functional","context":"The author is quoting a study verbatim; quote edits are not authorized.","text":"原文写道：当前结果尚未证明方案能提升转化率。","expected":"retain_quote","protected":"Review author framing separately; preserve original attribution and wording."},
+    {"id":"safety-action","profile":"functional","context":"A workplace data-handling instruction.","text":"禁止将未脱敏日志发到外部群。","expected":"retain","protected":"Keep the prohibition, data scope and destination."},
+    {"id":"character-self-defence","profile":"literary","context":"Fictional scene.","text":"他把信翻过来，又翻回去。\n“我不是怕她，”他说，“我只是没想好怎么开口。”\n信封边角已经被他捻得发软。","expected":"retain_character_voice","protected":"Hesitation and contradiction; no objective psychological diagnosis."},
+    {"id":"external-literary-disclaimer","profile":"literary","context":"A fictional scene without a separate essay or legal-disclosure purpose.","text":"母亲把那只豁口碗留给自己，把好碗推到我面前。我低头盛饭。这里的母亲只是一种虚构形象，不能代表所有母亲，也不足以证明家庭关系普遍如此。","expected":"remove_author_disclaimer","protected":"Keep concrete action, quiet voice and interpretive space."},
+    {"id":"quiet-literary-scene","profile":"literary","context":"A quiet fictional scene.","text":"院子里晒着两条旧床单。风停时，墙角的水滴声就清楚起来。","expected":"retain","protected":"Do not add a lesson, caveat or action request."},
+    {"id":"independent-entry-points","profile":"functional","context":"Two sections are distributed separately to different readers. Each needs its own study scope.","text":"研发摘要：这12位受访者更喜欢A，样本尚未覆盖其他地区。\n运营摘要：这12位受访者更喜欢A，样本尚未覆盖其他地区。","expected":"retain_necessary_repetition","protected":"Review both positions; frequency alone is not a defect."}
+  ]
+}
