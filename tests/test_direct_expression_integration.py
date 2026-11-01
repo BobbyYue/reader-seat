@@ -219,8 +219,8 @@ class AfterExpressionIntegrationTests(unittest.TestCase):
     def errors(self, record):
         return reader_value.validate(record, self.axes, self.binding, self.text)
 
-    def test_reader_value_v5_requires_current_after_record(self):
-        self.assertEqual(self.record["version"], 5)
+    def test_reader_value_v6_requires_current_after_record(self):
+        self.assertEqual(self.record["version"], 6)
         self.assertEqual(self.record["checks"]["expression"]["direct_expression"]["stage"], "after")
         self.assertEqual(self.errors(self.record), [])
 

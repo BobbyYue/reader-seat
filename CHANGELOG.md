@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.39.0 - 2026-11-01
+
+- Add scan-reading checks to planning, completed sections and the existing expression review. Inspect the takeaway from actual overview, heading and emphasis cues, the visibility of decisive conditions, and the explanation needed for the requested depth.
+- Require an exact-text `scan_reading` record in `reader_value` version 6. Missing, stale, unanchored, incomplete or failed evidence blocks checked completion. Conditions buried in the body or omitted entirely can be recorded as completed failures without inventing quotes.
+- Reuse existing review roles, rounds and visual inspection. Add synthetic cases and regressions for retained detail, conditional conclusions, concise messages, evidence binding and malformed records. The scan is an editorial simulation; actual rendering and isolated reader reviews remain required on their existing paths.
+- Expand Chinese defensive-expression candidates and paired-contrast detection. Keep exact offsets, avoid overlapping-prefix double counts, and preserve useful uncertainty and negative findings through contextual judgment.
+- Upgrade affected review records or continue in-progress work with its pinned runtime. Preserve the public portability/source-identity adaptations and existing report examples.
+
 ## 0.38.0 - 2026-10-28
 
 - Add context-reviewed defensive-expression metrics: candidate count C, confirmed excess count D, excess-character ratio R and unresolved judgments. Keyword matches select candidates; useful limits, uncertainty and source quotations remain protected.

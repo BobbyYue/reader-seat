@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "data_origin": "Synthetic workplace cases for regression; no measured outcomes or user message history.",
+  "evaluation": "Use a fresh reviewer without exposing expected_decision; compare source meaning, cue takeaway, decisive conditions and preserved detail. Module validation is not human eye-tracking or full Skill acceptance.",
+  "cases": [
+    {
+      "id": "D1",
+      "profile": "document",
+      "reader": "没参与项目的产品经理",
+      "task": "判断是否能在周五上线",
+      "source": "测试已完成。回滚验证尚未完成。仅在回滚验证通过后可以于周五上线，否则延期。",
+      "candidate": "# 本周项目进展\n经过持续推进，各方面工作取得积极进展。\n## 后续安排\n**周五上线。**\n常规测试已完成。回滚验证尚未完成，仅在验证通过后上线，否则延期。",
+      "expected_decision": "revise"
+    },
+    {
+      "id": "D2",
+      "profile": "document",
+      "reader": "需要了解事件的互联网从业者",
+      "task": "了解产品发生什么变化及适用范围",
+      "source": "团队今天向已报名的测试用户开放了导出功能。正式开放日期尚未公布。",
+      "candidate": "# 导出功能向已报名的测试用户开放\n团队今天开放了导出功能，当前仅限已报名的测试用户。正式开放日期尚未公布。",
+      "expected_decision": "keep"
+    },
+    {
+      "id": "D3",
+      "profile": "document",
+      "reader": "分析报告读者",
+      "task": "理解实验结果和下一步依据",
+      "source": "实验未发现显著差异，当前样本不足以排除小幅提升。需要保留样本范围和置信区间的解释。",
+      "candidate": "# 本次实验未发现显著差异\n当前样本仍无法排除小幅提升。解释结果时，需要结合样本范围和置信区间，而不能把未显著写成效果相同。\n## 怎样理解结果\n这次结果支持继续区分已经观测到的差异与尚未排除的提升；后续判断需要保留样本范围和置信区间的解释。",
+      "expected_decision": "keep"
+    }
+  ]
+}

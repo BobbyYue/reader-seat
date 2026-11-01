@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Read the example report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.38.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.39.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -105,7 +105,11 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents, including research from a question, rather than short-message polishing or unsupported content expansion.
 
 <details>
-<summary><strong>What's new in 0.38.0 and earlier upgrade notes</strong></summary>
+<summary><strong>What's new in 0.39.0 and earlier upgrade notes</strong></summary>
+
+### Find The Answer Without Losing Its Conditions
+
+Version 0.39.0 adds a [scan-reading check](references/scan-reading.md): read the overview, headings and emphasized statements together, then check that their takeaway preserves the decisive conditions and leads to enough explanation. It runs within the existing review and visual inspection. Regenerate affected `reader_value` records using version 6. The update also recognizes more defensive-expression candidates while retaining useful uncertainty and negative findings; the report examples remain unchanged.
 
 ### Remove Unhelpful Disclaimers
 

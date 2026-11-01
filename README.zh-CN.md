@@ -4,7 +4,7 @@
 
 [English](README.md) · [阅读案例报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.38.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.39.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -103,7 +103,11 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向完整文档，也支持从一个问题开始调研写作；不用于短消息润色或没有依据的内容扩写。
 
 <details>
-<summary><strong>0.38.0 更新与历史升级说明</strong></summary>
+<summary><strong>0.39.0 更新与历史升级说明</strong></summary>
+
+### 容易找到答案，也看得到关键条件
+
+0.39.0 加入[扫读检查](references/scan-reading.md)：把摘要、标题和强调内容连起来读，检查读者会得到什么结论、是否遗漏关键条件，以及正文是否保留足够的解释。这项检查融入已有审读与页面检查，升级后重新生成第6版 `reader_value` 记录。同时扩大防御性表达候选的识别范围，保留有用的不确定性和负面结论；上方报告案例保持原样。
 
 ### 删掉没有帮助读者的免责和兜底
 

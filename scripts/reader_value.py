@@ -13,8 +13,10 @@ from pathlib import Path
 import context_value
 import direct_expression
 import source_attribution
+import scan_reading
 
-VERSION = 5
+VERSION = 6
+SCAN_PROFILE = "document"
 EMPTY_ATTESTATIONS = {"pass", "passed", "ok", "yes", "checked", "none", "n/a", "true", "false", "通过", "正常", "无", "已检查"}
 CRAFT_GUIDANCE = {
     "concrete_detail": "Quote the supported action/change/problem that makes this worth reading for the intended reader. Generic benefits are not evidence. Invent no stakes, scene, motive, number or reaction; a simple fact may suffice.",
@@ -30,6 +32,8 @@ GUIDANCE = {
 }
 GUIDANCE["expression"] += " Review the whole candidate; record craft_checks with quote, pass/fail and reason. Clear messages may reuse one span. For unresolved wording only, consult the matching references/writing-craft-cases.md case; no extra round. " + " ".join(f"{key}: {value}" for key, value in CRAFT_GUIDANCE.items())
 GUIDANCE['expression'] += ' Complete direct_expression independently for the final text. ' + direct_expression.GUIDANCE
+GUIDANCE['expression'] += ' ' + scan_reading.GUIDANCE
+GUIDANCE['presentation'] += ' Verify the actual scan path: headings, leads, labels and emphasis expose the required answers with readable decisive conditions; needed detail stays accessible. Do not infer gaze or comprehension from layout.'
 GUIDANCE["meaning"] += " In detail_support, compare source and edits: preserve quantity, range, frequency, attribution, logic, uncertainty and intent. No invention for rhythm; label permitted illustrative examples."
 GUIDANCE['meaning'] += ' Complete source_attribution in this same source review. ' + source_attribution.GUIDANCE
 
@@ -141,6 +145,7 @@ def validate(review, axes, binding, text, *, source="", renders=()):
         if item.get("status") != "pass" or item.get("action") != "keep":
             errors.append(f"{prefix} retains an unresolved reader problem")
         if axis == "expression":
+            errors.extend(scan_reading.validate(item.get("scan_reading"), text, SCAN_PROFILE))
             errors.extend(direct_expression.validate(item.get('direct_expression'), text, 'after'))
             probes = item.get("craft_checks")
             if not isinstance(probes, dict) or set(probes) != set(CRAFT_GUIDANCE):
@@ -196,6 +201,7 @@ def template(axes, binding, text="", source=""):
         item = {"status": "fail", "action": "revise", "location": "", "quote": "",
                 "reader_effect": "", "protected_meaning": ""}
         if axis == "expression":
+            item["scan_reading"] = scan_reading.template(text, SCAN_PROFILE)
             item['direct_expression'] = direct_expression.template(text, 'after')
             item["craft_checks"] = {name: {"status": "fail", "quote": "", "reason": ""} for name in CRAFT_GUIDANCE}
         if axis == "selection":

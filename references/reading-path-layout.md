@@ -64,6 +64,13 @@ These rules are mandatory runtime rules. They cannot be downgraded to style advi
 
 ## Verification
 
+Apply [scan-reading.md](scan-reading.md) inside the existing plan, unit check
+and expression review. Select first-pass answers and conditions before prose;
+scan each unit's cues while drafting. The mandatory `scan_reading` evidence
+records quoted cues, their takeaway, condition placement and reachable detail.
+The visual reviewer checks their actual salience and readability on the native
+page. Keep full explanations; F-shaped layout and more headings are not goals.
+
 Complete the `reading-path-layout` runtime rules with artifact-specific evidence in the semantic review. Then supply real target render evidence to the independent `structure-visual` reviewer. That reviewer separately checks reading path, heading information, claim-evidence adjacency, density and spacing, obstruction, table and visual readability, encoding, target-size stability, and accessibility.
 
 After any structural or visual change, update the artifact hash and rerun all four reader-review dimensions. A local source or clean screenshot without an artifact-bound passing aggregate does not satisfy delivery.

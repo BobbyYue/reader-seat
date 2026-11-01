@@ -3,7 +3,7 @@
   "execution_gates": [
     {
       "id": "G1-task",
-      "required_record": "Record scenario, reader/context/decision, surface/mode, sourced answers/unknowns, channel/language/format, risk and access-find-understand-use. Lock expression_plan: lead answers, opening reason and boundary placement.",
+      "required_record": "Record scenario, reader/task, surface, sourced answers, language/format, risk and access-find-understand-use. Lock expression_plan: lead answers, scan cues and decisive conditions together.",
       "exit_condition": "Reader outcome, language, format, scope, risk and path are testable without framework labels."
     },
     {
@@ -18,7 +18,7 @@
     },
     {
       "id": "G4-build",
-      "required_record": "Record output/title/format/layout/visual/scenario evidence: heading facts, section jobs, adjacent evidence, density and concrete value. Each unit needs text-bound expression_review for direct alternatives and repeated framing.",
+      "required_record": "Record heading facts, section jobs, adjacent evidence and density. Each unit needs expression_review; scan its cues together for the supported answer and conditions, retaining needed explanation.",
       "exit_condition": "Implement the reading path; resolve unsupported, decorative, misleading, obstructive or incomplete structure."
     },
     {
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Lock expression_plan; require unit expression_review. Keep reader_value v5 craft/context/attribution checks. context_review v4 counts defensive C/D/R, reviews whole-text repetition and unflagged caveats; necessary negatives stay, excess/pending items block pass."
+      "instruction": "Lock expression_plan; require unit expression_review and reader_value v6 scan_reading/craft/context/attribution. context_review v4 counts C/D/R and reviews repetitions/unflagged caveats; preserve necessary negatives, block excess or pending."
     },
     {
       "id": "external-action-authorization",
@@ -277,7 +277,7 @@
       },
       {
         "id": "layout-opening-hierarchy",
-        "instruction": "Make the opening support a quick correct judgment: identify the object and practical takeaway first, then the strongest support, consequence, action, or boundary that the reader actually needs."
+        "instruction": "Expose first-pass answers through an overview, descriptive headings and leads as needed. In the existing scan_reading review, locate cues, takeaway, decisive conditions and sufficient reachable detail."
       },
       {
         "id": "layout-one-reader-job-per-section",
@@ -297,7 +297,7 @@
       },
       {
         "id": "layout-native-render-verification",
-        "instruction": "Verify the actual target render for heading hierarchy, whitespace, dense-block rhythm, claim-evidence adjacency, overflow, clipping, overlap, and table and figure legibility before delivery."
+        "instruction": "Inspect the actual render: scan cues stand out with readable conditions; hierarchy, spacing, density, table/figure legibility and adjacency work without clipping or overlap. AI scan simulation is not human evidence."
       }
     ],
     "html-output": [

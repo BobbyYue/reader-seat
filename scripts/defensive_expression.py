@@ -8,9 +8,22 @@ import unicodedata
 
 VERSION = 1
 PROFILES = {'functional', 'literary', 'teaching', 'spoken'}
+ZH_SIGNALS = (
+    '不能', '不能直接', '不能把', '还不能', '尚不能', '不能推出',
+    '不能仅凭', '不能只凭', '不能只看', '不能仅靠', '不能简单', '不能据此',
+    '不能说', '不能断言', '不能视为', '不能保证', '不能认定', '不能确定',
+    '不能确认', '不能当作', '不能当做', '不能断定', '不能承诺', '不能说明', '不能证明',
+    '不足以', '不足以说明', '不足以证明', '只能证明', '只能说明',
+    '不证明', '无法说明', '无法证明', '不代表', '不等于', '不等同于',
+    '不意味着', '并不意味着', '不一定', '未必', '不必然', '不完全',
+    '不是', '不是说', '而不是', '并不是', '并非', '更准确地说',
+    '没有证据', '未发现', '尚未', '仅供参考', '仅作参考', '因人而异',
+    '具体情况具体分析', '不构成', '不保证',
+)
+# Keep original offsets and prefer the full cue over nested prefixes at one location.
 PATTERN = re.compile(
-    r'不能|不足以|不代表|并不意味着|并非|不是|不等于|没有证据|未发现|尚未|'
-    r'仅供参考|仅作参考|因人而异|具体情况具体分析|不构成|不保证|'
+    r'(?:并)?不是[^。！？!?；;\r\n]*?而是|'
+    + '|'.join(re.escape(term) for term in sorted(ZH_SIGNALS, key=len, reverse=True)) + '|'
     r'\b(?:cannot|can[\x27’]t|does not|do not|is not|are not|not necessarily|'
     r'no evidence|not yet|for reference only|results may vary|no guarantee|'
     r'it depends|should not|must not)\b', re.I)
