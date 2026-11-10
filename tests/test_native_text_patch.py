@@ -91,10 +91,11 @@ class NativeTextPatchTests(unittest.TestCase):
             "depth": {"mode": "orientation", "reason": "Structural fixture only: recover the one supplied finding"},
             "surfaces": [{"id": "finding-and-evidence", "mode": "blocks", "block_ids": ["finding", "evidence"]}],
             "answers": [{"id": "A1", "kind": "takeaway", "question": "What changed and what remains unknown?",
+                         "reader_use": "Recover the supplied bounded pilot finding in this synthetic protocol test",
                          "expected_information": "Pilot rose 5%; cause unknown.",
                          "source_location": "Structural fixture source", "source_status": "supported",
                          "required_on": ["finding-and-evidence"]}]})
-        lock = self.write(folder / "lock.json", reader_answers.lock_plan(plan, source))
+        lock = self.write(folder / "lock.json", reader_answers.lock_plan(plan, source, require_depth=True))
         snapshot = folder / "candidate.xml"
         snapshot.write_text(patch.candidate_xml(patch.load(self.paths["candidate"])) if xml is None else xml,
                             encoding="utf-8")
@@ -114,12 +115,17 @@ class NativeTextPatchTests(unittest.TestCase):
             "depth_fit": {"mode": "orientation", "status": "pass", "reason": "Structural fixture: only the supplied bounded pilot statement is requested",
                           "reader_quote": finding, "source_quote": source.read_text(encoding="utf-8")},
             "answers": [{"answer_id": "A1", "surface_id": surface["id"], "status": "pass",
-                         "reader_quote": finding, "rationale": "Structural fixture only, not semantic evidence."}]})
+                         "reader_quote": finding, "rationale": "Structural fixture only, not semantic evidence.",
+                         "judgment": {"question_fit": "pass", "answer_fit": "pass", "support_fit": "pass", "form": "fact",
+                            "inference": False, "bridge": "", "repair": "",
+                            "candidate_quote": Path(surface["path"]).read_text()[:80], "source_quote": source.read_text()[:70],
+                            "rationale": "SYNTHETIC structural fixture, not independent semantic validation"}}]})
         manifest_path = surfaces / "surface-manifest.json"
         answer = {"version": reader_answers.CONTRACT_VERSION, "status": "pass", "errors": []}
         for key, path in (("manifest", manifest_path), ("responses", responses), ("evaluation", evaluation)):
             answer[key + "_path"] = str(path)
             answer[key + "_sha256"] = patch.digest(path)
+        answer["reader_outcomes"] = reader_answers.outcome_record(manifest, patch.load(responses), patch.load(evaluation))
         self.write(self.paths["answer_receipt"], answer)
         self.assertEqual(reader_answers.validate_receipt(self.paths["answer_receipt"], self.paths["candidate"]), [])
         self.answer_source, self.answer_manifest = source, manifest_path

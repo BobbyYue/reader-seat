@@ -47,7 +47,7 @@
     },
     {
       "id": "reader-task-organization",
-      "instruction": "Plan supported answers, evidence, limits and unknowns before prose; preserve requested depth. Substantive summaries default to explanation."
+      "instruction": "Lock questions, reader_use and sourced answers. In the same source review, bind question/answer/support judgments to actual text; count blind answers and follow-ups."
     },
     {
       "id": "evidence-calibration",
@@ -55,7 +55,7 @@
     },
     {
       "id": "natural-non-template-expression",
-      "instruction": "Lock expression_plan; require unit expression_review and reader_value v6 scan_reading/craft/context/attribution. context_review v4 counts C/D/R and reviews repetitions/unflagged caveats; preserve necessary negatives, block excess or pending."
+      "instruction": "Lock answers and expression_plan; require unit expression_review and reader_value v6. context_review v5 checks answer/selection/ending, attribution, C/D/R and cumulative burden. Keep explanations and limits; unresolved issues block delivery even with zero phrase hits."
     },
     {
       "id": "external-action-authorization",

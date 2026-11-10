@@ -111,7 +111,7 @@ class RuntimeContractTests(unittest.TestCase):
             "depth": {"mode": "orientation", "reason": "This structural fixture asks only what the supplied statement says"},
             "expression_plan": structural_expression_plan(),
             "surfaces": [{"id": "fixture", "mode": "full", "reason": "Full-document structural fixture; semantic extraction has separate tests"}],
-            "answers": [{"id": "A1", "kind": "takeaway", "question": "What does this fixture state?", "expected_information": "Fixture content only", "source_location": "Test source bundle", "source_status": "supported", "required_on": ["fixture"]}]
+            "answers": [{"id": "A1", "kind": "takeaway", "reader_use": "Inspect the supplied statement for this synthetic structural test only", "question": "What does this fixture state?", "expected_information": "Fixture content only", "source_location": "Test source bundle", "source_status": "supported", "required_on": ["fixture"]}]
         })
 
     def tearDown(self) -> None:
@@ -284,7 +284,12 @@ class RuntimeContractTests(unittest.TestCase):
                     "depth_fit": {"mode": "orientation", "status": "pass", "reason": "STRUCTURAL FIXTURE: the limited task only requests the supplied statement.",
                                   "reader_quote": responses[0]["findings"][0], "source_quote": locked_source.read_text()[:70]},
                     "answers": [{"answer_id": "A1", "surface_id": surface["id"], "status": "pass",
-                                 "reader_quote": responses[0]["findings"][0], "rationale": "Structural fixture only"}]
+                                 "reader_quote": responses[0]["findings"][0], "rationale": "Structural fixture only",
+                                 "judgment": {"question_fit": "pass", "answer_fit": "pass", "support_fit": "pass",
+                                    "form": "fact", "inference": False, "bridge": "", "repair": "",
+                                    "candidate_quote": Path(surface["path"]).read_text()[:80],
+                                    "source_quote": locked_source.read_text()[:70],
+                                    "rationale": "SYNTHETIC structural fixture, not an independent semantic finding"}}]
                 }
             result_path = review_dir / f"{dimension}-result.json"
             result_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")

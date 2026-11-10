@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "boundary": "Synthetic workplace cases. Give task, material and candidate to a fresh reviewer; hide expectations. These are semantic regression pairs, not measured human outcomes or fixed wording targets.",
+  "cases": [
+    {"id":"decision-deferred","task":"判断这次发布是否可以继续。","material":"发布包含登录、支付和退款。登录和支付通过测试，退款尚未测试；发布要求三个流程测试通过。","candidate":"整体方向很好，后续结合实际情况完善验证即可。","expected":{"answer":"revise","preserve":"Do not invent a pass for refunds or release approval."}},
+    {"id":"decision-delivered","task":"判断这次发布是否可以继续。","material":"发布包含登录、支付和退款。登录和支付通过测试，退款尚未测试；发布要求三个流程测试通过。","candidate":"先补退款测试，再决定发布。登录和支付已通过，退款尚未测试。","expected":{"answer":"pass","selection":"pass","ending":"pass"}},
+    {"id":"false-certainty-short","task":"判断这次发布是否可以继续。","material":"发布包含登录、支付和退款。登录和支付通过测试，退款尚未测试；发布要求三个流程测试通过。","candidate":"测试已通过，可以发布。","expected":{"answer":"revise","preserve":"The shorter answer loses the untested release requirement."}},
+    {"id":"method-is-answer","task":"告诉我用两周客户收入明细定位下降贡献的方法。","material":"每行是一个客户一天的收入；有两完整周数据和独立的周报总额。","candidate":"按客户分别加总两周收入，用本周减上周。保留增长和下降客户，将所有变化加总，与周报的整体变化核对。差额查清后，再按下降金额定位重点客户。","expected":{"answer":"pass","preserve":"Do not demand an actual revenue conclusion from a method request."}},
+    {"id":"honest-unknown","task":"发布定在周五吗？只回复当前时间安排。","material":"发布日期尚未确定。","candidate":"发布日期还没定。","expected":{"answer":"pass","selection":"pass","ending":"pass"}},
+    {"id":"unrequested-service-tail","task":"帮我说明发布日期是否确定，不追加建议。","material":"发布日期尚未确定。","candidate":"发布日期还没定。如果你愿意，我还可以帮你整理一份全面的项目推进计划。","expected":{"answer":"pass","ending":"revise"}},
+    {"id":"recipient-offer-preserved","task":"检查这条消息是否自然，保持原意。","material":"发送者自愿向同事提供明天下午的排查帮助。","candidate":"如果你需要，我明天下午可以一起排查。","expected":{"answer":"pass","ending":"pass","preserve":"This is the sender's actual offer, not agent service padding."}},
+    {"id":"summary-masks-selection","task":"给只需要判断本周是否试用的同事写结论。","material":"只读试用不改线上数据，已完成权限和回滚检查，可先在一个测试账号试用。","candidate":"本周可先用一个测试账号做只读试用。AI应用的发展历程值得回顾。行业正在持续探索多种技术路线。每条技术路线都有独特的适用场景和局限，长期演进仍需要全面观察。","expected":{"answer":"pass","selection":"revise","preserve":"A useful first sentence does not make unrelated background necessary."}},
+    {"id":"explanation-needs-depth","task":"向第一次接触的同事解释为什么要保留增长客户，用例子说明。","material":"甲下降90万元，乙增长50万元，其他下降20万元，整体下降60万元。","candidate":"甲减少90万元，其他减少20万元，合计减少110万元。乙增长50万元，抵消了其中一部分，所以整体减少60万元。保留增长客户，才能把明细加回整体。","expected":{"answer":"pass","selection":"pass","preserve":"Keep the calculation and explanation; do not compress to a slogan."}},
+    {"id":"shared-condition-repetition","task":"总结这次仅覆盖安卓的试用反馈，保留范围即可。","material":"反馈只来自安卓试用，主要问题是导出较慢，首页加载符合预期。","candidate":"本次安卓试用中，导出较慢，首页加载符合预期。以上不代表iOS的体验。需要强调，这些结论仅限安卓。其他平台的情况还需要另行核实。","expected":{"answer":"pass","selection":"revise","preserve":"Keep Android scope once; do not generalize to iOS."}}
+  ]
+}

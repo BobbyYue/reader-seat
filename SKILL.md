@@ -54,10 +54,10 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
    otherwise use the primary source's dominant language, not the prompt
    language. Explicit format wins, then an existing artifact, then chat-only;
    otherwise a finished document defaults to self-contained HTML.
-3. Save the source and a pre-draft [required-answer plan](references/required-reader-answers.md) with task-specific `depth`; pass `--reader-answer-plan` to `runtime_contract.py init`. It locks the
+3. Save the source and a pre-draft [required-answer plan](references/required-reader-answers.md) with task-specific `depth` and each answer's `reader_use`; pass `--reader-answer-plan` to `runtime_contract.py init`. It locks the
    decisions and generates `resolved-task-contract.md`,
    `module-manifest.json`, and the semantic review.
-   Include `expression_plan`: lead answers, opening choice and essential limits; see [direct expression](references/direct-expression.md).
+   Include `expression_plan`: lead answers, opening choice and essential limits; see [direct expression](references/direct-expression.md). Fix the requested answer type and scope before prose; a finding request needs its supported result, while a method or unknown may itself be the answer.
 4. Continue only when `status=locked`. Read the generated task contract as the
    default instruction context. It contains every selected compact rule and the
    target reader, active scenario contract, and the required record and exit
@@ -72,7 +72,7 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
    deterministic source, content, reading-path, format, asset, visual, and
    rendered checks. Classify each pre-audit change and rerun only the affected
    checks; use the union when a change crosses categories.
-   Each complete unit needs a text-bound `expression_review`; compare faithful direct wording and repeated framing before registering it.
+   Each complete unit needs a text-bound `expression_review`; compare faithful direct wording and repeated framing before registering it. Check its local answer and section-level priorities, keeping explanations that help first-time readers.
 7. Once the exact stable candidate exists,
    run `runtime_contract.py bind-review` before filling any review item. This
    creates a separate binding receipt and locks it into the task contract, so
@@ -85,13 +85,14 @@ Use `runtime_contract.py init-lifecycle` to derive one `functional` [writing lif
    `not-applicable` or waived by selecting another output format.
 9. For every finished artifact, use [scripts/reader_review.py](scripts/reader_review.py)
    to prepare four fresh, mutually isolated reviewers; managed execution runs independent jobs concurrently and waits for raw blind answers before source-answer evaluation:
-   no-context (extracted surface only), readability, source-reliability, and structure-visual. The source reviewer then matches the frozen raw replay to every required answer. All four
+   no-context (extracted surface only), readability, source-reliability, and structure-visual. The source reviewer matches frozen replay, checks [question/answer/support quality](references/judgment-quality.md), and classifies follow-ups; [reader outcomes](references/reader-outcomes.md) are recomputed from the same returns. All four
    must pass for the exact artifact hash. Complete the prepared `reader_value`
    fields in the same reviews: supported detail, progression, reading flow, content necessity, source
    meaning and actual reading layout. Missing or unresolved fields block both
    aggregation and final verification; do not add reviewers or visible checklists.
    The readability reviewer checks `expression.direct_expression` and the mandatory [scan-reading](references/scan-reading.md) record; verify cues, takeaway, decisive conditions and access to full explanation in the existing batch.
    In that same context review, [defensive-expression](references/defensive-expression.md) checks every candidate and whole-text repetition; computed C/D/R stay private, and unresolved excess or pending items block completion while necessary limits remain.
+   [Context review v5](references/context-value.md#answer-selection-and-ending) requires quoted judgments on answer delivery, selection and ending. Zero phrase issues cannot override a missing answer, overloaded body or padded ending; stop when the scoped reader need is met.
    The normal path starts one complete
    batch only after the candidate and packets are stable. If it fails, wait for
    all results, merge every blocker, revise once, restabilize, then rerun all

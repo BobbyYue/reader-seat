@@ -37,6 +37,13 @@ class ReaderValueTests(unittest.TestCase):
     def test_complete_evidence_passes(self):
         self.assertEqual(self.errors(self.review), [])
 
+    def test_reader_delivery_failure_reaches_existing_parent_gate(self):
+        for key in ('answer', 'selection', 'ending'):
+            review = copy.deepcopy(self.review)
+            review['checks']['selection']['context_review']['whole_text_scan'][key].update(
+                status='revise', reason='SYNTHETIC unresolved reader need', repair='Repair the actual scoped issue.')
+            self.assertTrue(any('reader_delivery unresolved' in error for error in self.errors(review)))
+
     def test_missing_craft_check_blocks_existing_expression_pass(self):
         for name in reader_value.CRAFT_GUIDANCE:
             review = copy.deepcopy(self.review)

@@ -20,7 +20,8 @@ def native_plan(contract_path):
         if reader_answers.digest(item["path"]) != item["sha256"]:
             raise ValueError("native reader-answer plan or source changed")
     original = reader_answers.load(lock["plan"]["path"])
-    errors = reader_answers.plan_errors(original, require_depth=lock.get("requires_depth", False))
+    errors = reader_answers.plan_errors(original, require_depth=lock.get("requires_depth", False),
+                                        require_judgment=lock.get("judgment_quality_version") == 1)
     if errors:
         raise ValueError("native reader-answer plan is invalid: " + "; ".join(errors))
     errors = direct_expression.plan_errors(original.get('expression_plan'), original['answers'])
@@ -34,7 +35,8 @@ def native_plan(contract_path):
                "task": task["task"], "decisions": decisions, "answer_plan": lock["plan"]}
     answers = [{"id": answer["id"], "question": answer["question"],
                 "expected": answer["expected_information"], "source_location": answer["source_location"],
-                "source_status": answer["source_status"]} for answer in original["answers"]]
+                "source_status": answer["source_status"],
+                **({"reader_use": answer["reader_use"]} if "reader_use" in answer else {})} for answer in original["answers"]]
     plan = {"task": task["contract_id"], "genre": task["task"]["scenario"],
             "domain": "Internet-industry work document", "purpose": original["reader"]["decision"],
             "language": decisions["output_language"], "format": decisions["output_format"],

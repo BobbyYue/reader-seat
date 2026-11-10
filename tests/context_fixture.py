@@ -17,8 +17,10 @@ def structural_context(text, profile='functional'):
     result = context_value.template(text, profile)
     result['defensive_expression'] = structural_defensive(text, profile)
     result['attribution_replay'] = structural_attribution(text, profile=profile)
-    result.update(audience='STRUCTURAL FIXTURE reader', purpose='Test binding only',
-                  whole_text_scan='STRUCTURAL FIXTURE, not a content-value judgment')
+    result.update(audience='STRUCTURAL FIXTURE reader', purpose='Test binding only')
+    result['whole_text_scan'] = {key: dict(status='pass', quote=text,
+        reason='STRUCTURAL FIXTURE only; not a semantic judgment', repair='')
+        for key in ('answer', 'selection', 'ending')}
     for item in result['items']:
         quote = item['context']
         item.update(quote=quote, without='', with_reading='STRUCTURAL FIXTURE with text',

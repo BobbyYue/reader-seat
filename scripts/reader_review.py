@@ -244,7 +244,11 @@ def command_prepare(args: argparse.Namespace) -> None:
             packet["reading_guidance"] += " Check the planned understanding depth against the reader task. A list of accurate labels may still omit the reasons, evidence or relationships needed to understand it; preserve concise orientation when that is the actual task."
         if dimension == "source-reliability":
             packet["answer_manifest"] = str(output_dir / "answers" / "surface-manifest.json")
+            if answer_lock.get("judgment_quality_version") == 1:
+                import judgment_quality
+                packet["judgment_quality_contract"] = judgment_quality.CONTRACT
             packet["reading_guidance"] += " After the no-context response is frozen, independently evaluate it against the locked answer plan. Include answer_evaluation using reader_answers.py contract; do not alter or coach the raw response."
+            packet["reading_guidance"] += " For each remaining question supply group_id, answer_ids, classification and source-based rationale. Group paraphrases of the same unresolved problem; do not group distinct needed answers. source_unknown needs an unknown answer in the plan and disclosure_quote from the actual reading surface. A necessary unknown that the text fails to disclose is missing_required_answer. Optional curiosity is detail, not a defect. Do not invent questions or optimize their raw count."
             if answer_plan.get("depth"):
                 packet["reading_guidance"] += " Complete answer_evaluation.depth_fit with mode, pass/fail, task-specific reason, an exact source_quote and an exact reader_quote. Reject a shallow answer plan as well as a shallow draft; keyword coverage is not understanding. Source limitations must remain explicit, never filled with invention."
         axes = editorial_axes(dimension, packet["render_evidence"])
@@ -434,6 +438,18 @@ def validate_answer_evidence(manifest, contract, results):
         return [f"missing or invalid required reader answers: {exc}"]
 
 
+def answer_outcomes(manifest, results):
+    import reader_answers
+    try:
+        entry = manifest["answer_manifest"]
+        if file_hash(Path(entry["path"])) != entry["sha256"]:
+            raise ValueError("reader answer manifest changed")
+        return reader_answers.outcome_record(reader_answers.load(entry["path"]),
+            results["no-context"]["answer_responses"], results["source-reliability"]["answer_evaluation"])
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        return {"version": 1, "status": "unmeasured", "reason": str(exc)}
+
+
 def command_aggregate(args: argparse.Namespace) -> None:
     try:
         contract = read_json(args.contract.resolve())
@@ -554,6 +570,7 @@ def command_aggregate(args: argparse.Namespace) -> None:
         "dimensions": list(DIMENSIONS),
         "reviews": review_records,
         "issues": combined_issues,
+        "reader_outcomes": answer_outcomes(manifest, {k: v[0] for k, v in results.items()}),
         "validation_failures": failures,
         "max_rounds": MAX_ROUNDS,
         "max_rounds_exhausted": status == "needs-user-decision" and round_number >= MAX_ROUNDS,
@@ -732,6 +749,9 @@ def validate_aggregate_for_artifact(
         answer_failures = validate_answer_evidence(manifest, contract, raw_results)
         failures.extend(answer_failures)
         original_all_pass = original_all_pass and not answer_failures
+        recomputed = answer_outcomes(manifest, raw_results)
+        if recomputed.get("status") != "not_measured" and aggregate.get("reader_outcomes") != recomputed:
+            failures.append("reader review aggregate outcomes differ from original blind/source records")
     expected_status = "pass" if original_all_pass else (
         "needs-user-decision" if aggregate.get("round") == MAX_ROUNDS else "revision-required"
     )

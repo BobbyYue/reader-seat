@@ -106,7 +106,28 @@ def check_reference_links(errors: list[str]) -> None:
                 fail(f"broken reference link in {path.name}: {link}", errors)
 
 
+def check_reader_outcomes_contract(contract: dict, errors: list[str]) -> None:
+    expected = {"version": 1, "script": "scripts/reader_outcomes.py",
+                "reference": "references/reader-outcomes.md", "required_in": "existing-reader-answer-aggregation",
+                "comparison": "opt-in-same-task-fresh-context", "new_reviewers_or_rounds": False,
+                "automatic_quality_threshold": False}
+    if contract.get("reader_outcomes") != expected:
+        fail("reader outcomes must reuse bound reviews without extra rounds or automatic quality thresholds", errors)
+    for name in ("script", "reference"):
+        if not (ROOT / expected[name]).is_file():
+            fail("reader outcomes missing " + expected[name], errors)
+
+
 def check_contract(contract: dict, errors: list[str]) -> None:
+    check_reader_outcomes_contract(contract, errors)
+    expected_quality = {"version": 1, "script": "scripts/judgment_quality.py",
+                        "reference": "references/judgment-quality.md",
+                        "required_in": "existing-source-answer-review", "new_reviewers_or_rounds": False}
+    if contract.get("judgment_quality") != expected_quality:
+        fail("judgment quality must run in the existing source review without extra rounds", errors)
+    for field in ("script", "reference"):
+        if not (ROOT / expected_quality[field]).is_file():
+            fail("judgment quality missing " + expected_quality[field], errors)
     if contract.get("schema_version") != 3:
         fail("skill contract schema_version must be 3", errors)
     if not re.fullmatch(r"\d+\.\d+\.\d+", contract.get("skill_version", "")):
@@ -615,6 +636,8 @@ def check_runtime_portability(contract: dict, errors: list[str]) -> None:
         "hard-gate-and-reader-outcome-evaluation",
         "fail-closed-runtime-contract",
         "four-way-independent-reader-validation",
+        "recomputed-reader-answer-and-followup-outcomes",
+        "opt-in-comparable-version-reader-outcomes",
         "vendor-neutral-command-adapters",
         "task-specific-runtime-bundle",
         "versioned-runtime-rule-inventory",

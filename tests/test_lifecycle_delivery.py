@@ -112,6 +112,9 @@ class LifecycleDeliveryTests(unittest.TestCase):
         task = json.loads(self.task.contract.read_text())
         self.assertEqual(state["plan"]["reader"]["need"], original["reader"]["decision"])
         self.assertEqual(state["plan"]["required_answers"][0]["expected"], original["answers"][0]["expected_information"])
+        self.assertEqual(state["plan"]["required_answers"][0]["reader_use"], original["answers"][0]["reader_use"])
+        packet = json.loads((run / "task-packet.json").read_text())
+        self.assertEqual(packet["task"]["required_answers"][0]["reader_use"], original["answers"][0]["reader_use"])
         self.assertEqual(state["plan"]["format"], task["decisions"]["output_format"])
         self.assertIn(task["decisions"]["reader_validation"]["source_bundle"], state["sources"])
         self.assertEqual(state["plan"]["native_binding"]["answer_plan"],

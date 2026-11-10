@@ -2,6 +2,15 @@
   "schema_version": 1,
   "cases": [
     {
+      "id": "reader-outcomes-distinguish-gap-unknown-and-curiosity",
+      "scenario": "business",
+      "operation": "rewrite",
+      "prompt": "Synthetic source: review is approved, API integration is unfinished, release date is unknown. The draft only says the project has made progress. Revise for a teammate deciding whether release is ready, preserving the unknown date. In the existing blind/source review, distinguish a necessary unanswered readiness question from an optional question about future features.",
+      "must_preserve": ["Approved review", "Unfinished API integration", "Unknown release date"],
+      "expected_behaviors": ["State the actual status instead of generic progress", "Freeze necessary questions before writing", "Count unique avoidable follow-ups from raw replay", "Preserve disclosed unknowns and optional curiosity", "Ordinary review has no measured version gain"],
+      "forbidden_behaviors": ["Invent a date to eliminate a question", "Count all questions as defects", "Use zero questions as proof of correct understanding", "Add reviewers or review rounds", "Expose internal metric records in the article"]
+    },
+    {
       "id": "finished-delivery-needs-writing-stages",
       "scenario": "business",
       "operation": "create",

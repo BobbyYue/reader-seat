@@ -1,6 +1,23 @@
 {
   "schema_version": 3,
-  "skill_version": "0.39.0",
+  "skill_version": "0.42.0",
+  "context_review_version": 5,
+  "judgment_quality": {
+    "version": 1,
+    "script": "scripts/judgment_quality.py",
+    "reference": "references/judgment-quality.md",
+    "required_in": "existing-source-answer-review",
+    "new_reviewers_or_rounds": false
+  },
+  "reader_outcomes": {
+    "version": 1,
+    "script": "scripts/reader_outcomes.py",
+    "reference": "references/reader-outcomes.md",
+    "required_in": "existing-reader-answer-aggregation",
+    "comparison": "opt-in-same-task-fresh-context",
+    "new_reviewers_or_rounds": false,
+    "automatic_quality_threshold": false
+  },
   "managed_execution": {
     "policy": "config/execution-policy.json",
     "controller": "scripts/writing_execution.py",
@@ -353,6 +370,8 @@
     "hard-gate-and-reader-outcome-evaluation",
     "fail-closed-runtime-contract",
     "four-way-independent-reader-validation",
+    "recomputed-reader-answer-and-followup-outcomes",
+    "opt-in-comparable-version-reader-outcomes",
     "vendor-neutral-command-adapters",
     "task-specific-runtime-bundle",
     "versioned-runtime-rule-inventory",

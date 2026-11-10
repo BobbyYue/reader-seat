@@ -34,6 +34,9 @@ From the source, write the minimum questions that must be answered on that
 surface. Record the supported answer and source location, or an explicit
 source-unknown. Check the plan against all decision-critical source findings;
 do not quietly omit a difficult finding to make a draft pass.
+For every answer, record `reader_use`: what this reader can know, judge or do
+after receiving it. New Reader's Seat locks require this before drafting.
+The existing source review verifies [question, answer and support quality](judgment-quality.md).
 
 Use the existing reader task to choose a source-backed reason to read: a real
 problem, change, consequence or decision. Show it in the opening, not a generic
@@ -103,6 +106,7 @@ Save a plan with this structure (replace all example content with actual facts):
   "answers": [{
     "id": "A1",
     "kind": "evidence",
+    "reader_use": "Determine the observed pilot result and whether it supports further testing",
     "question": "What changed in the pilot?",
     "expected_information": "Use the exact supported pilot finding here",
     "source_location": "Source section and evidence reference",
@@ -179,6 +183,7 @@ produces:
   }],
   "questions": [{
     "surface_id": "opening", "index": 0,
+    "group_id": "optional-method-detail", "answer_ids": [],
     "classification": "detail",
     "rationale": "Why this question does not block the intended judgment"
   }]
@@ -191,6 +196,11 @@ question: `missing_required_answer` blocks; `source_unknown` preserves an actual
 source gap; `detail` is optional for this task. Do not relabel a known decisive
 omission as detail. False causality fails source fidelity even when all tokens
 and numbers are present. No questions are needed when the reader has none.
+
+New locks require the deduplication and disclosure fields in
+[reader-outcomes.md](reader-outcomes.md). Aggregation recomputes required-question
+correctness and avoidable follow-ups from these same records; a normal run has
+no version-gain measurement. Never reduce questions by hiding needed uncertainty.
 
 Reader's Seat reuses its no-context and source reviewers: store raw responses in
 the no-context result's `answer_responses`; after that result is frozen, the

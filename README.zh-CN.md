@@ -4,7 +4,7 @@
 
 [English](README.md) · [阅读案例报告](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.zh.html) · [安装](#安装)
 
-[![Version](https://img.shields.io/badge/version-0.39.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.42.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -103,7 +103,11 @@ git clone https://github.com/BobbyYue/reader-seat.git /path/to/your-agent/skills
 未经明确授权，Reader's Seat 不会发布、覆盖或发送内容。它面向完整文档，也支持从一个问题开始调研写作；不用于短消息润色或没有依据的内容扩写。
 
 <details>
-<summary><strong>0.39.0 更新与历史升级说明</strong></summary>
+<summary><strong>0.42.0 更新与历史升级说明</strong></summary>
+
+### 回答问题，保留有用的解释
+
+0.42.0 检查文章是否回答了读者的问题、背景和细节是否占了合适的篇幅、结尾是否及时结束。空泛肯定、反复限定和额外服务提议不能代替答案；必要的不确定性、例子和解释继续保留。本版也同步了本机最新的读者答题与追问检查。原有审读使用[第5版上下文检查](references/context-value.md#answer-selection-and-ending)，缺项或未解决的问题会阻止正式交付，不增加审稿人或轮次。现有报告案例保持原样。
 
 ### 容易找到答案，也看得到关键条件
 

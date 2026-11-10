@@ -34,6 +34,9 @@ never share another reviewer's verdict or coach the reader. This reuses the four
 reviewers rather than adding a fifth audit. Store `answer_responses` in the blind
 result and `answer_evaluation` in the source result; aggregation and final
 verification require both and reopen their bindings.
+The same aggregation records [reader outcomes](reader-outcomes.md): required
+questions correctly understood and deduplicated avoidable follow-ups. It adds
+no reviewer or default round and does not turn optional curiosity into a defect.
 For high-risk work, use a different model for `source-reliability` when the host
 supports it, and retain the existing independent semantic judge requirement.
 

@@ -64,7 +64,7 @@ def depth_errors(plan, required=False):
     return errors
 
 
-def plan_errors(plan, *, require_depth=False):
+def plan_errors(plan, *, require_depth=False, require_judgment=False):
     errors = []
     if not isinstance(plan, dict):
         return ["reader plan must be an object"]
@@ -135,6 +135,9 @@ def plan_errors(plan, *, require_depth=False):
             errors.append(f"{sid}: surface has no reader-required answers")
     if not errors:
         errors.extend(depth_errors(plan, required=require_depth))
+        if require_judgment:
+            import judgment_quality
+            errors.extend(judgment_quality.plan_errors(plan))
     return errors
 
 
@@ -226,10 +229,11 @@ def extract_surface(text, surface):
 
 def lock_plan(plan_path, source_path, *, require_depth=False):
     plan = load(plan_path)
-    errors = plan_errors(plan, require_depth=require_depth)
+    errors = plan_errors(plan, require_depth=require_depth, require_judgment=require_depth)
     if errors:
         raise ValueError("; ".join(errors))
-    return {"version": CONTRACT_VERSION, "requires_depth": require_depth, "plan": {"path": str(Path(plan_path).resolve()),
+    return {"version": CONTRACT_VERSION, "requires_depth": require_depth, "reader_outcomes_version": 1,
+            **({"judgment_quality_version": 1} if require_depth else {}), "plan": {"path": str(Path(plan_path).resolve()),
             "sha256": digest(plan_path)}, "source": {"path": str(Path(source_path).resolve()),
             "sha256": digest(source_path)}}
 
@@ -243,7 +247,8 @@ def open_lock(lock_path):
         if digest(item["path"]) != item["sha256"]:
             raise ValueError(f"locked {name} changed; relock and rerun affected checks")
     plan = load(lock["plan"]["path"])
-    errors = plan_errors(plan, require_depth=lock.get("requires_depth", False))
+    errors = plan_errors(plan, require_depth=lock.get("requires_depth", False),
+                         require_judgment=lock.get("judgment_quality_version") == 1)
     if errors:
         raise ValueError("; ".join(errors))
     return lock, plan
@@ -420,7 +425,26 @@ def validate_answers(manifest, responses, evaluation):
             errors.append("question requires a source-based classification and rationale")
         if classification == "missing_required_answer":
             errors.append("known decision-required answer was omitted from the reading surface")
+    try:
+        if load(manifest["lock_path"]).get("reader_outcomes_version") == 1:
+            import reader_outcomes
+            result = reader_outcomes.summarize(manifest, responses, evaluation)
+            quality = result.get("judgment_quality", {})
+            for problem in quality.get("problems", []):
+                errors.append(f"{problem['answer_id']}: task-value judgment needs repair: {problem['reason']}; {problem['repair']}")
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        errors.append("reader outcomes: " + str(exc))
     return errors
+
+
+def outcome_record(manifest, responses, evaluation):
+    if load(manifest["lock_path"]).get("reader_outcomes_version") != 1:
+        return {"version": 1, "status": "not_measured", "reason": "Legacy review did not request deduplicated follow-up evidence; no outcomes were retroactively fabricated."}
+    import reader_outcomes
+    try:
+        return reader_outcomes.summarize(manifest, responses, evaluation)
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        return {"version": 1, "status": "unmeasured", "reason": str(exc)}
 
 
 def main():
@@ -456,6 +480,7 @@ def main():
                  "manifest_path": str(Path(args.manifest).resolve()), "manifest_sha256": digest(args.manifest),
                  "responses_path": str(Path(args.responses).resolve()), "responses_sha256": digest(args.responses),
                  "evaluation_path": str(Path(args.evaluation).resolve()), "evaluation_sha256": digest(args.evaluation),
+                 "reader_outcomes": outcome_record(manifest, responses, evaluation),
                  "errors": errors})
             if errors:
                 raise ValueError("; ".join(errors))
@@ -476,6 +501,10 @@ def validate_receipt(path, artifact_path=None):
         if artifact_path and manifest["artifact"]["sha256"] != digest(artifact_path):
             return ["reader-answer receipt belongs to a different artifact"]
         errors = validate_answers(manifest, load(receipt["responses_path"]), load(receipt["evaluation_path"]))
+        if load(manifest["lock_path"]).get("reader_outcomes_version") == 1:
+            current = outcome_record(manifest, load(receipt["responses_path"]), load(receipt["evaluation_path"]))
+            if receipt.get("reader_outcomes") != current:
+                errors.append("reader-answer outcomes changed or differ from original evidence")
         if receipt.get("status") != "pass":
             errors.append("reader-answer receipt did not pass")
         return errors

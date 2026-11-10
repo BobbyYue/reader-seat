@@ -477,6 +477,8 @@ class ReaderAnswersTests(unittest.TestCase):
         self.rebind_responses()
         self.evaluation["questions"] = [{
             "surface_id": "headings", "index": 0, "classification": classification,
+            "group_id": "fixture-followup", "answer_ids": ["uncertainty"] if classification == "source_unknown" else [],
+            **({"disclosure_quote": "Eligibility remains unknown"} if classification == "source_unknown" else {}),
             "rationale": "Hand-authored structural classification against the source",
         }]
 

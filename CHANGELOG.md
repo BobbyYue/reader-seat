@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.42.0 - 2026-11-10
+
+- Require anchored judgments on answer delivery, content selection and ending in context-review version 5. An empty phrase scan cannot approve a missing answer, overloaded body or padded closing.
+- Preserve useful explanations, genuine uncertainty, source limits and requested offers. Add synthetic regression pairs for vague approval, overcompression, repeated conditions, method requests and clear messages.
+- Include the latest local reader outcomes and question/answer/support review: bind concrete reader use, inspect actual blind answers and classify follow-ups without adding reviewers or rounds.
+- Keep existing public portability fixes, source-identity handling, output formats, privacy adaptations and report examples. Regenerate affected reviews or finish active work with its pinned runtime.
+
 ## 0.39.0 - 2026-11-01
 
 - Add scan-reading checks to planning, completed sections and the existing expression review. Inspect the takeaway from actual overview, heading and emphasis cues, the visibility of decisive conditions, and the explanation needed for the requested depth.

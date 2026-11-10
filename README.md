@@ -4,7 +4,7 @@
 
 [中文说明](README.zh-CN.md) · [Read the example report](https://bobbyyue.github.io/reader-seat/reports/ai-and-work.en.html) · [Install](#install)
 
-[![Version](https://img.shields.io/badge/version-0.39.0-2563EB)](SKILL.md)
+[![Version](https://img.shields.io/badge/version-0.42.0-2563EB)](SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-16803C.svg)](LICENSE)
 [![Validate](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml/badge.svg)](https://github.com/BobbyYue/reader-seat/actions/workflows/validate.yml)
 
@@ -105,7 +105,11 @@ See [ready-to-use prompts](examples/quick-start.en.md) for project progress, dat
 Reader's Seat does not publish, overwrite, or send content without explicit authorization. It is intended for substantive documents, including research from a question, rather than short-message polishing or unsupported content expansion.
 
 <details>
-<summary><strong>What's new in 0.39.0 and earlier upgrade notes</strong></summary>
+<summary><strong>What's new in 0.42.0 and earlier upgrade notes</strong></summary>
+
+### Deliver The Answer, Keep The Useful Detail
+
+Version 0.42.0 checks whether the document answers the reader's question, gives appropriate space to supporting detail, and ends after useful content. Generic approval, repeated caveats and offers of extra help do not substitute for an answer. Necessary uncertainty, examples and explanation stay. This release also includes reader-answer and follow-up checks from the latest local version. The existing review requires [context-review version 5](references/context-value.md#answer-selection-and-ending); missing or unresolved judgments block checked delivery without adding reviewers or rounds. Existing report examples are unchanged.
 
 ### Find The Answer Without Losing Its Conditions
 

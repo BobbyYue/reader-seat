@@ -6,8 +6,9 @@ from pathlib import Path
 import re
 import source_attribution
 import defensive_expression
+import reader_delivery
 
-VERSION = 4
+VERSION = 5
 INSTRUCTION_BOUNDARY_GUIDANCE = (
     'Separate agent-facing writing instructions from reader-facing content. Turn tone, audience, structure, length, '
     'method and revision requests into writing choices, not literal or paraphrased compliance statements in titles, '
@@ -32,6 +33,7 @@ GUIDANCE = (INSTRUCTION_BOUNDARY_GUIDANCE + 'Read the whole supplied surface for
     'without is context minus one exact unique quote. Use exact enums: ' + json.dumps(ITEM_FORMAT, separators=(',', ':')) + '. '
     'Do not substitute status/action or descriptive enum values. ' + source_attribution.GUIDANCE)
 GUIDANCE += " " + defensive_expression.GUIDANCE
+GUIDANCE += " " + reader_delivery.GUIDANCE
 SIGNALS = (('qualification', r'不代表|并不意味着|不能据此|仅供参考|仅作阅读|not (?:proof|evidence)|does not (?:mean|prove)|for (?:reference|reading) only'),
            ('calculation-note', r'原始精度|展示值|未按.{0,12}重新分组|rounded (?:values|display)|unrounded|display precision'),
            ('writing-instruction', r'(?:按|按照|遵照)(?:你|您|用户)的?(?:要求|指令)|(?:本文|本段|本节|这一段|这篇(?:文章|报告)).{0,32}(?:专业但易读|读者视角|不夸张|不刻意吸引眼球)|为了让(?:读者|你).{0,20}(?:看懂|读懂).{0,20}(?:先|下面)|(?:as (?:you )?requested|according to your (?:instructions|request))|this (?:article|section|paragraph).{0,50}(?:professional (?:but|yet) readable|reader[- ]first|avoid hype)'))
@@ -73,7 +75,7 @@ def template(text, profile='functional'):
     return {'version': VERSION, 'text_sha256': sha(text), 'profile': profile,
             'attribution_replay': source_attribution.template(text, profile=profile),
             'defensive_expression': defensive_expression.template(text, profile),
-            'audience': '', 'purpose': '', 'whole_text_scan': '',
+            'audience': '', 'purpose': '', 'whole_text_scan': reader_delivery.template(),
             'items': [dict(p, quote='', without='', with_reading='', without_reading='', effect='', reason='', decision='pending') for p in probes(text)]}
 
 
@@ -90,7 +92,8 @@ def validate(record, text, profile=None, source=None):
         errors.append('context_value stale version or text binding')
     if not isinstance(record.get('profile'), str) or record.get('profile') not in {'functional', 'literary', 'teaching', 'spoken'} or (profile and record.get('profile') != profile):
         errors.append('context_value wrong writing profile')
-    for key in ('audience', 'purpose', 'whole_text_scan'):
+    errors.extend(reader_delivery.validate(record.get('whole_text_scan'), text, record.get('profile')))
+    for key in ('audience', 'purpose'):
         if not nonempty(record.get(key)):
             errors.append('context_value missing ' + key)
     items = record.get('items')
